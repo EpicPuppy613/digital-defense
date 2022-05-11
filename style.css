@@ -1,3 +1,12 @@
-html {
-  
+canvas {
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+}
+html, body, img {
+    padding: 0;
+    margin: 0;
+    background-color: black;
 }
