@@ -59,12 +59,11 @@ class Location {
     }
 }
 class TowerPrototype {
-    constructor (name, type, texture, turret, rotspeed, firerate, damage, range, color, offset, firewidth, fireduration) {
+    constructor (name, type, texture, turret, firerate, damage, range, color, offset, firewidth, fireduration, shots) {
         this.name = name;
         this.type = type;
         this.texture = texture;
         this.turret = turret;
-        this.rotspeed = rotspeed;
         this.firerate = firerate;
         this.damage = damage;
         this.range = range;
@@ -72,6 +71,7 @@ class TowerPrototype {
         this.offset = offset;
         this.firewidth = firewidth;
         this.fireduration = fireduration;
+        this.shots = shots;
     }
 }
 class Tower {
@@ -89,17 +89,17 @@ class Tower {
      * @param {String} color 
      * @param {Number} offset 
      */
-    constructor (name, type, x, y, texture, turret, rotspeed, firerate, damage, range, color, offset, firewidth, fireduration) {
+    constructor (name, type, x, y, texture, turret, firerate, damage, range, color, offset, firewidth, fireduration, shots=1) {
         this.name = name;
         this.type = type;
         this.x = x;
         this.y = y;
         this.texture = texture;
         this.turret = turret;
-        this.rotspeed = rotspeed;
         this.firerate = firerate;
         this.reload = 50/firerate;
         this.cooldown = 0;
+        this.shots = shots;
         this.damage = damage;
         this.level = 1;
         this.direction = 0;
@@ -118,6 +118,7 @@ class Tower {
     }
     tick () {
         //find enemy
+        var shots = this.shots;
         for (const enemy of G.T.E) {
             var difx = enemy.x * G.A.A.config.scale[0] - (this.x + 0.5) * G.A.A.config.scale[0];
             var dify = enemy.y * G.A.A.config.scale[1] - (this.y + 0.5) * G.A.A.config.scale[1];
@@ -126,20 +127,8 @@ class Tower {
             var directionDiff = direction - this.direction;
             if (directionDiff > 180) directionDiff -= 360;
             else if (directionDiff < -180) directionDiff += 360;
-            if (directionDiff < 0) this.left = true;
-            else this.left = false;
-            if (directionDiff > 0) this.right = true;
-            else this.right = false;
-            if (Math.abs(directionDiff) < this.rotspeed / 50) {
+            if (this.cooldown <= 0/*Math.abs(directionDiff) < this.rotspeed / 50*/) {
                 this.direction = direction;
-            } else {
-                if (this.right) this.direction += this.rotspeed / 50;
-                if (this.left) this.direction -= this.rotspeed / 50;
-                if (this.direction >= 360) {
-                    this.direction -= 360;
-                } else if (this.direction < 0) {
-                    this.direction += 360;  
-                }
             }
             var distance = (difx / Math.cos((direction - 90) * (Math.PI/180)));
             var hit = [distance * Math.sin(this.direction * (Math.PI/180)), -distance * Math.cos(this.direction * (Math.PI/180))];
@@ -159,9 +148,12 @@ class Tower {
                     (this.x + 0.5) + offset[0] / G.A.A.config.scale[0],
                     (this.y + 0.5) + offset[1] / G.A.A.config.scale[1],
                     this.duration));
-                this.cooldown = this.reload;
             }
-            break;
+            shots--
+            if (shots <= 0) break;
+        }
+        if (this.cooldown <= 0) {
+            this.cooldown = this.reload;
         }
         this.cooldown--;
     }
@@ -378,20 +370,35 @@ document.addEventListener('keydown', e => {
             else if (e.shiftKey) G.O.Y -= G.A.A.config.scale[1] * 5;
             else G.O.Y -= G.A.A.config.scale[1];
             break;
+        case 'KeyC':
+            if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null) {
+                new Tower("Basic", 'basic', G.A.C.X, G.A.C.Y, 'basic', 'basic-turret', 2, 10, 2.5, '#007eeb', 20, 2, 10, 1);
+            } 
+            break;
+        case 'KeyV':
+            if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null) {
+                new Tower("Sniper", 'sniper', G.A.C.X, G.A.C.Y, 'sniper', 'sniper-turret', 0.5, 40, 4.5, '#00cb3e', 26, 1, 25, 1);
+            } 
+            break;
         case 'KeyB':
             if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null) {
-                new Tower("Basic", 'basic', G.A.C.X, G.A.C.Y, 'basic', 'basic-turret', 90, 2, 10, 2.5, '#007eeb', 20, 2, 10);
+                new Tower("Beam", 'beam', G.A.C.X, G.A.C.Y, 'beam', 'beam-turret', 50, 0.1, 1.25, '#b700dc', 9, 4, 2, 5);
             } 
             break;
         case 'KeyN':
             if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null) {
-                new Tower("Sniper", 'sniper', G.A.C.X, G.A.C.Y, 'sniper', 'sniper-turret', 45, 0.5, 40, 4, '#00cb3e', 26, 1, 25);
-            } 
+                new Tower("Multishot", 'multi', G.A.C.X, G.A.C.Y, 'multi', 'multi-turret', 2, 5, 2, '#eded00', 4, 2, 10, 3);
+            }
             break;
         case 'KeyM':
             if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null) {
-                new Tower("Beam", 'beam', G.A.C.X, G.A.C.Y, 'beam', 'beam-turret', 1800, 50, 0.8, 1.25, '#b700dc', 9, 4, 2);
-            } 
+                new Tower("Aura", 'aura', G.A.C.X, G.A.C.Y, 'aura', 'aura-turret', 50, 0.02, 1.5, '#f17a00', 0, 0.2, 2, 200);
+            }
+            break;
+        case 'KeyZ':
+            if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null) {
+                new Tower("Ultimate", 'super', G.A.C.X, G.A.C.Y, 'super', 'super-turret', 4, 20, 3.5, '#f30000', 20, 2, 10, 2);
+            }
             break;
         case 'KeyE':
             G.A.E.basic.generate(1, 1, 1);
@@ -399,11 +406,11 @@ document.addEventListener('keydown', e => {
         case 'KeyX':
         case 'Backspace':
         case 'Delete':
-            if (getTile(G.A.C.X, G.A.C.Y, true).tower != null) {
-                if (G.T.B.indexOf(getTile(G.A.C.X, G.A.C.Y).tower) != -1) {
-                    G.T.B.splice(G.T.T.indexOf(getTile(G.A.C.X, G.A.C.Y).tower), 1);
-                    getTile(G.A.C.X, G.A.C.Y, true).tower = null;
-                }
+            for (var i = 0; i < G.T.B.length; i++) {
+                if (G.T.B[i].x == G.A.C.X && G.T.B[i].y == G.A.C.Y && getTile(G.T.B[i].x, G.T.B[i].y, true).tower != null) {
+                    getTile(G.T.B[i].x, G.T.B[i].y).tower = null;
+                    G.T.B.splice(i, 1);
+                } 
             }
     }
     } catch (err) {
@@ -613,6 +620,11 @@ function DrawUI () {
         G.C.font = "16px 'Press Start 2P', sans-serif";
         G.C.fillText("Kills: " + tower.kills.toLocaleString(), 10, G.height - offset + 44);
         G.C.fillText("Earned: " + tower.earned.toLocaleString() + "p", 10, G.height - offset + 64);
+        G.C.fillText("Fire Rate: " + tower.firerate.toFixed(1) + "/s", 10, G.height - offset + 84);
+        G.C.fillText("Damage: " + tower.damage.toFixed(1), 10, G.height - offset + 104);
+        G.C.fillText("DPS: " + (tower.firerate * tower.damage).toFixed(1) + "/s", 10, G.height - offset + 124); 
+        G.C.fillText("Range: " + tower.range.toFixed(2), 10, G.height - offset + 144);
+        G.C.fillText("Shots: " + tower.shots.toFixed(0) + " (" + (tower.firerate * tower.damage * tower.shots).toFixed(0) + " DPS)", 10, G.height - offset + 164);
     }
     G.C.textBaseline = 'alphabetic';
     G.C.fillStyle = 'gold';

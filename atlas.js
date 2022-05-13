@@ -97,6 +97,24 @@ G.A.A = {
         ],
         "enemy-basic": [
             192, 256
+        ],
+        "multi": [
+            256, 128
+        ],
+        "multi-turret": [
+            256, 192
+        ],
+        "aura": [
+            320, 128
+        ],
+        "aura-turret": [
+            320, 192
+        ],
+        "super": [
+            384, 128
+        ],
+        "super-turret": [
+            384, 192
         ]
     }
 }
