@@ -5,6 +5,12 @@ G.canvas.width = window.innerWidth;
 G.canvas.height = window.innerHeight;
 G.width = G.canvas.width; //GAME WIDTH
 G.height = G.canvas.height; //GAME HEIGHT
+G.map = "test";
+G.path = [];
+G.S = {}; //SETTINGS
+// -----[SETTINGS]-----
+G.S.extendedtargeting = false; //Extended targetting options
+G.S.lives = 1.0; //Lives multiplier
 G.M = {}; //MOUSE
 G.M.X = 0; //MOUSE X
 G.M.Y = 0; //MOUSE Y
@@ -33,8 +39,8 @@ G.U = {};
 G.U.on = false;
 G.U.anim = 0;
 G.points = 250;
-G.hp = 200;
-G.maxhp = 200;
+G.hp = Math.round(200 * G.S.lives);
+G.maxhp = Math.round(200 * G.S.lives);
 
 class Tile {
     constructor (type, x, y, texture, direction) {
@@ -113,13 +119,50 @@ class Tower {
         this.level = 1;
         this.earned = 0;
         this.kills = 0;
+        this.targeting = 'f'; //First, Last, Health, Speed, Damage, Reward
         getTile(this.x, this.y).tower = this;
         G.T.B.push(getTile(this.x, this.y).tower);
     }
     tick () {
         //find enemy
         var shots = this.shots;
-        for (const enemy of G.T.E) {
+        var sort = [];
+        var property = 'distance';
+        var reverse = false;
+        switch (this.targeting) {
+            case 'f':
+                property = 'distance';
+                reverse = false;
+                break;
+            case 'l':
+                property = 'distance';
+                reverse = true;
+                break;
+            case 'h':
+                property = 'hp';
+                reverse = false;
+                break;
+            case 's':
+                property = 'speed';
+                reverse = false;
+                break;
+            case 'd':
+                property = 'damage';
+                reverse = false;
+                break;
+            case 'reward':
+                property = 'reward';
+                reverse = false;
+                break;
+        }
+        for (var e = 0; e < G.T.E.length; e++) {
+            sort.push([e, G.T.E[e][property], G.T.E[e].distance]);
+        }
+        sort.sort((a, b) => b[2] - a[2]);
+        sort.sort((a, b) => b[1] - a[1]);
+        if (reverse) sort.reverse();
+        for (const s of sort) {
+            var enemy = G.T.E[s[0]];
             var difx = enemy.x * G.A.A.config.scale[0] - (this.x + 0.5) * G.A.A.config.scale[0];
             var dify = enemy.y * G.A.A.config.scale[1] - (this.y + 0.5) * G.A.A.config.scale[1];
             if (!(difx ** 2 + dify ** 2 <= (this.range * G.A.A.config.scale[0]) ** 2)) continue;
@@ -214,28 +257,29 @@ class Enemy {
         this.movement = 0;
         this.hitbox = hitbox;
         this.reward = reward;
+        this.distance = 0;
     }
     tick () {
         if (this.movement <= 0) {
             switch (getTile(this.tile[0], this.tile[1], true).direction) {
                 case 'l':
                     this.direction = [-1, 0];
-                    this.movement = 1;
+                    this.movement += 1;
                     this.tile[0] -= 1;
                     break;
                 case 'r':
                     this.direction = [1, 0];
-                    this.movement = 1;
+                    this.movement += 1;
                     this.tile[0] += 1;
                     break;
                 case 'u':
                     this.direction = [0, -1];
-                    this.movement = 1;
+                    this.movement += 1;
                     this.tile[1] -= 1;
                     break;
                 case 'd':
                     this.direction = [0, 1];
-                    this.movement = 1;
+                    this.movement += 1;
                     this.tile[1] += 1;
                     break;
                 case 'b':
@@ -247,6 +291,19 @@ class Enemy {
             this.x += this.direction[0] * this.speed / 50;
             this.y += this.direction[1] * this.speed / 50;
             this.movement -= Math.abs(((this.direction[0] * this.speed) + (this.direction[1] * this.speed)) / 50);
+        }
+        this.distance = G.path.indexOf(Math.floor(this.x) + ',' + Math.floor(this.y));
+        if (this.direction[0] > 0) {
+            this.distance += this.x - Math.floor(this.x);
+        }
+        if (this.direction[0] < 0) {
+            this.distance += 1 - (this.x - Math.floor(this.x));
+        }
+        if (this.direction[1] > 0) {
+            this.distance += this.y - Math.floor(this.y);
+        }
+        if (this.direction[1] < 0) {
+            this.distance += 1 - (this.y - Math.floor(this.y));
         }
         if (this.hp <= 0) {
             G.points += this.reward;
@@ -305,6 +362,9 @@ function loadMap (mapdata) {
         if (getTile(tile.x, tile.y - 1, true).type == 'track') tile.paths += 'u';
         if (getTile(tile.x, tile.y + 1, true).type == 'track') tile.paths += 'd';
         tile.texture = 'track-' + tile.paths;
+    }
+    for (const path of mapdata.path) {
+        G.path.push(path.replaceAll(/\s/g, ''));
     }
 }
 
@@ -401,7 +461,36 @@ document.addEventListener('keydown', e => {
             }
             break;
         case 'KeyE':
-            G.A.E.basic.generate(1, 1, 1);
+            var enemy = Math.floor(Math.random() * 17);
+            switch (enemy) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                    G.A.E.basic.generate(1, 1, 1);
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                    G.A.E.heavy.generate(1, 1, 1);
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                    G.A.E.fast.generate(1, 1, 1);
+                    break;  
+                case 14:
+                    G.A.E.tank.generate(1, 1, 1);
+                    break;
+                case 15:
+                case 16:
+                    G.A.E.speeder.generate(1, 1, 1);
+                    break;     
+            }
             break;
         case 'KeyX':
         case 'Backspace':

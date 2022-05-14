@@ -98,6 +98,12 @@ G.A.A = {
         "enemy-basic": [
             192, 256
         ],
+        "enemy-heavy": [
+            256, 256
+        ],
+        "enemy-fast": [
+            320, 256
+        ],
         "multi": [
             256, 128
         ],
@@ -115,6 +121,12 @@ G.A.A = {
         ],
         "super-turret": [
             384, 192
+        ],
+        "enemy-tank": [
+            384, 256
+        ],
+        "enemy-speeder": [
+            448, 256
         ]
     }
 }
