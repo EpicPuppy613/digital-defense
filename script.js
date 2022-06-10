@@ -14,6 +14,7 @@ G.wave = 0;
 G.wavetimer = 0;
 G.wavespawn = 0;
 G.wavespawned = 0;
+G.wavetotal = 0;
 G.wavespace = 0;
 G.waveset = "test";
 G.speed = 2;
@@ -111,7 +112,7 @@ T.T = {};
 T.L = [];
 
 String.prototype.formatDuration = function () {
-    var sec_num = Math.floor(parseInt(this, 10) / 50); // don't forget the second param
+    var sec_num = Math.floor(parseInt(this, 10)); // don't forget the second param
     var days    = Math.floor(sec_num / 86400)
     var hours   = Math.floor((sec_num % 86400) / 3600);
     var minutes = Math.floor((sec_num % 3600) / 60);
@@ -299,7 +300,7 @@ class Tower {
         this.texture = texture;
         this.turret = turret;
         this.firerate = firerate;
-        this.reload = 50/firerate;
+        this.reload = 1 / firerate;
         this.cooldown = 0;
         this.shots = shots;
         this.damage = damage;
@@ -380,9 +381,9 @@ class Tower {
             if (shots < 1) break;
         }
         if (this.cooldown <= 0 && fire) {
-            this.cooldown = this.reload;
+            this.cooldown += this.reload;
         }
-        this.cooldown--;
+        this.cooldown -= (1 / F.time);
     }
     targetchange (change) {
         this.tnum += change;
@@ -426,7 +427,7 @@ class Laser {
         this.duration = duration;
     }
     tick () {
-        this.duration--;
+        this.duration -= 1 / F.time;
         if (this.duration <= 0) return true;
     }
 }
@@ -515,9 +516,9 @@ class Enemy {
                     break;
             }
         } else {
-            this.x += this.direction[0] * this.speed / 50;
-            this.y += this.direction[1] * this.speed / 50;
-            this.movement -= Math.abs(((this.direction[0] * this.speed) + (this.direction[1] * this.speed)) / 50);
+            this.x += this.direction[0] * this.speed / F.time;
+            this.y += this.direction[1] * this.speed / F.time;
+            this.movement -= Math.abs(((this.direction[0] * this.speed) + (this.direction[1] * this.speed)) / F.time);
         }
         this.distance = G.path.indexOf(Math.floor(this.x) + ',' + Math.floor(this.y));
         if (this.direction[0] > 0) {
@@ -615,11 +616,23 @@ class MenuButton {
         G.N.B[this.id] = this;
     }
     collide (x, y) {
+        var px; 
+        var py;
+        var pw;
+        var ph;
+        if (typeof this.x == 'function') px = this.x();
+        else px = this.x;
+        if (typeof this.y == 'function') py = this.y();
+        else py = this.y;
+        if (typeof this.w == 'function') pw = this.w();
+        else pw = this.w;
+        if (typeof this.h == 'function') ph = this.h();
+        else ph = this.h;
         return (
-            this.x < x &&
-            this.x + this.w > x &&
-            this.y < y &&
-            this.y + this.h > y &&
+            px < x &&
+            px + pw > x &&
+            py < y &&
+            py + ph > y &&
             G.scene == this.scene
         );
     }
@@ -755,13 +768,6 @@ function loadMap (mapdata) {
     G.S.mapy = Math.floor((G.S.mapx / mapdata.map.size[0]) * mapdata.map.size[1]);
 }
 
-setInterval(() => {
-    G.A.C.pos += 3;
-    if (G.A.C.pos >= 360) {
-        G.A.C.pos -= 360;
-    }
-}, 20);
-
 G.nodes = [];
 
 G.canvas.addEventListener('mousemove', e => {
@@ -772,9 +778,38 @@ G.canvas.addEventListener('mousemove', e => {
     }
 });
 
-G.loop = setInterval(Main, 20);
+//FRAME STUFF
+F = {};
+F.last = performance.now();
+F.fps = Array(20).fill(0);
+F.time = 1;
+F.limit = 60;
+F.limiti = 3;
+F.limits = [24, 30, 50, 60, 120, 240, "None"];
+
+fload = window.localStorage.getItem("FPS");
+if (fload != null) {
+    F.limiti = Math.max(0, Math.min(F.limits.length - 1, parseInt(fload)));
+    F.limit = F.limits[F.limiti];
+    clearInterval(G.loop);
+    if (F.limit == "None") G.loop = setInterval(Main, 0);
+    else G.loop = setInterval(Main, 1000 / F.limit);
+}
+
+G.loop = setInterval(Main, 1000 / F.limit);
 
 function Main () {
+    F.time = 1000 / (performance.now() - F.last);
+    F.last = performance.now();
+    F.fps.push(F.time);
+    F.fps.shift();
+    G.C.clearRect(0, 0, G.width, G.height);
+    G.C.fillStyle = 'black';
+    G.C.fillRect(0, 0, G.width, G.height);
+    G.A.C.pos += 180 / F.time;
+    if (G.A.C.pos >= 360) {
+        G.A.C.pos -= 360;
+    }
     try {
         Draw();
         if (G.scene == 'g' && G.pause) {
@@ -806,11 +841,11 @@ function Main () {
                             p--;
                         }
                     }
-                    if (G.wave != 0) G.time += 1;
-                    G.wavetimer--;
-                    G.wavespawn--;
+                    if (G.wave != 0) G.time += 1 / F.time;
+                    G.wavetimer-= 1 / F.time;
+                    G.wavespawn-= 1 / F.time;
                 }
-                if (G.wave != 0 && G.wavespawn % G.wavespace == 0 && G.wavespawn >= 0) {
+                if (G.wave != 0 && G.wavespawn + (G.wavespace * G.wavespawned) - G.wavetotal <= 0 && G.wavespawn >= 0) {
                     spawn = G.A.D.W[G.waveset].key[G.A.D.W[G.waveset].W[G.wave - 1][5][G.wavespawned]];
                     if (spawn != null) {
                         G.A.E[spawn].generate(G.A.D.W[G.waveset].W[G.wave - 1][0], G.A.D.W[G.waveset].W[G.wave - 1][1], G.A.D.W[G.waveset].W[G.wave - 1][2]);
@@ -830,6 +865,7 @@ function Main () {
     DrawConsole();
 }
 
+new DEbugMsg("FPS", () => Math.round(F.fps.reduce((a, b) => a + b, 0) / F.fps.length));
 new DEbugMsg("Console:", null, "red");
 new DEbugMsg(null, () => G.D[7], "#f77", 'l', 1, true);
 new DEbugMsg(null, () => G.D[6], "#f77", 'l', 1, true);
@@ -844,13 +880,14 @@ new DEbugMsg("Cursor", () => G.M.X + ", " + G.M.Y, '#7ff', 'r');
 new DEbugMsg("Offset", () => G.O.X.toFixed(0) + ", " + G.O.Y.toFixed(0), '#7ff', 'r');
 new DEbugMsg("Map", () => G.map, '#7ff', 'r');
 new DEbugMsg('Speed', () => G.speed, '#7ff', 'r');
-new DEbugMsg('Time', () => G.time, '#7ff', 'r');
+new DEbugMsg('Time', () => G.time.toFixed(2), '#7ff', 'r');
 new DEbugMsg('Wave', () => G.wave, '#7ff', 'r');
-new DEbugMsg('Timer', () => G.wavetimer, '#aff', 'r', 1);
+new DEbugMsg('Timer', () => G.wavetimer.toFixed(2), '#aff', 'r', 1);
 new DEbugMsg('Set', () => G.waveset, '#aff', 'r', 1);
-new DEbugMsg('Space', () => G.wavespace, '#aff', 'r', 1);
-new DEbugMsg('Spawn', () => G.wavespawn, '#aff', 'r', 1);
+new DEbugMsg('Space', () => G.wavespace.toFixed(2), '#aff', 'r', 1);
+new DEbugMsg('Spawn', () => G.wavespawn.toFixed(2), '#aff', 'r', 1);
 new DEbugMsg('Spawned', () => G.wavespawned, '#aff', 'r', 1);
+new DEbugMsg('Total', () => G.wavetotal.toFixed(2), '#aff', 'r', 1);
 new DEbugMsg("[MAP INFO]", null, 'lime', 'l');
 new DEbugMsg("Tiles", () => JSON.stringify(G.T.T), '#7f7', 'l', 0, true);
 new DEbugMsg("Length", () => G.T.T.length, '#afa', 'l', 1);
@@ -879,8 +916,8 @@ function DrawConsole() {
         for (const c of G.DC) {
             try {
                 G.C.fillStyle = c.color;
+                x = 6;
                 if (c.side == 'r') x = G.width - 6;
-                else x = 6;
                 hidden = false;
                 if (G.O.X > G.width / 2 - 16 && c.hscroll && c.side != 'r') hidden = true;
                 if (c.hscroll && c.side != 'r') x += G.O.X;
@@ -911,7 +948,6 @@ function DrawConsole() {
                     G.C.textAlign = 'left';
                     G.C.fillText("[DEBUG ERROR]", 6, ly);
                 }
-                
             }
         }
     } catch (err) {
@@ -1093,10 +1129,10 @@ G.canvas.addEventListener('click', e => {
         G.C.font = "16px 'Press Start 2P', sans-serif";
         next = {};
         if (G.wave == 0) next.x = G.width - G.C.measureText('Send Wave: --').width - 20;
-        else next.x = G.width - G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer / 50), 0)).width - 20;
+        else next.x = G.width - G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer), 0)).width - 20;
         next.y = 48;
         if (G.wave == 0) next.w = G.C.measureText('Send Wave: --').width + 20;
-        else next.w = G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer / 50), 0)).width + 20;
+        else next.w = G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer), 0)).width + 20;
         next.h = 32;
         if (
             next.x < e.offsetX &&
@@ -1214,9 +1250,6 @@ class Scene {
 }
 
 function Draw () {
-    G.C.clearRect(0, 0, G.width, G.height);
-    G.C.fillStyle = 'black';
-    G.C.fillRect(0, 0, G.width, G.height);
     S[G.scene].draw();
 }
 
@@ -1235,8 +1268,6 @@ function NewGame (map) {
     G.multi = 1;
     G.alternate = false;
     G.pause = false;
-    clearInterval(G.loop);
-    G.loop = setInterval(Main, 20 / (G.speed / 2));
     G.path = [];
     G.A.C.on = false;
     G.hp = Math.round(25 * G.S.lives);
@@ -1245,36 +1276,55 @@ function NewGame (map) {
     loadMap(G.A.M[map]);
 }
 
+function FrameLimit(change) {
+    F.limiti = Math.max(Math.min(F.limiti + change, F.limits.length - 1), 0);
+    F.limit = F.limits[F.limiti];
+    clearInterval(G.loop);
+    console.log(F.limit == "None", 1000 / F.limit);
+    if (F.limit == "None") {
+        G.loop = setInterval(Main, 0);
+        console.log('bruh');
+    }
+    else G.loop = setInterval(Main, 1000 / F.limit);
+    window.localStorage.setItem("FPS", F.limiti);
+}
+
 //W-BUTTON:M // MENU BUTTONS
-new MenuButton("start", G.width / 2 - 250, 310, 500, 48, () => {G.scene = 't';}, 'm');
-new MenuButton("resume", G.width / 2 - 250, 420, 400, 36, () => {if (G.wave != 0) G.scene = 'g';}, 'm');
-new MenuButton("settings", G.width / 2 - 200, 500, 400, 36, () => {G.scene = 's'}, 'm');
-new MenuButton("editor", G.width / 2 - 200, 580, 400, 36, () => {G.scene = 'e'}, 'm');
-new MenuButton("quit", G.width / 2 - 200, 660, 400, 36, () => {window.close()}, 'm');
+new MenuButton("start", () => G.width / 2 - 250, 310, 500, 48, () => {G.scene = 't';}, 'm');
+new MenuButton("resume", () => G.width / 2 - 250, 420, 400, 36, () => {if (G.wave != 0) G.scene = 'g';}, 'm');
+new MenuButton("settings", () => G.width / 2 - 200, 500, 400, 36, () => {G.scene = 's'}, 'm');
+new MenuButton("editor", () => G.width / 2 - 200, 580, 400, 36, () => {G.scene = 'e'}, 'm');
+new MenuButton("quit", () => G.width / 2 - 200, 660, 400, 36, () => {window.close()}, 'm');
 //W-BUTTON:E // EDITOR BUTTONS
 new MenuButton("eback", 0, 20, 200, 36, () => {G.scene = 'm'}, 'e');
 //W-BUTTON:S // SETTINGS BUTTONS
 new MenuButton("sback", 0, 20, 200, 36, () => {G.scene = 'm'}, 's');
-new MenuButton("bindings", G.width / 2 - 200, 320, 400, 36, () => {G.scene = 'sb'}, 's');
-new MenuButton("default", G.width / 2 - 200, 400, 400, 36, () => {if (confirm("Are you sure?\nThis will reset all key bindings to default and reload the page.")) {window.localStorage.setItem('keys', null); location.reload();}}, 's');
+new MenuButton("bindings", () => G.width / 2 - 200, 320, 400, 36, () => {G.scene = 'sb'}, 's');
+new MenuButton("default", () => G.width / 2 - 200, 400, 400, 36, () => {if (confirm("Are you sure?\nThis will reset all key bindings to default and reload the page.")) {window.localStorage.setItem('keys', null); location.reload();}}, 's');
+new MenuButton("graphics", () => G.width / 2 - 200, 480, 400, 36, () => {G.scene = 'sg'}, 's');
 //W-BUTTON:SB // SETTINGS: BINDINGS BUTTONS
 new MenuButton("sbback", 0, 20, 200, 36, () => {G.scene = 's'}, 'sb');
-new MenuButton("sbnext", Math.round(G.width / 2) + 50, G.height - 80, 300, 36, () => {G.R.P = Math.min(S.length - 1, G.R.P + 1); G.R.R = undefined}, 'sb');
-new MenuButton("sbprev", Math.round(G.width / 2) - 350, G.height - 80, 300, 36, () => {G.R.P = Math.max(0, G.R.P - 1); G.R.R = undefined}, 'sb');
-new MenuButton("sbbind0", Math.round(G.width / 2) - 250, 290, 500, 36, () => {G.R.R = S[G.R.P].bindings[0]}, 'sb');
-new MenuButton("sbbind1", Math.round(G.width / 2) - 250, 340, 500, 36, () => {G.R.R = S[G.R.P].bindings[1]}, 'sb');
-new MenuButton("sbbind2", Math.round(G.width / 2) - 250, 390, 500, 36, () => {G.R.R = S[G.R.P].bindings[2]}, 'sb');
-new MenuButton("sbbind3", Math.round(G.width / 2) - 250, 440, 500, 36, () => {G.R.R = S[G.R.P].bindings[3]}, 'sb');
-new MenuButton("sbbind4", Math.round(G.width / 2) - 250, 490, 500, 36, () => {G.R.R = S[G.R.P].bindings[4]}, 'sb');
-new MenuButton("sbbind5", Math.round(G.width / 2) - 250, 540, 500, 36, () => {G.R.R = S[G.R.P].bindings[5]}, 'sb');
-new MenuButton("sbbind6", Math.round(G.width / 2) - 250, 590, 500, 36, () => {G.R.R = S[G.R.P].bindings[6]}, 'sb');
-new MenuButton("sbbind7", Math.round(G.width / 2) - 250, 640, 500, 36, () => {G.R.R = S[G.R.P].bindings[7]}, 'sb');
+new MenuButton("sbnext", () => Math.round(G.width / 2) + 50, () => G.height - 80, 300, 36, () => {G.R.P = Math.min(S.length - 1, G.R.P + 1); G.R.R = undefined}, 'sb');
+new MenuButton("sbprev", () => Math.round(G.width / 2) - 350, () => G.height - 80, 300, 36, () => {G.R.P = Math.max(0, G.R.P - 1); G.R.R = undefined}, 'sb');
+new MenuButton("sbbind0", () => Math.round(G.width / 2) - 250, 290, 500, 36, () => {G.R.R = S[G.R.P].bindings[0]}, 'sb');
+new MenuButton("sbbind1", () => Math.round(G.width / 2) - 250, 340, 500, 36, () => {G.R.R = S[G.R.P].bindings[1]}, 'sb');
+new MenuButton("sbbind2", () => Math.round(G.width / 2) - 250, 390, 500, 36, () => {G.R.R = S[G.R.P].bindings[2]}, 'sb');
+new MenuButton("sbbind3", () => Math.round(G.width / 2) - 250, 440, 500, 36, () => {G.R.R = S[G.R.P].bindings[3]}, 'sb');
+new MenuButton("sbbind4", () => Math.round(G.width / 2) - 250, 490, 500, 36, () => {G.R.R = S[G.R.P].bindings[4]}, 'sb');
+new MenuButton("sbbind5", () => Math.round(G.width / 2) - 250, 540, 500, 36, () => {G.R.R = S[G.R.P].bindings[5]}, 'sb');
+new MenuButton("sbbind6", () => Math.round(G.width / 2) - 250, 590, 500, 36, () => {G.R.R = S[G.R.P].bindings[6]}, 'sb');
+new MenuButton("sbbind7", () => Math.round(G.width / 2) - 250, 640, 500, 36, () => {G.R.R = S[G.R.P].bindings[7]}, 'sb');
 //W-BUTTON:T
 new MenuButton("tback", 0, 20, 200, 36, () => {G.scene = 'm'}, 't');
-new MenuButton("tnext", Math.round(G.width / 2) + 50, G.height - 80, 300, 36, () => {G.TS.page = Math.min(Math.floor((G.TS.A.length - 1) / 2), G.TS.page + 1)}, 't');
-new MenuButton("tprev", Math.round(G.width / 2) - 350, G.height - 80, 300, 36, () => {G.TS.page = Math.max(0, G.TS.page - 1)}, 't');
-new MenuButton("tleft", 50, 180, Math.round(G.width / 2) - 100, 450, () => {if (G.TS.page * 2 < G.TS.A.length) {NewGame(G.TS.A[G.TS.page * 2]); G.scene = 'g';}}, 't');
-new MenuButton("tright", Math.round(G.width / 2) + 50, 180, Math.round(G.width / 2) - 100, 450, () => {if (G.TS.page * 2 + 1 < G.TS.A.length) {NewGame(G.TS.A[G.TS.page * 2 + 1]); G.scene = 'g';}}, 't');
+new MenuButton("tnext", () => Math.round(G.width / 2) + 50, () => G.height - 80, 300, 36, () => {G.TS.page = Math.min(Math.floor((G.TS.A.length - 1) / 2), G.TS.page + 1)}, 't');
+new MenuButton("tprev", () => Math.round(G.width / 2) - 350, () => G.height - 80, 300, 36, () => {G.TS.page = Math.max(0, G.TS.page - 1)}, 't');
+new MenuButton("tleft", 50, 180, () => Math.round(G.width / 2) - 100, 450, () => {if (G.TS.page * 2 < G.TS.A.length) {NewGame(G.TS.A[G.TS.page * 2]); G.scene = 'g';}}, 't');
+new MenuButton("tright", () => Math.round(G.width / 2) + 50, 180, () => Math.round(G.width / 2) - 100, 450, () => {if (G.TS.page * 2 + 1 < G.TS.A.length) {NewGame(G.TS.A[G.TS.page * 2 + 1]); G.scene = 'g';}}, 't');
+//W-BUTTON:SG // SETTINGS: GRAPHICS BUTTONS
+new MenuButton("sgback", 0, 20, 200, 36, () => {G.scene = 's'}, 'sg');
+new MenuButton("rescale", () => G.width / 2 - 200, 320, 400, 36, () => {G.width = window.innerWidth; G.height = window.innerHeight; G.canvas.width = G.width; G.canvas.height = G.height}, 'sg');
+new MenuButton("fpsdown", () => G.width / 2 - 200, 440, 200, 36, () => {FrameLimit(-1)}, 'sg');
+new MenuButton("fpsup", () => G.width / 2, 440, 200, 36, () => {FrameLimit(1)}, 'sg');
 
 //W-SCENE:M // MENU
 new Scene ('m', () => {
@@ -1320,7 +1370,32 @@ new Scene ('s', () => {
     else G.C.fillText('CONTROLS', Math.round(G.width / 2), 350);
     if (G.N.B.default.hover) G.C.fillText('> RESET BINDINGS <', Math.round(G.width / 2), 430);
     else G.C.fillText('RESET BINDINGS', Math.round(G.width / 2), 430);
+    if (G.N.B.graphics.hover) G.C.fillText('> GRAPHICS <', Math.round(G.width / 2), 510);
+    else G.C.fillText('GRAPHICS', Math.round(G.width / 2), 510);
     if (G.N.B.sback.hover) G.C.fillText('> BACK <', 100, 50);
+    else G.C.fillText('BACK', 100, 50);
+});
+
+//W-SCENE:SG // SETTINGS:GRAPHICS
+new Scene ('sg', () => {
+    G.C.fillStyle = 'white';
+    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.textAlign = 'center';
+    G.C.fillText('GRAPHICS', Math.round(G.width / 2), 200);
+    G.C.font = "24px 'Press Start 2P', sans-serif";
+    if (G.N.B.rescale.hover) G.C.fillText('> RESCALE <', Math.round(G.width / 2), 350);
+    else G.C.fillText('RESCALE', Math.round(G.width / 2), 350);
+    G.C.fillText('FPS LIMIT:', Math.round(G.width / 2), 430);
+    if (F.limit != 'None') {
+        if (G.N.B.fpsup.hover) G.C.fillText('> ' + F.limit + ' fps >', Math.round(G.width / 2), 470);
+        else if (G.N.B.fpsdown.hover) G.C.fillText('< ' + F.limit + ' fps <', Math.round(G.width / 2), 470);
+        else G.C.fillText('< ' + F.limit + ' fps >', Math.round(G.width / 2), 470);
+    } else {
+        if (G.N.B.fpsup.hover) G.C.fillText('> ' + F.limit + ' >', Math.round(G.width / 2), 470);
+        else if (G.N.B.fpsdown.hover) G.C.fillText('< ' + F.limit + ' <', Math.round(G.width / 2), 470);
+        else G.C.fillText('< ' + F.limit + ' >', Math.round(G.width / 2), 470);
+    }
+    if (G.N.B.sgback.hover) G.C.fillText('> BACK <', 100, 50);
     else G.C.fillText('BACK', 100, 50);
 });
 
@@ -1577,13 +1652,13 @@ new Scene ('g', () => {
     G.C.fillStyle = '#555';
     if (G.wave == 0) G.C.fillRect(G.width - G.C.measureText('Send Wave: --').width - 20, 48, 
     G.C.measureText('Send Wave: --').width + 20, 32);
-    else G.C.fillRect(G.width - G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer / 50), 0)).width - 20, 48, 
-    G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer / 50), 0)).width + 20, 32);
+    else G.C.fillRect(G.width - G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer), 0)).width - 20, 48, 
+    G.C.measureText('Send Wave: ' + Math.max(Math.floor(G.wavetimer), 0)).width + 20, 32);
     if (G.wavespawn > 0) G.C.fillStyle = '#999';
     else G.C.fillStyle = 'white';
     G.C.textAlign = 'right';
     if (G.wave == 0) G.C.fillText('Send Wave: --', G.width - 10, 72);
-    else G.C.fillText('Send Wave: ' + Math.max(Math.floor(G.wavetimer / 50), 0), G.width - 10, 72);
+    else G.C.fillText('Send Wave: ' + Math.max(Math.floor(G.wavetimer), 0), G.width - 10, 72);
     G.C.textAlign = 'left';
     if (getTile(G.A.C.X, G.A.C.Y, true).tower == null) G.C.fillStyle = 'white';
     else G.C.fillStyle = getTile(G.A.C.X, G.A.C.Y, true).tower.color;
@@ -1893,7 +1968,7 @@ new KeyBinding('Start', 'start', 'Enter', e => {G.scene = 'g'}, 'm');
 new KeyBinding('Quit', 'quit', 'KeyQ', e => {G.scene = 'm'; G.speed = 0; G.pause = true;}, 'g');`q`
 new KeyBinding('Next Targeting', 'nexttargeting', 'KeyY', e => {if (getTile(G.A.C.X, G.A.C.Y, true).tower !== null) getTile(G.A.C.X, G.A.C.Y).tower.targetchange(1)}, 'g');
 new KeyBinding('Previous Targeting', 'prevtargeting', 'KeyT', e => {if (getTile(G.A.C.X, G.A.C.Y, true).tower !== null) getTile(G.A.C.X, G.A.C.Y).tower.targetchange(-1)}, 'g');
-new KeyBinding('Back', 'back', 'Escape', e => {if (G.scene.length > 1) G.scene = G.scene.slice(0, -1); else G.scene = 'm'}, ['e', 's', 'sb', 't']);
+new KeyBinding('Back', 'back', 'Escape', e => {if (G.scene.length > 1) G.scene = G.scene.slice(0, -1); else G.scene = 'm'}, ['e', 's', 'sb', 't', 'sg']);
 new KeyBinding('Debug On', 'don', 'KeyP', e => {G.DEEEEEEEEBUG = true}, ['g', 'm', 's']);
 new KeyBinding('Debug Off', 'doff', 'KeyO', e => {G.DEEEEEEEEBUG = false}, ['g', 'm', 's']);
 
@@ -2037,6 +2112,7 @@ function NextWave() {
     G.wave++;
     try { 
         G.wavespawn = wave[3] * wave[5].length; 
+        G.wavetotal = G.wavespawn;
         G.wavetimer = G.wavespawn + wave[4];
         G.wavespace = wave[3];
         G.wavespawned = 0;

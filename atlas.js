@@ -109,6 +109,3 @@ new TextureAtlas(
         new TextureEntry("turret-super-5", 5, 12)
     ]
 )
-
-G.P = new OffscreenCanvas(G.A.A.config.scale[0], G.A.A.config.scale[1]); //PRELOAD
-G.PC = G.P.getContext('2d');
