@@ -1,135 +1,114 @@
-G.A.A = {
-    "config": {
-        "size": [
-            64, 64
-        ],
-        "tiles": [
-            8, 4
-        ],
-        "scale": [
-            64, 64
-        ],
-        "defaultscale": [
-            64, 64
-        ]
-    },
-    "atlas": {
-        "track-": [
-            0, 0
-        ],
-        "track-r": [
-            64, 0
-        ],
-        "track-rl": [
-            128, 0
-        ],
-        "track-l": [
-            192, 0
-        ],
-        "track-d": [
-            256, 0
-        ],
-        "track-rd": [
-            320, 0
-        ],
-        "track-rld": [
-            384, 0
-        ],
-        "track-ld": [
-            448, 0
-        ],
-        "track-ud": [
-            0, 64
-        ],
-        "track-rud": [
-            64, 64
-        ],
-        "track-rlud": [
-            128, 64
-        ],
-        "track-lud": [
-            192, 64
-        ],
-        "track-u": [
-            256, 64
-        ],
-        "track-ru": [
-            320, 64
-        ],
-        "track-rlu": [
-            384, 64
-        ],
-        "track-lu": [
-            448, 64
-        ],
-        "selected": [
-            0, 192
-        ],
-        "selected-invalid": [
-            0, 256
-        ],
-        "spawn": [
-            64, 256
-        ],
-        "base": [
-            128, 256
-        ],
-        "tower": [
-            0, 128
-        ],
-        "basic": [
-            64, 128
-        ],
-        "basic-turret": [
-            64, 192
-        ],
-        "sniper": [
-            128, 128
-        ],
-        "sniper-turret": [
-            128, 192
-        ],
-        "beam": [
-            192, 128
-        ],
-        "beam-turret": [
-            192, 192
-        ],
-        "enemy-basic": [
-            192, 256
-        ],
-        "enemy-heavy": [
-            256, 256
-        ],
-        "enemy-fast": [
-            320, 256
-        ],
-        "multi": [
-            256, 128
-        ],
-        "multi-turret": [
-            256, 192
-        ],
-        "aura": [
-            320, 128
-        ],
-        "aura-turret": [
-            320, 192
-        ],
-        "super": [
-            384, 128
-        ],
-        "super-turret": [
-            384, 192
-        ],
-        "enemy-tank": [
-            384, 256
-        ],
-        "enemy-speeder": [
-            448, 256
-        ]
-    }
-}
+new TextureAtlas(
+    "tiles", "img/tiles.png", new TextureConfig(128, 128, 5, 5, 64, 64),
+    [
+        new TextureEntry("track-", 0, 0),
+        new TextureEntry("track-r", 1, 0),
+        new TextureEntry("track-rl", 2, 0),
+        new TextureEntry("track-l", 3, 0),
+        new TextureEntry("track-d", 4, 0),
+        new TextureEntry("track-rd", 0, 1),
+        new TextureEntry("track-rld", 1, 1),
+        new TextureEntry("track-ld", 2, 1),
+        new TextureEntry("track-ud", 3, 1),
+        new TextureEntry("track-rud", 4, 1),
+        new TextureEntry("track-rlud", 0, 2),
+        new TextureEntry("track-lud", 1, 2),
+        new TextureEntry("track-u", 2, 2),
+        new TextureEntry("track-ru", 3, 2),
+        new TextureEntry("track-rlu", 4, 2),
+        new TextureEntry("track-lu", 0, 3),
+        new TextureEntry("tower", 1, 3),
+        new TextureEntry("selected", 2, 3),
+        new TextureEntry("selected-invalid", 3, 3),
+        new TextureEntry("spawn", 4, 3),
+        new TextureEntry("base", 0, 4)
+        
+    ]
+)
+
+new TextureAtlas(
+    "sprites", "img/sprites.png", new TextureConfig(64, 64, 6, 3, 64, 64),
+    [
+        new TextureEntry("enemy-speeder", 0, 0),
+        new TextureEntry("enemy-fast", 1, 0),
+        new TextureEntry("enemy-basic", 2, 0),
+        new TextureEntry("enemy-heavy", 3, 0),
+        new TextureEntry("enemy-tank", 4, 0),
+        new TextureEntry("enemy-boss", 5, 0),
+        new TextureEntry("tower-basic", 0, 1),
+        new TextureEntry("tower-basic-1", 1, 1),
+        new TextureEntry("tower-basic-2", 2, 1),
+        new TextureEntry("tower-basic-3", 3, 1),
+        new TextureEntry("tower-basic-4", 4, 1),
+        new TextureEntry("tower-basic-5", 5, 1),
+        new TextureEntry("tower-sniper", 0, 2),
+        new TextureEntry("tower-sniper-1", 1, 2),
+        new TextureEntry("tower-sniper-2", 2, 2),
+        new TextureEntry("tower-sniper-3", 3, 2),
+        new TextureEntry("tower-sniper-4", 4, 2),
+        new TextureEntry("tower-sniper-5", 5, 2),
+        new TextureEntry("tower-beam", 0, 3),
+        new TextureEntry("tower-beam-1", 1, 3),
+        new TextureEntry("tower-beam-2", 2, 3),
+        new TextureEntry("tower-beam-3", 3, 3),
+        new TextureEntry("tower-beam-4", 4, 3),
+        new TextureEntry("tower-beam-5", 5, 3),
+        new TextureEntry("tower-multi", 0, 4),
+        new TextureEntry("tower-multi-1", 1, 4),
+        new TextureEntry("tower-multi-2", 2, 4),
+        new TextureEntry("tower-multi-3", 3, 4),
+        new TextureEntry("tower-multi-4", 4, 4),
+        new TextureEntry("tower-multi-5", 5, 4),
+        new TextureEntry("tower-aura", 0, 5),
+        new TextureEntry("tower-aura-1", 1, 5),
+        new TextureEntry("tower-aura-2", 2, 5),
+        new TextureEntry("tower-aura-3", 3, 5),
+        new TextureEntry("tower-aura-4", 4, 5),
+        new TextureEntry("tower-aura-5", 5, 5),
+        new TextureEntry("tower-super", 0, 6),
+        new TextureEntry("tower-super-1", 1, 6),
+        new TextureEntry("tower-super-2", 2, 6),
+        new TextureEntry("tower-super-3", 3, 6),
+        new TextureEntry("tower-super-4", 4, 6),
+        new TextureEntry("tower-super-5", 5, 6),
+        new TextureEntry("turret-basic", 0, 7),
+        new TextureEntry("turret-basic-1", 1, 7),
+        new TextureEntry("turret-basic-2", 2, 7),
+        new TextureEntry("turret-basic-3", 3, 7),
+        new TextureEntry("turret-basic-4", 4, 7),
+        new TextureEntry("turret-basic-5", 5, 7),
+        new TextureEntry("turret-sniper", 0, 8),
+        new TextureEntry("turret-sniper-1", 1, 8),
+        new TextureEntry("turret-sniper-2", 2, 8),
+        new TextureEntry("turret-sniper-3", 3, 8),
+        new TextureEntry("turret-sniper-4", 4, 8),
+        new TextureEntry("turret-sniper-5", 5, 8),
+        new TextureEntry("turret-beam", 0, 9),
+        new TextureEntry("turret-beam-1", 1, 9),
+        new TextureEntry("turret-beam-2", 2, 9),
+        new TextureEntry("turret-beam-3", 3, 9),
+        new TextureEntry("turret-beam-4", 4, 9),
+        new TextureEntry("turret-beam-5", 5, 9),
+        new TextureEntry("turret-multi", 0, 10),
+        new TextureEntry("turret-multi-1", 1, 10),
+        new TextureEntry("turret-multi-2", 2, 10),
+        new TextureEntry("turret-multi-3", 3, 10),
+        new TextureEntry("turret-multi-4", 4, 10),
+        new TextureEntry("turret-multi-5", 5, 10),
+        new TextureEntry("turret-aura", 0, 11),
+        new TextureEntry("turret-aura-1", 1, 11),
+        new TextureEntry("turret-aura-2", 2, 11),
+        new TextureEntry("turret-aura-3", 3, 11),
+        new TextureEntry("turret-aura-4", 4, 11),
+        new TextureEntry("turret-aura-5", 5, 11),
+        new TextureEntry("turret-super", 0, 12),
+        new TextureEntry("turret-super-1", 1, 12),
+        new TextureEntry("turret-super-2", 2, 12),
+        new TextureEntry("turret-super-3", 3, 12),
+        new TextureEntry("turret-super-4", 4, 12),
+        new TextureEntry("turret-super-5", 5, 12)
+    ]
+)
 
 G.P = new OffscreenCanvas(G.A.A.config.scale[0], G.A.A.config.scale[1]); //PRELOAD
 G.PC = G.P.getContext('2d');

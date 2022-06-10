@@ -1,4 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('PressStart2P-Regular.woff2') format('woff2'),
+        url('PressStart2P-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
 canvas {
     top: 0;
@@ -6,9 +13,10 @@ canvas {
     margin: 0;
     padding: 0;
     position: fixed;
+    background-color: black;
 }
 html, body, img {
     padding: 0;
     margin: 0;
-    background-color: black;
+    background-color: gray;
 }
