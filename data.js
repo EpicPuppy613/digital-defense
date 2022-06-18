@@ -347,54 +347,54 @@ G.A.D = {
                 " ": null
             },
             "W": [
-                [1.1, 1.0, 1.0, 0.50, 20.0, "bbbbbbbb"],
-                [1.2, 1.0, 1.1, 0.48, 20.4, "bbbbbbbbbbbb"],
-                [1.3, 1.0, 1.1, 0.46, 20.8, "bbbbbbbbbbbbbbbb"],
-                [1.4, 1.0, 1.2, 0.44, 21.2, "bbbbbbbbbbbbbbbbbbbb"],
-                [1.5, 1.0, 1.2, 0.42, 21.6, "bbbbbb h bbbbbb h bbbbbb"],
-                [1.6, 1.1, 1.3, 0.40, 22.0, "bbbbb hh bbbbb hh bbbbb hh bbbbb"],
-                [1.7, 1.1, 1.3, 0.38, 22.4, "fbbbbbf h fbbbbbf h fbbbbbf h fbbbbbf"],
-                [1.8, 1.1, 1.4, 0.30, 22.8, "bbbfffbbb bbbfffbbb bbbfffbbb bbbfffbbb"],
-                [1.9, 1.1, 1.4, 0.30, 23.2, "bbff h ffbbff h ffbbff h ffbbff h ffbb"],
-                [2.0, 1.1, 1.5, 0.24, 23.6, "bbfbbfbbfbbfbbfbbfbbfbbfbbfbbfbbfbbfbb"],
-                [2.1, 1.2, 1.5, 0.30, 24.0, "hbbbbffffhffffbbbbffffhffffbbbbh"],
-                [2.2, 1.2, 1.6, 0.50, 24.4, "fhf   t    bbbbffhhffbbbb   t    fhf"],
-                [2.3, 1.2, 1.6, 0.48, 24.8, "fbfbhbfbf   t    fbfbhbfbf   t    fbfbhbfbf"],
-                [2.4, 1.2, 1.7, 0.36, 25.2, "fff ss fff ss fff ss fff ss fff ss fff ss fff"],
-                [2.5, 1.2, 1.7, 0.36, 25.6, "ffbbsbbff ffbbsbbff ffbbsbbff ffbbsbbff ffbbsbbff"],
-                [2.6, 1.3, 1.8, 0.40, 26.0, "fbsbf   t    fbsbf   t   fbsbf   t    fbsbf"],
-                [2.7, 1.3, 1.8, 0.20, 26.4, "bbssffssbbssffssbb     bbssffssbbssffssbb"],
-                [2.8, 1.3, 1.9, 0.24, 26.8, "fff sss fff hhh fff sts fff hhh fff sss fff"],
-                [2.9, 1.3, 1.9, 0.30, 27.2, "fbfsbsfbfhbhfbfstsfbfhbhfbfsbsfbfstsfbfhbhfbfsbsfbf"],
-                [3.0, 1.3, 1.0, 0.32, 27.6, "bbfbb    bbfbb      c      bbfbb    bbfbb"],
-                [3.1, 1.4, 2.0, 0.36, 28.0, "hhffbbsbbffhhffbbssbbffhhffbbsbbffhh"],
-                [3.2, 1.4, 2.1, 0.16, 28.4, "ssssssssssss          ffffffffff          bbbbbbbb          hhhh          tt"],
-                [3.3, 1.4, 2.1, 0.24, 28.8, "sbfbhbfbs   t   sbfbhbfbs   t   sbfbhbfbs   t   sbfbhbfbs   t   sbfbhbfbs"],
-                [3.4, 1.4, 2.2, 0.04, 29.2, "bbbfhfbbbfhfbbb                                                                      bbbfhfbbbfhfbbb"],
-                [3.5, 1.4, 2.2, 0.16, 29.6, "ffff ssss ffff               bb t bb t bb               ffff ssss ffff"],
-                [3.6, 1.5, 2.3, 0.01, 30.0, ""],
-                [3.7, 1.5, 2.3, 0.01, 30.4, ""],
-                [3.8, 1.5, 2.4, 0.01, 30.8, ""],
-                [3.9, 1.5, 2.4, 0.01, 31.2, ""],
-                [4.0, 1.5, 2.5, 0.01, 31.6, ""]
+                [1.1, 1.0, 1.0, 25, 1000, "bbbbbbbb"],
+                [1.2, 1.0, 1.1, 24, 1020, "bbbbbbbbbbbb"],
+                [1.3, 1.0, 1.1, 23, 1040, "bbbbbbbbbbbbbbbb"],
+                [1.4, 1.0, 1.2, 22, 1060, "bbbbbbbbbbbbbbbbbbbb"],
+                [1.5, 1.0, 1.2, 21, 1080, "bbbbbb h bbbbbb h bbbbbb"],
+                [1.6, 1.1, 1.3, 20, 1100, "bbbbb hh bbbbb hh bbbbb hh bbbbb"],
+                [1.7, 1.1, 1.3, 19, 1120, "fbbbbbf h fbbbbbf h fbbbbbf h fbbbbbf"],
+                [1.8, 1.1, 1.4, 15, 1140, "bbbfffbbb bbbfffbbb bbbfffbbb bbbfffbbb"],
+                [1.9, 1.1, 1.4, 15, 1160, "bbff h ffbbff h ffbbff h ffbbff h ffbb"],
+                [2.0, 1.1, 1.5, 12, 1180, "bbfbbfbbfbbfbbfbbfbbfbbfbbfbbfbbfbbfbb"],
+                [2.1, 1.2, 1.5, 15, 1200, "hbbbbffffhffffbbbbffffhffffbbbbh"],
+                [2.2, 1.2, 1.6, 25, 1220, "fhf   t    bbbbffhhffbbbb   t    fhf"],
+                [2.3, 1.2, 1.6, 24, 1240, "fbfbhbfbf   t    fbfbhbfbf   t    fbfbhbfbf"],
+                [2.4, 1.2, 1.7, 18, 1260, "fff ss fff ss fff ss fff ss fff ss fff ss fff"],
+                [2.5, 1.2, 1.7, 18, 1280, "ffbbsbbff ffbbsbbff ffbbsbbff ffbbsbbff ffbbsbbff"],
+                [2.6, 1.3, 1.8, 20, 1300, "fbsbf   t    fbsbf   t   fbsbf   t    fbsbf"],
+                [2.7, 1.3, 1.8, 10, 1320, "bbssffssbbssffssbb     bbssffssbbssffssbb"],
+                [2.8, 1.3, 1.9, 12, 1340, "fff sss fff hhh fff sts fff hhh fff sss fff"],
+                [2.9, 1.3, 1.9, 15, 1360, "fbfsbsfbfhbhfbfstsfbfhbhfbfsbsfbfstsfbfhbhfbfsbsfbf"],
+                [3.0, 1.3, 1.0, 16, 1380, "bbfbb    bbfbb      c      bbfbb    bbfbb"],
+                [3.1, 1.4, 2.0, 18, 1400, "hhffbbsbbffhhffbbssbbffhhffbbsbbffhh"],
+                [3.2, 1.4, 2.1, 08, 1420, "ssssssssssss          ffffffffff          bbbbbbbb          hhhh          tt"],
+                [3.3, 1.4, 2.1, 12, 1440, "sbfbhbfbs   t   sbfbhbfbs   t   sbfbhbfbs   t   sbfbhbfbs   t   sbfbhbfbs"],
+                [3.4, 1.4, 2.2, 02, 1460, "bbbfhfbbbfhfbbb                                                                      bbbfhfbbbfhfbbb"],
+                [3.5, 1.4, 2.2, 08, 1480, "ffff ssss ffff               bb t bb t bb               ffff ssss ffff"],
+                [3.6, 1.5, 2.3, 00, 1500, ""],
+                [3.7, 1.5, 2.3, 00, 1520, ""],
+                [3.8, 1.5, 2.4, 00, 1540, ""],
+                [3.9, 1.5, 2.4, 00, 1560, ""],
+                [4.0, 1.5, 2.5, 00, 1580, ""]
             ]
         }
     }
 };
 
 G.A.B = {
-    basic: new TowerPrototype("Basic", 'basic', 'tower-basic', 'turret-basic', 2, 4, 2.5, '#007eeb', 20, 2, 0.20, 1, 60, [
+    basic: new TowerPrototype("Basic", 'basic', 'tower-basic', 'turret-basic', 2, 4, 2.5, '#007eeb', 20, 2, 10, 1, 60, [
         {"level": 2, "req": ["basic-mk1"], "texture": "tower-basic-1", "turret": "turret-basic-1"},
         {"level": 4, "req": ["basic-mk2"], "texture": "tower-basic-2", "turret": "turret-basic-2"},
         {"level": 7, "req": ["basic-mk3"], "texture": "tower-basic-3", "turret": "turret-basic-3"},
         {"level": 11, "req": ["basic-mk4"], "texture": "tower-basic-4", "turret": "turret-basic-4"},
         {"level": 16, "req": ["basic-mk5"], "texture": "tower-basic-5", "turret": "turret-basic-5"}
     ]),
-    sniper: new TowerPrototype("Sniper", 'sniper', 'tower-sniper', 'turret-sniper', 0.5, 15, 4.5, '#00cb3e', 26, 1, 0.50, 1, 85),
-    beam: new TowerPrototype("Beam", 'beam', 'tower-beam', 'turret-beam', 25, 0.2, 1.25, '#b700dc', 9, 4, 0.08, 3, 110),
-    multi: new TowerPrototype("Multishot", 'multi', 'tower-multi', 'turret-multi', 2, 2.5, 2, '#eded00', 4, 2, 0.20, 3, 150),
-    aura: new TowerPrototype("Aura", 'aura', 'tower-aura', 'turret-aura', 50, 0.01, 1.5, '#f17a00', 0, 0.2, 0.04, 100, 185),
-    super: new TowerPrototype("Ultimate", 'super', 'tower-super', 'turret-super', 4, 15, 3.5, '#f30000', 20, 2, 0.20, 1, 500)
+    sniper: new TowerPrototype("Sniper", 'sniper', 'tower-sniper', 'turret-sniper', 0.5, 15, 4.5, '#00cb3e', 26, 1, 25, 1, 85),
+    beam: new TowerPrototype("Beam", 'beam', 'tower-beam', 'turret-beam', 25, 0.2, 1.25, '#b700dc', 9, 4, 4, 3, 110),
+    multi: new TowerPrototype("Multishot", 'multi', 'tower-multi', 'turret-multi', 2, 2.5, 2, '#eded00', 4, 2, 10, 3, 150),
+    aura: new TowerPrototype("Aura", 'aura', 'tower-aura', 'turret-aura', 50, 0.01, 1.5, '#f17a00', 0, 0.2, 2, 100, 185),
+    super: new TowerPrototype("Ultimate", 'super', 'tower-super', 'turret-super', 4, 15, 3.5, '#f30000', 20, 2, 10, 1, 500)
 };
 
 G.A.E = {
@@ -651,3 +651,5 @@ G.A.U = {
         )
     ]
 }
+
+loadMap(G.A.D.T[G.map]);
