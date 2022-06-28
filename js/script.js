@@ -1350,7 +1350,7 @@ G.canvas.addEventListener('click', e => {
                 }
             };
             //Destroy tower
-            offset = (96 * Math.sin((Math.PI / 50) * (G.U.anim - 25)) + 96);
+            offset = (96 * Math.sin((Math.PI / F.time) * (G.U.anim - 25)) + 96);
             G.C.font = "16px 'Press Start 2P', sans-serif";
             destroy = {};
             destroy.x = G.width - G.C.textWidth("[X] Destroy: " + tile.tower.refund + "p").width - 20;

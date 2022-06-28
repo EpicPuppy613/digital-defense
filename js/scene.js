@@ -476,8 +476,8 @@ new Scene('g', () => {
     }
     if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && G.A.C.on) G.U.on = true;
     else G.U.on = false;
-    if (G.U.on && G.U.anim < 50) G.U.anim += 10;
-    if (!G.U.on && G.U.anim > 0) G.U.anim -= 10;
+    if (G.U.on && G.U.anim < 50) G.U.anim = Math.min(G.U.anim + 500 / F.time, 50);
+    if (!G.U.on && G.U.anim > 0) G.U.anim = Math.max(G.U.anim - 500 / F.time, 0);
     offset = (96 * Math.sin((Math.PI / 50) * (G.U.anim - 25)) + 96);
     //W-UI
     //TOPBAR
