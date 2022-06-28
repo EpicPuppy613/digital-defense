@@ -1,12 +1,3 @@
-@font-face {
-    font-family: 'Press Start 2P';
-    src: url('PressStart2P-Regular.woff2') format('woff2'),
-        url('PressStart2P-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
 canvas {
     top: 0;
     left: 0;
