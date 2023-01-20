@@ -1,0 +1,14 @@
+{
+    "type": "tan", 
+    "id": "tank", 
+    "size": [56, 56], 
+    "texture": "enemy-tank", 
+    "hp": 100, 
+    "damage": 5, 
+    "speed": 0.4, 
+    "hitbox": [28, 28], 
+    "reward": 10, 
+    "color1": "#790000", 
+    "color2": "#550000",
+    "boss": false
+}

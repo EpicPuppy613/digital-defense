@@ -1,0 +1,20 @@
+{
+    "name": "Precision III",
+    "id": "sniper-dg3",
+    "desc": [
+        "massively increases the",
+        "damage of the tower",
+        "",
+        "+ 28 damage"
+    ],
+    "tower": "sniper",
+    "cost": 800,
+    "req": [
+        "sniper-mk4",
+        "sniper-PB",
+        "sniper-dg2"
+    ],
+    "add": {
+        "dg": 28
+    }
+}

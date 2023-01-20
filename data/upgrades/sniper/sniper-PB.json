@@ -1,0 +1,24 @@
+{
+    "name": "SNIPER BOOST",
+    "id": "sniper-PB",
+    "desc": [
+        "increases the stats of the tower",
+        "",
+        "+ 16 damage",
+        "+ 0.15 fire rate",
+        "+ 0.45 range"
+    ],
+    "tower": "sniper",
+    "cost": 550,
+    "req": [
+        "sniper-mk3",
+        "sniper-rg2",
+        "sniper-dg2",
+        "sniper-fr2"
+    ],
+    "add": {
+        "dg": 16,
+        "fr": 0.15,
+        "rg": 0.45
+    }
+}

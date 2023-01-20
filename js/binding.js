@@ -1,72 +1,72 @@
 //W-BINDINGS
-new KeyBinding('Deselect', 'deselect', 'Escape', () => { G.A.C.on = false; }, 'g');
-new KeyBinding('Recenter', 'recenter', 'KeyR', () => { G.O.X = Math.floor((G.width - G.A.M[G.map].map.size[0] * G.A.TS[0]) / 2); G.O.Y = 48 + Math.floor((G.height - 48 - G.A.M[G.map].map.size[1] * G.A.TS[1]) / 2); }, ['g', 'ee']);
+new KeyBinding('Deselect', 'deselect', 'Escape', () => { G.data.cursor.on = false; }, 'g');
+new KeyBinding('Recenter', 'recenter', 'KeyR', () => { G.offset.X = Math.floor((G.width - G.data.maps[G.map].map.size[0] * G.data.trackSize[0]) / 2); G.offset.Y = 48 + Math.floor((G.height - 48 - G.data.maps[G.map].map.size[1] * G.data.trackSize[1]) / 2); }, ['g', 'ee']);
 new KeyBinding('Move Right', 'right', 'ArrowRight', e => {
-    if (e.ctrlKey && e.shiftKey) G.O.X -= G.A.TS[0] * 16;
-    else if (e.ctrlKey) G.O.X -= G.A.TS[0] / 4;
-    else if (e.shiftKey) G.O.X -= G.A.TS[0] * 4;
-    else G.O.X -= G.A.TS[0];
+    if (e.ctrlKey && e.shiftKey) G.offset.X -= G.data.trackSize[0] * 16;
+    else if (e.ctrlKey) G.offset.X -= G.data.trackSize[0] / 4;
+    else if (e.shiftKey) G.offset.X -= G.data.trackSize[0] * 4;
+    else G.offset.X -= G.data.trackSize[0];
 }, ['g', 'ee']);
 new KeyBinding('Move Left', 'left', 'ArrowLeft', e => {
-    if (e.ctrlKey && e.shiftKey) G.O.X += G.A.TS[0] * 16;
-    else if (e.ctrlKey) G.O.X += G.A.TS[0] / 4;
-    else if (e.shiftKey) G.O.X += G.A.TS[0] * 4;
-    else G.O.X += G.A.TS[0];
+    if (e.ctrlKey && e.shiftKey) G.offset.X += G.data.trackSize[0] * 16;
+    else if (e.ctrlKey) G.offset.X += G.data.trackSize[0] / 4;
+    else if (e.shiftKey) G.offset.X += G.data.trackSize[0] * 4;
+    else G.offset.X += G.data.trackSize[0];
 }, ['g', 'ee']);
 new KeyBinding('Move Up', 'up', 'ArrowUp', e => {
-    if (e.ctrlKey && e.shiftKey) G.O.Y += G.A.TS[1] * 16;
-    else if (e.ctrlKey) G.O.Y += G.A.TS[0] / 4;
-    else if (e.shiftKey) G.O.Y += G.A.TS[0] * 4;
-    else G.O.Y += G.A.TS[0];
+    if (e.ctrlKey && e.shiftKey) G.offset.Y += G.data.trackSize[1] * 16;
+    else if (e.ctrlKey) G.offset.Y += G.data.trackSize[0] / 4;
+    else if (e.shiftKey) G.offset.Y += G.data.trackSize[0] * 4;
+    else G.offset.Y += G.data.trackSize[0];
 }, ['g', 'ee']);
 new KeyBinding('Move Down', 'down', 'ArrowDown', e => {
-    if (e.ctrlKey && e.shiftKey) G.O.Y -= G.A.TS[1] * 16;
-    else if (e.ctrlKey) G.O.Y -= G.A.TS[0] / 4;
-    else if (e.shiftKey) G.O.Y -= G.A.TS[0] * 4;
-    else G.O.Y -= G.A.TS[0];
+    if (e.ctrlKey && e.shiftKey) G.offset.Y -= G.data.trackSize[1] * 16;
+    else if (e.ctrlKey) G.offset.Y -= G.data.trackSize[0] / 4;
+    else if (e.shiftKey) G.offset.Y -= G.data.trackSize[0] * 4;
+    else G.offset.Y -= G.data.trackSize[0];
 }, ['g', 'ee']);
 new KeyBinding('Build Basic', 'basic', 'KeyG', e => {
-    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.basic.cost && G.A.C.on) {
-        G.A.B.basic.generate(G.A.C.X, G.A.C.Y);
-        G.points -= G.A.B.basic.cost;
+    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.basic.cost && G.data.cursor.on) {
+        G.data.buildings.basic.generate(G.data.cursor.X, G.data.cursor.Y);
+        G.points -= G.data.buildings.basic.cost;
     }
 }, 'g');
 new KeyBinding('Build Sniper', 'sniper', 'KeyH', e => {
-    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.sniper.cost && G.A.C.on) {
-        G.A.B.sniper.generate(G.A.C.X, G.A.C.Y);
-        G.points -= G.A.B.sniper.cost;
+    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.sniper.cost && G.data.cursor.on) {
+        G.data.buildings.sniper.generate(G.data.cursor.X, G.data.cursor.Y);
+        G.points -= G.data.buildings.sniper.cost;
     }
 }, 'g');
 new KeyBinding('Build Beam', 'beam', 'KeyJ', e => {
-    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.beam.cost && G.A.C.on) {
-        G.A.B.beam.generate(G.A.C.X, G.A.C.Y);
-        G.points -= G.A.B.beam.cost;
+    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.beam.cost && G.data.cursor.on) {
+        G.data.buildings.beam.generate(G.data.cursor.X, G.data.cursor.Y);
+        G.points -= G.data.buildings.beam.cost;
     }
 }, 'g');
 new KeyBinding('Build Multishot', 'multi', 'KeyB', e => {
-    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.multi.cost && G.A.C.on) {
-        G.A.B.multi.generate(G.A.C.X, G.A.C.Y);
-        G.points -= G.A.B.multi.cost;
+    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.multi.cost && G.data.cursor.on) {
+        G.data.buildings.multi.generate(G.data.cursor.X, G.data.cursor.Y);
+        G.points -= G.data.buildings.multi.cost;
     }
 }, 'g');
 new KeyBinding('Build Aura', 'aura', 'KeyN', e => {
-    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.aura.cost && G.A.C.on) {
-        G.A.B.aura.generate(G.A.C.X, G.A.C.Y);
-        G.points -= G.A.B.aura.cost;
+    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.aura.cost && G.data.cursor.on) {
+        G.data.buildings.aura.generate(G.data.cursor.X, G.data.cursor.Y);
+        G.points -= G.data.buildings.aura.cost;
     }
 }, 'g');
 new KeyBinding('Build Ultimate', 'super', 'KeyM', e => {
-    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.super.cost && G.A.C.on) {
-        G.A.B.super.generate(G.A.C.X, G.A.C.Y);
-        G.points -= G.A.B.super.cost;
+    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.super.cost && G.data.cursor.on) {
+        G.data.buildings.super.generate(G.data.cursor.X, G.data.cursor.Y);
+        G.points -= G.data.buildings.super.cost;
     }
 }, 'g');
 new KeyBinding('Destroy', 'destroy', 'KeyX', e => {
-    for (var i = 0; i < G.T.B.length; i++) {
-        if (G.T.B[i].x == G.A.C.X && G.T.B[i].y == G.A.C.Y && getTile(G.T.B[i].x, G.T.B[i].y, true).tower != null) {
-            G.points += getTile(G.T.B[i].x, G.T.B[i].y).tower.refund;
-            getTile(G.T.B[i].x, G.T.B[i].y).tower = null;
-            G.T.B.splice(i, 1);
+    for (let i = 0; i < G.objects.buildings.length; i++) {
+        if (G.objects.buildings[i].x == G.data.cursor.X && G.objects.buildings[i].y == G.data.cursor.Y && getTile(G.objects.buildings[i].x, G.objects.buildings[i].y, true).tower != null) {
+            G.points += getTile(G.objects.buildings[i].x, G.objects.buildings[i].y).tower.refund;
+            getTile(G.objects.buildings[i].x, G.objects.buildings[i].y).tower = null;
+            G.objects.buildings.splice(i, 1);
         }
     }
 }, 'g');
@@ -115,23 +115,20 @@ new KeyBinding('Pause', 'pause', 'KeyS', e => {
     G.multi = G.speeds[G.speed];
 }, 'g');
 new KeyBinding('Send Wave', 'wave', 'KeyW', e => { if (G.wavespawn < 0) NextWave(); }, 'g');
-new KeyBinding('Buy Upgrade 1', 'upgrade1', 'Digit1', e => { BuyUpgrade(getTile(G.A.C.X, G.A.C.Y, true), 0); }, 'g');
-new KeyBinding('Buy Upgrade 2', 'upgrade2', 'Digit2', e => { BuyUpgrade(getTile(G.A.C.X, G.A.C.Y, true), 1); }, 'g');
-new KeyBinding('Buy Upgrade 3', 'upgrade3', 'Digit3', e => { BuyUpgrade(getTile(G.A.C.X, G.A.C.Y, true), 2); }, 'g');
+new KeyBinding('Buy Upgrade 1', 'upgrade1', 'Digit1', e => { BuyUpgrade(getTile(G.data.cursor.X, G.data.cursor.Y, true), 0); }, 'g');
+new KeyBinding('Buy Upgrade 2', 'upgrade2', 'Digit2', e => { BuyUpgrade(getTile(G.data.cursor.X, G.data.cursor.Y, true), 1); }, 'g');
+new KeyBinding('Buy Upgrade 3', 'upgrade3', 'Digit3', e => { BuyUpgrade(getTile(G.data.cursor.X, G.data.cursor.Y, true), 2); }, 'g');
 new KeyBinding('Force Wave', 'force', 'KeyF', e => { NextWave(); }, 'g');
 new KeyBinding('Start', 'start', 'Enter', e => { G.scene = 'g' }, 'm');
-new KeyBinding('Quit', 'quit', 'KeyQ', e => { G.scene = 'm'; G.speed = 0; G.pause = true; A.M.S = true; }, 'g'); `q`
-new KeyBinding('Next Targeting', 'nexttargeting', 'KeyY', e => { if (getTile(G.A.C.X, G.A.C.Y, true).tower !== null) getTile(G.A.C.X, G.A.C.Y).tower.targetchange(1) }, 'g');
-new KeyBinding('Previous Targeting', 'prevtargeting', 'KeyT', e => { if (getTile(G.A.C.X, G.A.C.Y, true).tower !== null) getTile(G.A.C.X, G.A.C.Y).tower.targetchange(-1) }, 'g');
+new KeyBinding('Quit', 'quit', 'KeyQ', e => { G.scene = 'm'; G.speed = 0; G.pause = true; G.audio.music.switch = true; }, 'g'); `q`
+new KeyBinding('Next Targeting', 'nexttargeting', 'KeyY', e => { if (getTile(G.data.cursor.X, G.data.cursor.Y, true).tower !== null) getTile(G.data.cursor.X, G.data.cursor.Y).tower.targetchange(1) }, 'g');
+new KeyBinding('Previous Targeting', 'prevtargeting', 'KeyT', e => { if (getTile(G.data.cursor.X, G.data.cursor.Y, true).tower !== null) getTile(G.data.cursor.X, G.data.cursor.Y).tower.targetchange(-1) }, 'g');
 new KeyBinding('Back', 'back', 'Escape', e => { if (G.scene.length > 1) G.scene = G.scene.slice(0, -1); else G.scene = 'm' }, ['e', 's', 'sb', 't', 'sg', 'ee', 'ss']);
 new KeyBinding('Debug On', 'don', 'KeyP', e => { G.DEEEEEEEEBUG = true }, ['g', 'm', 's', 'e', 'ee']);
 new KeyBinding('Debug Off', 'doff', 'KeyO', e => { G.DEEEEEEEEBUG = false }, ['g', 'm', 's', 'e', 'ee']);
-new KeyBinding('Toggle Left', 'eleft', 'KeyA', e => { if (E.D.L) E.D.L = false; else if (!E.D.B && !E.D.P) E.D.L = true; }, 'ee');
-new KeyBinding('Toggle Right', 'eright', 'KeyD', e => { if (E.D.R) E.D.R = false; else if (!E.D.B && !E.D.P) E.D.R = true; }, 'ee');
-new KeyBinding('Toggle Up', 'eup', 'KeyW', e => { if (E.D.U) E.D.U = false; else if (!E.D.B && !E.D.P) E.D.U = true; }, 'ee');
-new KeyBinding('Toggle Down', 'edown', 'KeyS', e => { if (E.D.D) E.D.D = false; else if (!E.D.B && !E.D.P) E.D.D = true; }, 'ee');
-new KeyBinding('Toggle Base', 'ebase', 'KeyB', e => { if (E.D.B) E.D.B = false; else if (!E.D.P) {E.D.B = true; E.D.L = false; E.D.R = false; E.D.U = false; E.D.D = false;} }, 'ee');
-new KeyBinding('Toggle Platform', 'eplat', 'KeyC', e => {  if (E.D.P) E.D.P = false; else {E.D.P = true; E.D.B = false; E.D.L = false; E.D.R = false; E.D.U = false; E.D.D = false;} }, 'ee');
-new KeyBinding('Increase Percent Total', 'lt', 'KeyT', e => { L.percent = Math.min(L.percent + 0.025, 0.999) }, 'l');
-new KeyBinding('Increase Sub Total', 'ls', 'KeyF', e => { L.stages[L.stage].percent = Math.min(L.stages[L.stage].percent + 0.025, 1) }, 'l');
-new KeyBinding('Next Stage', 'ln', 'KeyG', e => { L.stage = Math.min(L.stage + 1, 3); L.stages[L.stage].percent = 0 }, 'l');
+new KeyBinding('Toggle Left', 'eleft', 'KeyA', e => { if (G.editor.direction.left) G.editor.direction.left = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.left = true; }, 'ee');
+new KeyBinding('Toggle Right', 'eright', 'KeyD', e => { if (G.editor.direction.right) G.editor.direction.right = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.right = true; }, 'ee');
+new KeyBinding('Toggle Up', 'eup', 'KeyW', e => { if (G.editor.direction.up) G.editor.direction.up = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.up = true; }, 'ee');
+new KeyBinding('Toggle Down', 'edown', 'KeyS', e => { if (G.editor.direction.down) G.editor.direction.down = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.down = true; }, 'ee');
+new KeyBinding('Toggle Base', 'ebase', 'KeyB', e => { if (G.editor.direction.base) G.editor.direction.base = false; else if (!G.editor.direction.platform) {G.editor.direction.base = true; G.editor.direction.left = false; G.editor.direction.right = false; G.editor.direction.up = false; G.editor.direction.down = false;} }, 'ee');
+new KeyBinding('Toggle Platform', 'eplat', 'KeyC', e => {  if (G.editor.direction.platform) G.editor.direction.platform = false; else {G.editor.direction.platform = true; G.editor.direction.base = false; G.editor.direction.left = false; G.editor.direction.right = false; G.editor.direction.up = false; G.editor.direction.down = false;} }, 'ee');

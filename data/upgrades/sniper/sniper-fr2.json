@@ -1,0 +1,18 @@
+{
+    "name": "Rate II",
+    "id": "sniper-fr2",
+    "desc": [
+        "increases the fire rate of the tower",
+        "",
+        "+ 0.1 fire rate"
+    ],
+    "tower": "sniper",
+    "cost": 420,
+    "req": [
+        "sniper-mk2",
+        "sniper-fr1"
+    ],
+    "add": {
+        "fr": 0.1
+    }
+}

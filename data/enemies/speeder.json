@@ -1,0 +1,14 @@
+{
+    "type": "speeder", 
+    "id": "speeder", 
+    "size": [20, 20], 
+    "texture": "enemy-speeder", 
+    "hp": 2, 
+    "damage": 1, 
+    "speed": 2.5, 
+    "hitbox": [10, 10], 
+    "reward": 1.5, 
+    "color1": "#ffae00", 
+    "color2": "#e0a300",
+    "boss": false
+}

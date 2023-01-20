@@ -1,0 +1,14 @@
+{
+    "type": "heavy", 
+    "id": "heavy", 
+    "size": [44, 44], 
+    "texture": "enemy-heavy", 
+    "hp": 25, 
+    "damage": 2, 
+    "speed": 0.7, 
+    "hitbox": [22, 22], 
+    "reward": 2, 
+    "color1": "#be0000", 
+    "color2": "#930000",
+    "boss": false
+}

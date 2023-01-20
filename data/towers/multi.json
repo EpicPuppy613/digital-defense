@@ -1,0 +1,15 @@
+{
+    "name": "Multishot",
+    "type": "multi",
+    "texture": "tower-multi",
+    "turret": "turret-multi",
+    "firerate": 2,
+    "damage": 2.5,
+    "range": 2,
+    "color": "#eded00",
+    "offset": 4,
+    "firewidth": 2,
+    "fireduration": 0.2,
+    "shots": 3,
+    "cost": 150
+}

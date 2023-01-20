@@ -1,0 +1,18 @@
+{
+    "name": "Damage III",
+    "id": "basic-dg3",
+    "desc": [
+        "increases the damage of the tower",
+        "",
+        "+ 3 damage"
+    ],
+    "tower": "basic",
+    "cost": 300,
+    "req": [
+        "basic-mk3",
+        "basic-dg2"
+    ],
+    "add": {
+        "dg": 3
+    }
+}

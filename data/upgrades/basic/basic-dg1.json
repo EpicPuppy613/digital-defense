@@ -1,0 +1,17 @@
+{
+    "name": "Damage I",
+    "id": "basic-dg1",
+    "desc": [
+        "increases the damage of the tower",
+        "",
+        "+ 2 damage"
+    ],
+    "tower": "basic",
+    "cost": 85,
+    "req": [
+        "basic-mk1"
+    ],
+    "add": {
+        "dg": 2
+    }
+}

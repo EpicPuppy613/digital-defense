@@ -1,6 +1,6 @@
 //override 
 Array.prototype.includes = function (obj) {
-    var i = this.length;
+    let i = this.length;
     while (i--) {
         if (this[i] == obj) {
             return true;
@@ -37,138 +37,158 @@ G.pause = false;
 G.DEEEEEEEEBUG = false;
 G.time = 0;
 G.path = [];
-G.S = {}; //SETTINGS
-G.S.mapy = 0;
+G.settings = {}; //SETTINGS
+G.settings.mapy = 0;
 
 //W-SETTINGS
 // -----[SETTINGS]-----
-G.S.extendedtargeting = true; //Extended targetting options
-G.S.MORESPEED = false; //MORE speed options
-G.S.lives = 1.0; //Lives multiplier
-G.S.mapx = Math.floor(G.width / 5); //Minimap X max width
-G.S.cheatmode = false; //Enable increased starting money & lives
+G.settings.extendedtargeting = true; //Extended targetting options
+G.settings.MORESPEED = false; //MORE speed options
+G.settings.lives = 1.0; //Lives multiplier
+G.settings.mapx = Math.floor(G.width / 5); //Minimap X max width
+G.settings.cheatmode = false; //Enable increased starting money & lives
 // --------------------
-if (G.S.MORESPEED) {
+if (G.settings.MORESPEED) {
     G.speeds = [0, 0.5, 1, 2, 3, 4, 6, 8, 12, 16];
     G.maxspeed = 9;
 }
-G.M = {}; //MOUSE
-G.M.X = 0; //MOUSE X
-G.M.Y = 0; //MOUSE Y
-G.N = {}; //NAVIGATION
-G.N.B = {}; //BUTTONS
-G.N.pos = 0; //MENU POSITION
+G.mouse = {}; //MOUSE
+G.mouse.X = 0; //MOUSE X
+G.mouse.Y = 0; //MOUSE Y
+G.nav = {}; //NAVIGATION
+G.nav.buttons = {}; //BUTTONS
+G.nav.pos = 0; //MENU POSITION
 G.scene = 'l'; //SCENE
 G.boss = null;
-G.A = {}; //ASSETS
+G.data = {}; //ASSETS
 /** @type {Track{}} */
-G.A.M = {}; //MAPS
-G.A.TS = [64, 64]; //TILE SCALE
-G.A.DS = [64, 64]; //DEFAULT SCALE
-G.A.S = 1; //SCALE
-G.A.A = {}; //TEXTURE ATLASES
-G.A.T = {}; //TEXTURE DIRECTORY
-G.A.loaded = false; //GAME LOADED
-G.D = ["", "", "", "", "", "", "", ""]; //CONSOLE
+G.data.maps = {}; //MAPS
+G.data.tileSize = [64, 64]; //TILE SCALE
+G.data.difficultiesefaultSize = [64, 64]; //DEFAULT SCALE
+G.data.scale = 1; //SCALE
+G.data.atlas = {}; //TEXTURE ATLASES
+G.data.textures = {}; //TEXTURE DIRECTORY
+G.data.loaded = false; //GAME LOADED
+G.debug = ["", "", "", "", "", "", "", ""]; //CONSOLE
 /** @type {DEbugMsg[]} */
 G.DC = []; //Debug Componenets
-G.A.L = {}; //LOCATIONS
-G.A.L.S = []; //SPAWNS
-G.A.C = {}; //CURSOR
-G.A.C.on = false;
-G.A.C.pos = 0; //CURSOR ANIMATION FRAME
-G.A.C.X = 2; //CURSOR X
-G.A.C.Y = 2; //CURSOR Y
-G.O = {}; //OFFSET
-G.O.X = 0;
-G.O.Y = 0;
+G.data.enemies = {};
+G.data.buildings = {};
+G.data.difficulties = {};
+G.data.difficulties.W = {};
+G.data.locations = {}; //LOCATIONS
+G.data.locations.spawn = []; //SPAWNS
+G.data.cursor = {}; //CURSOR
+G.data.cursor.on = false;
+G.data.cursor.pos = 0; //CURSOR ANIMATION FRAME
+G.data.cursor.X = 2; //CURSOR X
+G.data.cursor.Y = 2; //CURSOR Y
+G.offset = {}; //OFFSET
+G.offset.X = 0;
+G.offset.Y = 0;
 /** TRACK SELECT */
-G.TS = {};
-G.TS.page = 0;
+G.trackSelect = {};
+G.trackSelect.page = 0;
 /** options */
-G.TS.O = [];
+G.trackSelect.O = [];
 /** available @type {Track[]} */
-G.TS.A = [];
-G.T = {};
+G.trackSelect.available = [];
+G.objects = {};
 /** projectiles */
-G.T.P = [];
+G.objects.projectiles = [];
 /** tiles */
-G.T.T = [];
+G.objects.tiles = [];
 /** locations */
-G.T.L = [];
+G.objects.locations = [];
 /** buildings */
-G.T.B = [];
+G.objects.buildings = [];
 /** enemies */
-G.T.E = [];
-G.B = []; //BUTTONS
-G.U = {};
-G.U.on = false;
-G.U.anim = 0;
+G.objects.enemies = [];
+G.toolBar = {};
+G.toolBar.on = false;
+G.toolBar.anim = 0;
 G.points = 0;
 G.basepoints = 150;
 G.basehp = 25;
-G.hp = Math.round(G.basehp * G.S.lives);
-G.maxhp = Math.round(G.basehp * G.S.lives);
+G.hp = Math.round(G.basehp * G.settings.lives);
+G.maxhp = Math.round(G.basehp * G.settings.lives);
 G.pan = {};
 G.pan.down = false;
 G.pan.x = 0;
 G.pan.y = 0;
 
-if (G.S.cheatmode) {
+if (G.settings.cheatmode) {
     G.basepoints *= 1000;
     G.basehp *= 100;
 }
 
-K = {}; //HOTKEYS
-S = {}; //SCENES
-T = {}; //TARGETING
-T.T = {};
-T.L = [];
+G.bindings = {}; //HOTKEYS
+G.scenes = {}; //SCENES
+G.targeting = {};
+G.targeting.all = {};
+G.targeting.list = [];
 
 /** Loading */
-const L = {};
-L.percent = 0;
-L.stage = 0;
-L.stages = [
+G.load = {};
+G.load.percent = 0;
+G.load.loaded = [];
+G.load.stage = 0;
+G.load.manifest = null;
+G.load.stages = [
     {
         stage: 'maps',
         display: 'loading maps...',
-        percent: 0
+        percent: 0,
+        progress: 0,
+        total: 0
     },
     {
         stage: 'enemies',
         display: 'loading enemies...',
-        percent: 0
+        percent: 0,
+        progress: 0,
+        total: 0
     },
     {
         stage: 'waves',
         display: 'loading waves...',
-        percent: 0
+        percent: 0,
+        progress: 0,
+        total: 0
     },
     {
         stage: 'towers',
         display: 'loading towers...',
-        percent: 0
+        percent: 0,
+        progress: 0,
+        total: 0
+    },
+    {
+        stage: 'upgrades',
+        display: 'loading upgrades...',
+        percent: 0,
+        progress: 0,
+        total: 0
     }
 ];
 
-const E = {}; //EDITOR
-E.C = {}; //MAP BOUNDS
-E.C.LX = 0; //LEFT
-E.C.TY = 0; //TOP
-E.C.RX = 0; //RIGHT
-E.C.BY = 0; //BOTTOM
-E.D = {}; //DIRECTIONS
-E.D.L = false; //LEFT
-E.D.R = false; //RIGHT
-E.D.U = false; //UP
-E.D.D = false; //DOWN
-E.D.B = false; //BASE
-E.D.P = false; //PLATFORM
+G.editor = {}; //EDITOR
+G.editor.bounds = {}; //MAP BOUNDS
+G.editor.bounds.left = 0; //LEFT
+G.editor.bounds.top = 0; //TOP
+G.editor.bounds.right = 0; //RIGHT
+G.editor.bounds.bottom = 0; //BOTTOM
+G.editor.direction = {}; //DIRECTIONS
+G.editor.direction.left = false; //LEFT
+G.editor.direction.right = false; //RIGHT
+G.editor.direction.up = false; //UP
+G.editor.direction.down = false; //DOWN
+G.editor.direction.base = false; //BASE
+G.editor.direction.platform = false; //PLATFORM
 
-const A = {}; //AUDIO
-A.M = {}; //MUSIC
-A.M.M = [
+G.audio = {}; //AUDIO
+G.audio.music = {}; //MUSIC
+G.audio.music.list = [
     {
         "scenes": ['m', 't'],
         "pool": ["audio/menua.mp3"]
@@ -178,22 +198,22 @@ A.M.M = [
         "pool": ["audio/settings.mp3"]
     }
 ]; //MUSIC
-A.M.T = 1; //TRANSITION
-A.M.S = false; //SWITCH
-A.M.D = [ //DEFAULT
+G.audio.music.transition = 1; //TRANSITION
+G.audio.music.switch = false; //SWITCH
+G.audio.music.default = [ //DEFAULT
     "audio/menua.mp3"
 ]
 /** @type {HTMLAudioElement} */
-A.M.C = null; //CURRENT
-A.V = {}; //VOLUME
-A.V.M = 1; //MUSIC VOLUME
-A.V.S = 1; //SFX VOLUME
+G.audio.music.current = null; //CURRENT
+G.audio.volume = {}; //VOLUME
+G.audio.volume.music = 1; //MUSIC VOLUME
+G.audio.volume.sfx = 1; //SFX VOLUME
 
-G.R = {}; //REBINDING
-G.R.P = 0; //REBINDING PAGE
-G.R.R = undefined; //REBIND
+G.rebind = {}; //REBINDING
+G.rebind.page = 0; //REBINDING PAGE
+G.rebind.current = undefined; //REBIND
 //W-REBIND
-S = [
+G.rebind.bindings = [
     {
         category: "General",
         bindings: ["deselect", "wave", "quit", "back"]
@@ -221,32 +241,32 @@ S = [
 ];
 
 function NextAudio (src) {
-    A.M.C = new Audio();
-    A.M.C.src = src;
-    A.M.C.volume = A.V.M;
-    A.M.C.oncanplay = function () {
+    G.audio.music.current = new Audio();
+    G.audio.music.current.src = src;
+    G.audio.music.current.volume = G.audio.volume.music;
+    G.audio.music.current.oncanplay = function () {
         this.play();
     }
-    A.M.C.onpause = function () {
-        A.M.S = false;
-        for (const pool of A.M.M) {
+    G.audio.music.current.onpause = function () {
+        G.audio.music.switch = false;
+        for (const pool of G.audio.music.list) {
             if (pool.scenes.includes(G.scene)) {
                 NextAudio(pool.pool[Math.floor(Math.random() * pool.pool.length)]);
                 return;
             }
         }
-        NextAudio(A.M.D[Math.floor(Math.random() * A.M.D.length)]);
+        NextAudio(G.audio.music.default[Math.floor(Math.random() * G.audio.music.default.length)]);
     }
 }
 
-setTimeout(() => NextAudio(A.M.D[Math.floor(Math.random() * A.M.D.length)]), 500);
+setTimeout(() => NextAudio(G.audio.music.default[Math.floor(Math.random() * G.audio.music.default.length)]), 500);
 
 String.prototype.formatDuration = function () {
-    var sec_num = Math.floor(parseInt(this, 10)); // don't forget the second param
-    var days = Math.floor(sec_num / 86400);
-    var hours = Math.floor((sec_num % 86400) / 3600);
-    var minutes = Math.floor((sec_num % 3600) / 60);
-    var seconds = sec_num % 60;
+    let sec_num = Math.floor(parseInt(this, 10)); // don't forget the second param
+    let days = Math.floor(sec_num / 86400);
+    let hours = Math.floor((sec_num % 86400) / 3600);
+    let minutes = Math.floor((sec_num % 3600) / 60);
+    let seconds = sec_num % 60;
 
     if (hours < 10) { hours = "0" + hours; }
     if (minutes < 10) { minutes = "0" + minutes; }
@@ -276,16 +296,16 @@ class DEbugMsg {
         G.DC.push(this);
     }
     out() {
-        var indent = "";
+        let indent = "";
         if (this.side == 'r') {
-            for (var i = 0; i < this.indent; i++) {
+            for (let i = 0; i < this.indent; i++) {
                 indent += " -";
             }
             if (this.content == null) return this.label + indent;
             else if (this.label == null) return this.content() + indent;
             return this.label + ": " + this.content() + indent;
         } else {
-            for (var i = 0; i < this.indent; i++) {
+            for (let i = 0; i < this.indent; i++) {
                 indent += "- ";
             }
             if (this.content == null) return indent + this.label;
@@ -314,7 +334,7 @@ class Tile {
         /** @type {null|Tower} */
         this.tower = null;
         this.paths = '';
-        G.T.T.push(this);
+        G.objects.tiles.push(this);
     }
 }
 
@@ -324,7 +344,7 @@ class Location {
         this.x = x;
         this.y = y;
         this.texture = texture;
-        G.T.L.push(this);
+        G.objects.locations.push(this);
     }
 }
 
@@ -354,9 +374,9 @@ class Track {
         this.difficulty = difficulty;
         this.available = available;
         if (this.available) {
-            G.TS.A.push(this.id);
+            G.trackSelect.available.push(this.id);
         }
-        G.A.M[this.id] = this;
+        G.data.maps[this.id] = this;
     }
 }
 
@@ -479,42 +499,42 @@ class Tower {
         this.targeting = 'f'; //First, Last, Health, Speed, Damage, Rewardpoo
         this.tnum = 0;
         getTile(this.x, this.y).tower = this;
-        G.T.B.push(getTile(this.x, this.y).tower);
+        G.objects.buildings.push(getTile(this.x, this.y).tower);
     }
     tick() {
         //find enemy
         while (this.cooldown <= 0) {
-            var shots = this.shots;
-            var sort = [];
-            var property = 'distance';
-            var reverse = false;
-            for (const targeting in T.T) {
+            let shots = this.shots;
+            let sort = [];
+            let property = 'distance';
+            let reverse = false;
+            for (const targeting in G.targeting.all) {
                 if (this.targeting == targeting) {
-                    property = T.T[targeting].property;
-                    reverse = T.T[targeting].reverse;
+                    property = G.targeting.all[targeting].property;
+                    reverse = G.targeting.all[targeting].reverse;
                 }
             }
-            for (var e = 0; e < G.T.E.length; e++) {
-                sort.push([e, G.T.E[e][property], G.T.E[e].distance]);
+            for (let e = 0; e < G.objects.enemies.length; e++) {
+                sort.push([e, G.objects.enemies[e][property], G.objects.enemies[e].distance]);
             }
             sort.sort((a, b) => b[2] - a[2]);
             sort.sort((a, b) => b[1] - a[1]);
             if (reverse) sort.reverse();
-            var fire = false;
+            let fire = false;
             for (const s of sort) {
-                var enemy = G.T.E[s[0]];
-                var difx = enemy.x * G.A.TS[0] - (this.x + 0.5) * G.A.TS[0];
-                var dify = enemy.y * G.A.TS[1] - (this.y + 0.5) * G.A.TS[1];
-                if (!(difx ** 2 + dify ** 2 <= (this.range * G.A.TS[0]) ** 2)) continue;
-                var direction = (Math.atan2(enemy.y * G.A.TS[1] - (this.y + 0.5) * G.A.TS[1], enemy.x * G.A.TS[0] - (this.x + 0.5) * G.A.TS[0]) * (180 / Math.PI)) + 90;
-                var directionDiff = direction - this.direction;
+                let enemy = G.objects.enemies[s[0]];
+                let difx = enemy.x * G.data.tileSize[0] - (this.x + 0.5) * G.data.tileSize[0];
+                let dify = enemy.y * G.data.tileSize[1] - (this.y + 0.5) * G.data.tileSize[1];
+                if (!(difx ** 2 + dify ** 2 <= (this.range * G.data.tileSize[0]) ** 2)) continue;
+                let direction = (Math.atan2(enemy.y * G.data.tileSize[1] - (this.y + 0.5) * G.data.tileSize[1], enemy.x * G.data.tileSize[0] - (this.x + 0.5) * G.data.tileSize[0]) * (180 / Math.PI)) + 90;
+                let directionDiff = direction - this.direction;
                 if (directionDiff > 180) directionDiff -= 360;
                 else if (directionDiff < -180) directionDiff += 360;
                 if (this.cooldown <= 0/*Math.abs(directionDiff) < this.rotspeed / 50*/) {
                     this.direction = direction;
                 }
-                var distance = (difx / Math.cos((direction - 90) * (Math.PI / 180)));
-                var hit = [distance * Math.sin(this.direction * (Math.PI / 180)), -distance * Math.cos(this.direction * (Math.PI / 180))];
+                let distance = (difx / Math.cos((direction - 90) * (Math.PI / 180)));
+                let hit = [distance * Math.sin(this.direction * (Math.PI / 180)), -distance * Math.cos(this.direction * (Math.PI / 180))];
                 //G.D = [difx, dify, hit];
                 if (
                     hit[0] >= difx - enemy.hitbox[0] / 2 &&
@@ -524,11 +544,11 @@ class Tower {
                     this.cooldown <= 0
                 ) {
                     fire = true;
-                    var prevhp = JSON.parse(JSON.stringify(enemy.hp));
+                    let prevhp = JSON.parse(JSON.stringify(enemy.hp));
                     enemy.hp -= this.damage;
                     if (enemy.hp <= 0 && prevhp > 0) { this.kills++; this.earned += enemy.reward; }
-                    var offset = [(this.offset / G.A.TS[0]) * Math.sin(this.direction * (Math.PI / 180)), -(this.offset / G.A.TS[1]) * Math.cos(this.direction * (Math.PI / 180))];
-                    G.T.P.push(new Laser(this.width, this.color, hit[0] / G.A.TS[0] + (this.x + 0.5), hit[1] / G.A.TS[1] + (this.y + 0.5),
+                    let offset = [(this.offset / G.data.tileSize[0]) * Math.sin(this.direction * (Math.PI / 180)), -(this.offset / G.data.tileSize[1]) * Math.cos(this.direction * (Math.PI / 180))];
+                    G.objects.projectiles.push(new Laser(this.width, this.color, hit[0] / G.data.tileSize[0] + (this.x + 0.5), hit[1] / G.data.tileSize[1] + (this.y + 0.5),
                         (this.x + 0.5) + offset[0],
                         (this.y + 0.5) + offset[1],
                         this.duration));
@@ -545,16 +565,16 @@ class Tower {
     }
     targetchange(change) {
         this.tnum += change;
-        if (this.tnum >= T.L.length) this.tnum -= T.L.length;
-        if (this.tnum < 0) this.tnum += T.L.length;
-        this.targeting = T.L[this.tnum];
+        if (this.tnum >= G.targeting.list.length) this.tnum -= G.targeting.list.length;
+        if (this.tnum < 0) this.tnum += G.targeting.list.length;
+        this.targeting = G.targeting.list[this.tnum];
     }
     refreshupgrades() {
         if (this.available.length != 0) return;
-        var pool = [];
-        for (const upgrade of G.A.U[this.type]) {
+        let pool = [];
+        for (const upgrade of G.data.upgrades[this.type]) {
             if (this.upgrades.includes(upgrade.id)) continue;
-            var buyable = true;
+            let buyable = true;
             for (const req of upgrade.req) {
                 if (this.upgrades.includes(req)) continue;
                 buyable = false;
@@ -566,8 +586,8 @@ class Tower {
             this.available = pool;
             return;
         }
-        for (var i = 0; i < 3; i++) {
-            var choose = Math.floor(Math.random() * pool.length);
+        for (let i = 0; i < 3; i++) {
+            let choose = Math.floor(Math.random() * pool.length);
             this.available.push(pool[choose]);
             pool.splice(choose, 1);
         }
@@ -606,16 +626,16 @@ class EnemyPrototype {
         this.boss = boss;
     }
     generate(hpmult, speedmult, rewardmult) {
-        var tile = Math.floor(Math.random() * G.A.L.S.length);
-        var img = G.A.T[this.texture];
-        G.T.E.push(new Enemy(
-            (G.A.L.S[tile][0] + this.size[0] / (2 * img.atlas.config.scale[0])) + Math.floor(Math.random() * (1 - this.size[0] / img.atlas.config.scale[0]) * img.atlas.config.scale[0]) / img.atlas.config.scale[0],
-            (G.A.L.S[tile][1] + this.size[1] / (2 * img.atlas.config.scale[1])) + Math.floor(Math.random() * (1 - this.size[1] / img.atlas.config.scale[1]) * img.atlas.config.scale[1]) / img.atlas.config.scale[1],
-            // G.A.L.S[tile][0] * G.A.A.config.scale[0],
-            // G.A.L.S[tile][1] * G.A.A.config.scale[1], 
-            G.A.L.S[tile], this.type, this.size, this.texture, this.hp * hpmult, this.damage, this.speed * speedmult,
+        let tile = Math.floor(Math.random() * G.data.locations.spawn.length);
+        let img = G.data.textures[this.texture];
+        G.objects.enemies.push(new Enemy(
+            (G.data.locations.spawn[tile][0] + this.size[0] / (2 * img.atlas.config.scale[0])) + Math.floor(Math.random() * (1 - this.size[0] / img.atlas.config.scale[0]) * img.atlas.config.scale[0]) / img.atlas.config.scale[0],
+            (G.data.locations.spawn[tile][1] + this.size[1] / (2 * img.atlas.config.scale[1])) + Math.floor(Math.random() * (1 - this.size[1] / img.atlas.config.scale[1]) * img.atlas.config.scale[1]) / img.atlas.config.scale[1],
+            // G.data.locations.spawn[tile][0] * G.data.atlas.config.scale[0],
+            // G.data.locations.spawn[tile][1] * G.data.atlas.config.scale[1], 
+            G.data.locations.spawn[tile], this.type, this.size, this.texture, this.hp * hpmult, this.damage, this.speed * speedmult,
             this.hitbox, Math.round(this.reward * rewardmult), this.color1, this.color2));
-        return G.T.E[-1];
+        return G.objects.enemies[-1];
     }
 }
 
@@ -640,7 +660,7 @@ class Enemy {
         this.color2 = color2;
     }
     newTile() {
-        var direction;
+        let direction;
         if (getTile(this.tile[0], this.tile[1], true).direction.length > 1) {
             direction = getTile(this.tile[0], this.tile[1], true).direction[Math.floor(Math.random() * getTile(this.tile[0], this.tile[1], true).direction.length)];
         } else {
@@ -675,7 +695,7 @@ class Enemy {
     }
     tick() {
         if (this.movement <= 0) {
-            this.newTile();
+            if(this.newTile()) return true;
         } else {
             let movedistance = this.speed / F.time;
             while (movedistance > 0) {
@@ -690,7 +710,7 @@ class Enemy {
                     movedistance = 0;
                     this.movement -= Math.abs(((this.direction[0] * this.speed) + (this.direction[1] * this.speed)) / F.time);
                 }
-                if (this.movement <= 0) this.newTile();
+                if (this.movement <= 0) if(this.newTile()) return true;
             }
         }
         this.distance = G.path.indexOf(Math.floor(this.x) + ',' + Math.floor(this.y));
@@ -756,7 +776,7 @@ class TextureAtlas {
         this.config = config;
         this.src = src;
         this.items = items;
-        G.A.A[this.id] = this;
+        G.data.atlas[this.id] = this;
         this.img = new Image();
         this.img.src = this.src;
         this.P = new OffscreenCanvas(this.config.size[0], this.config.size[1]);
@@ -765,7 +785,7 @@ class TextureAtlas {
             i.xpos = i.xpos * this.config.size[0];
             i.ypos = i.ypos * this.config.size[1];
             i.atlas = this;
-            G.A.T[i.id] = i;
+            G.data.textures[i.id] = i;
         }
     }
 }
@@ -788,13 +808,13 @@ class MenuButton {
         this.hover = false;
         this.action = action;
         this.scene = scene;
-        G.N.B[this.id] = this;
+        G.nav.buttons[this.id] = this;
     }
     collide(x, y) {
-        var px;
-        var py;
-        var pw;
-        var ph;
+        let px;
+        let py;
+        let pw;
+        let ph;
         if (typeof this.x == 'function') px = this.x();
         else px = this.x;
         if (typeof this.y == 'function') py = this.y();
@@ -822,14 +842,14 @@ class Targeting {
         this.color = color;
         this.available = available;
         this.condition = condition;
-        T.T[id] = this;
-        if (this.available) T.L.push(this.id);
+        G.targeting.all[id] = this;
+        if (this.available) G.targeting.list.push(this.id);
     }
 }
 
 function debug(msg) {
-    G.D.push(msg);
-    G.D.shift();
+    G.debug.push(msg);
+    G.debug.shift();
 }
 
 //W-TARGETING
@@ -847,7 +867,7 @@ new Targeting('Max HP', 'm', 'maxhp', false, '#f30000', false);
  * @returns {Tile}
  */
 function getTile(x, y, object = false) {
-    for (const tile of G.T.T) {
+    for (const tile of G.objects.tiles) {
         //Check if matching tile
         if (tile.x == x && tile.y == y) {
             return tile; //Return tile
@@ -859,9 +879,9 @@ function getTile(x, y, object = false) {
 }
 
 function delTile(x, y) {
-    for (t = 0; t < G.T.T.length; t++) {
-        if (G.T.T[t].x == x && G.T.T[t].y == y) {
-            G.T.T.splice(t, 1);
+    for (t = 0; t < G.objects.tiles.length; t++) {
+        if (G.objects.tiles[t].x == x && G.objects.tiles[t].y == y) {
+            G.objects.tiles.splice(t, 1);
             return true;
         }
     }
@@ -873,15 +893,15 @@ function delTile(x, y) {
  * @param {Track} mapdata 
  */
 function loadMap(mapdata) {
-    G.A.L.S = [];
+    G.data.locations.spawn = [];
     G.T = {};
-    G.T.P = [];
-    G.T.T = [];
-    G.T.L = [];
-    G.T.B = [];
-    G.T.E = [];
-    for (var y = 0; y < mapdata.track.length; y++) {
-        for (var x = 0; x < mapdata.track[y].length; x++) {
+    G.objects.projectiles = [];
+    G.objects.tiles = [];
+    G.objects.locations = [];
+    G.objects.buildings = [];
+    G.objects.enemies = [];
+    for (let y = 0; y < mapdata.track.length; y++) {
+        for (let x = 0; x < mapdata.track[y].length; x++) {
             switch (mapdata.track[y][x]) {
                 case 0:
                     break;
@@ -939,21 +959,21 @@ function loadMap(mapdata) {
             }
         }
     }
-    for (var i = 0; i < mapdata.locations.length; i++) {
+    for (let i = 0; i < mapdata.locations.length; i++) {
         new Location(mapdata.locations[i].type, mapdata.locations[i].pos[0], mapdata.locations[i].pos[1], mapdata.locations[i].type);
-        if (mapdata.locations[i].type == "spawn") G.A.L.S.push(mapdata.locations[i].pos);
+        if (mapdata.locations[i].type == "spawn") G.data.locations.spawn.push(mapdata.locations[i].pos);
     }
-    for (var t = 0; t < G.T.T.length; t++) {
-        if (G.T.T[t].type != 'track' || G.T.T[t].paths != '') continue;
-        var r = false;
-        var l = false;
-        var u = false;
-        var d = false;
-        tile = G.T.T[t];
-        if (getTile(G.T.T[t].x + 1, G.T.T[t].y, true).type == 'track') if (getTile(G.T.T[t].x + 1, G.T.T[t].y, true).direction.includes('l')) r = true;
-        if (getTile(G.T.T[t].x - 1, G.T.T[t].y, true).type == 'track') if (getTile(G.T.T[t].x - 1, G.T.T[t].y, true).direction.includes('r')) l = true;
-        if (getTile(G.T.T[t].x, G.T.T[t].y - 1, true).type == 'track') if (getTile(G.T.T[t].x, G.T.T[t].y - 1, true).direction.includes('d')) u = true;
-        if (getTile(G.T.T[t].x, G.T.T[t].y + 1, true).type == 'track') if (getTile(G.T.T[t].x, G.T.T[t].y + 1, true).direction.includes('u')) d = true;
+    for (let t = 0; t < G.objects.tiles.length; t++) {
+        if (G.objects.tiles[t].type != 'track' || G.objects.tiles[t].paths != '') continue;
+        let r = false;
+        let l = false;
+        let u = false;
+        let d = false;
+        tile = G.objects.tiles[t];
+        if (getTile(G.objects.tiles[t].x + 1, G.objects.tiles[t].y, true).type == 'track') if (getTile(G.objects.tiles[t].x + 1, G.objects.tiles[t].y, true).direction.includes('l')) r = true;
+        if (getTile(G.objects.tiles[t].x - 1, G.objects.tiles[t].y, true).type == 'track') if (getTile(G.objects.tiles[t].x - 1, G.objects.tiles[t].y, true).direction.includes('r')) l = true;
+        if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y - 1, true).type == 'track') if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y - 1, true).direction.includes('d')) u = true;
+        if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y + 1, true).type == 'track') if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y + 1, true).direction.includes('u')) d = true;
         if (tile.direction.includes('r')) r = true;
         if (tile.direction.includes('l')) l = true;
         if (tile.direction.includes('u')) u = true;
@@ -962,14 +982,14 @@ function loadMap(mapdata) {
         if (l) tile.paths += 'l';
         if (u) tile.paths += 'u';
         if (d) tile.paths += 'd';
-        G.T.T[t].texture = 'track-' + G.T.T[t].paths;
+        G.objects.tiles[t].texture = 'track-' + G.objects.tiles[t].paths;
     }
-    G.S.mapy = Math.floor((G.S.mapx / mapdata.map.size[0]) * mapdata.map.size[1]);
+    G.settings.mapy = Math.floor((G.settings.mapx / mapdata.map.size[0]) * mapdata.map.size[1]);
     //RECURSIVE PATHFINDING NOOOOOOOOOOOOOOOOOOOOOOOOO
-    var routes = 0;
-    var path = [];
-    var spawns = [];
-    var checks = [];
+    let routes = 0;
+    let path = [];
+    let spawns = [];
+    let checks = [];
     for (const location of mapdata.locations) {
         if (location.type == "base") {
             checks.push(location.pos);
@@ -980,10 +1000,11 @@ function loadMap(mapdata) {
             spawns.push(location.pos[0] + "," + location.pos[1]);
         }
     }
-    var p = 0;
+    let p = 0;
     while (routes > 0) {
         //UP
-        var tile = getTile(checks[p][0], checks[p][1] - 1, true);
+        let tile;
+        tile = getTile(checks[p][0], checks[p][1] - 1, true);
         if (tile.type == 'track') if (tile.direction.includes('d')) {
             if (!G.path.includes((checks[p][0]) + "," + (checks[p][1] - 1))) {
                 //alert(!path.includes([checks[p][0], checks[p][1] - 1]) + JSON.stringify(path) + JSON.stringify([checks[p][0], checks[p][1] - 1]));
@@ -992,7 +1013,7 @@ function loadMap(mapdata) {
             }
         }
         //LEFT
-        var tile = getTile(checks[p][0] - 1, checks[p][1], true);
+        tile = getTile(checks[p][0] - 1, checks[p][1], true);
         if (tile.type == 'track') if (tile.direction.includes('r')) {
             if (!G.path.includes((checks[p][0] - 1) + "," + (checks[p][1]))) {
                 //alert(!path.includes([checks[p][0], checks[p][1] - 1]));
@@ -1001,7 +1022,7 @@ function loadMap(mapdata) {
             }
         }
         //DOWN
-        var tile = getTile(checks[p][0], checks[p][1] + 1, true);
+        tile = getTile(checks[p][0], checks[p][1] + 1, true);
         if (tile.type == 'track') if (tile.direction.includes('u')) {
             if (!G.path.includes((checks[p][0]) + "," + (checks[p][1] + 1))) {
                 //alert(!path.includes([checks[p][0], checks[p][1] - 1]));
@@ -1010,7 +1031,7 @@ function loadMap(mapdata) {
             }
         }
         //RIGHT
-        var tile = getTile(checks[p][0] + 1, checks[p][1], true);
+        tile = getTile(checks[p][0] + 1, checks[p][1], true);
         if (tile.type == 'track') if (tile.direction.includes('l')) {
             if (!G.path.includes((checks[p][0] + 1) + "," + (checks[p][1]))) {
                 //alert(!path.includes([checks[p][0], checks[p][1] - 1]));
@@ -1027,16 +1048,16 @@ function loadMap(mapdata) {
 G.nodes = [];
 
 G.canvas.addEventListener('mousemove', e => {
-    G.M.X = e.offsetX;
-    G.M.Y = e.offsetY;
-    for (const button in G.N.B) {
-        G.N.B[button].hover = G.N.B[button].collide(e.offsetX, e.offsetY);
+    G.mouse.X = e.offsetX;
+    G.mouse.Y = e.offsetY;
+    for (const button in G.nav.buttons) {
+        G.nav.buttons[button].hover = G.nav.buttons[button].collide(e.offsetX, e.offsetY);
     }
     if (G.pan.down) {
-        G.O.X -= G.pan.x - G.M.X;
-        G.O.Y -= G.pan.y - G.M.Y;
-        G.pan.x = G.M.X;
-        G.pan.y = G.M.Y;
+        G.offset.X -= G.pan.x - G.mouse.X;
+        G.offset.Y -= G.pan.y - G.mouse.Y;
+        G.pan.x = G.mouse.X;
+        G.pan.y = G.mouse.Y;
     }
 });
 
@@ -1069,52 +1090,55 @@ function Main() {
     F.fps.push(F.time);
     F.fps.shift();
     try {
-        if (A.M.S) {
-            A.M.T -= 0.5 / F.time;
-            if (A.M.T <= 0) A.M.C.pause();
+        if (G.audio.music.switch) {
+            G.audio.music.transition -= 0.5 / F.time;
+            if (G.audio.music.transition <= 0) G.audio.music.current.pause();
         } else {
-            A.M.T = 1;
+            G.audio.music.transition = 1;
         }
-        A.M.C.volume = A.V.M * A.M.T;
+        G.audio.music.current.volume = G.audio.volume.music * G.audio.music.transition;
     } catch (err) {
         debug('audio fail');
-        A.M.S = false;
+        G.audio.music.switch = false;
     }
     G.C.clearRect(0, 0, G.width, G.height);
     G.C.fillStyle = 'black';
     G.C.fillRect(0, 0, G.width, G.height);
-    G.A.C.pos += 180 / F.time;
-    if (G.A.C.pos >= 360) {
-        G.A.C.pos -= 360;
+    G.data.cursor.pos += 180 / F.time;
+    if (G.data.cursor.pos >= 360) {
+        G.data.cursor.pos -= 360;
+    }
+    if (G.scene == 'l') {
+        LoadGame();
     }
     try {
         Draw();
         if (G.scene == 'g' && G.pause) {
-            for (const b of G.T.B) {
+            for (const b of G.objects.buildings) {
                 b.refreshupgrades();
             }
         }
         else if (G.scene == 'g' && !G.pause) {
-            for (var r = 0; r < G.multi; r++) {
+            for (let r = 0; r < G.multi; r++) {
                 if (G.alternate && G.skip) G.skip = false
                 else {
                     G.skip = true;
-                    for (const b of G.T.B) {
+                    for (const b of G.objects.buildings) {
                         b.tick();
                         b.refreshupgrades();
                     }
-                    for (var e = 0; e < G.T.E.length; e++) {
-                        if (G.T.E[e].tick()) {
-                            if (G.T.E[e] === G.boss) {
+                    for (let e = 0; e < G.objects.enemies.length; e++) {
+                        if (G.objects.enemies[e].tick()) {
+                            if (G.objects.enemies[e] === G.boss) {
                                 G.boss = null;
                             }
-                            G.T.E.splice(e, 1);
+                            G.objects.enemies.splice(e, 1);
                             e--;
                         }
                     }
-                    for (var p = 0; p < G.T.P.length; p++) {
-                        if (G.T.P[p].tick()) {
-                            G.T.P.splice(p, 1);
+                    for (let p = 0; p < G.objects.projectiles.length; p++) {
+                        if (G.objects.projectiles[p].tick()) {
+                            G.objects.projectiles.splice(p, 1);
                             p--;
                         }
                     }
@@ -1123,11 +1147,11 @@ function Main() {
                     G.wavespawn -= 1 / F.time;
                 }
                 if (G.wave != 0 && G.wavespawn + (G.wavespace * G.wavespawned) - G.wavetotal <= 0 && G.wavespawn >= 0) {
-                    spawn = G.A.D.W[G.waveset].key[G.A.D.W[G.waveset].W[G.wave - 1][5][G.wavespawned]];
+                    spawn = G.data.difficulties.W[G.waveset].key[G.data.difficulties.W[G.waveset].W[G.wave - 1][5][G.wavespawned]];
                     if (spawn != null) {
-                        G.A.E[spawn].generate(G.A.D.W[G.waveset].W[G.wave - 1][0], G.A.D.W[G.waveset].W[G.wave - 1][1], G.A.D.W[G.waveset].W[G.wave - 1][2]);
-                        if (G.A.E[spawn].boss) {
-                            G.boss = G.T.E[G.T.E.length - 1];
+                        G.data.enemies[spawn].generate(G.data.difficulties.W[G.waveset].W[G.wave - 1][0], G.data.difficulties.W[G.waveset].W[G.wave - 1][1], G.data.difficulties.W[G.waveset].W[G.wave - 1][2]);
+                        if (G.data.enemies[spawn].boss) {
+                            G.boss = G.objects.enemies[G.objects.enemies.length - 1];
                         }
                     }
                     G.wavespawned++;
@@ -1146,7 +1170,7 @@ new DEbugMsg("FPS", () => Math.round(F.fps.reduce((a, b) => a + b, 0) / F.fps.le
 new DEbugMsg("Width", () => G.width);
 new DEbugMsg("Height", () => G.height);
 new DEbugMsg('Scene', () => G.scene);
-new DEbugMsg('Buttons', () => JSON.stringify(G.N.B, (k, v) => {
+new DEbugMsg('Buttons', () => JSON.stringify(G.nav.buttons, (k, v) => {
     if (["x", "y", "w", "h"].includes(k) && typeof v == 'function') return v();
     else return v;
 }), '#77f', 'l', 0, true);
@@ -1160,13 +1184,13 @@ new DEbugMsg(null, () => G.D[2], "#f77", 'l', 1, true);
 new DEbugMsg(null, () => G.D[1], "#f77", 'l', 1, true);
 new DEbugMsg(null, () => G.D[0], "#f77", 'l', 1, true);
 new DEbugMsg('[SOUND INFO]', null, '#f7f');
-new DEbugMsg('Music Volume', () => A.V.M, '#faf');
-new DEbugMsg('SFX Volume', () => A.V.S, '#faf');
-new DEbugMsg('Switch', () => A.M.S, '#faf');
-new DEbugMsg('Transition', () => A.M.T, '#faf');
+new DEbugMsg('Music Volume', () => G.audio.volume.music, '#faf');
+new DEbugMsg('SFX Volume', () => G.audio.volume.sfx, '#faf');
+new DEbugMsg('Switch', () => G.audio.music.switch, '#faf');
+new DEbugMsg('Transition', () => G.audio.music.transition, '#faf');
 new DEbugMsg('[DEBUG INFO]', null, 'cyan', 'r');
-new DEbugMsg("Cursor", () => G.M.X + ", " + G.M.Y, '#7ff', 'r');
-new DEbugMsg("Offset", () => G.O.X.toFixed(0) + ", " + G.O.Y.toFixed(0), '#7ff', 'r');
+new DEbugMsg("Cursor", () => G.mouse.X + ", " + G.mouse.Y, '#7ff', 'r');
+new DEbugMsg("Offset", () => G.offset.X.toFixed(0) + ", " + G.offset.Y.toFixed(0), '#7ff', 'r');
 new DEbugMsg("Map", () => G.map, '#7ff', 'r');
 new DEbugMsg('Speed', () => G.speed, '#7ff', 'r');
 new DEbugMsg('Time', () => G.time.toFixed(2), '#7ff', 'r');
@@ -1178,28 +1202,28 @@ new DEbugMsg('Spawn', () => G.wavespawn.toFixed(2), '#aff', 'r', 1);
 new DEbugMsg('Spawned', () => G.wavespawned, '#aff', 'r', 1);
 new DEbugMsg('Total', () => G.wavetotal.toFixed(2), '#aff', 'r', 1);
 new DEbugMsg("[MAP INFO]", null, 'lime', 'l');
-new DEbugMsg("Tiles", () => JSON.stringify(G.T.T), '#7f7', 'l', 0, true);
-new DEbugMsg("Length", () => G.T.T.length, '#afa', 'l', 1);
-new DEbugMsg("Locations", () => JSON.stringify(G.T.L), '#7f7', 'l', 0, true);
-new DEbugMsg("Length", () => G.T.L.length, '#afa', 'l', 1);
-new DEbugMsg("Enemies", () => JSON.stringify(G.T.E, (key, value) => {
+new DEbugMsg("Tiles", () => JSON.stringify(G.objects.tiles), '#7f7', 'l', 0, true);
+new DEbugMsg("Length", () => G.objects.tiles.length, '#afa', 'l', 1);
+new DEbugMsg("Locations", () => JSON.stringify(G.objects.locations), '#7f7', 'l', 0, true);
+new DEbugMsg("Length", () => G.objects.locations.length, '#afa', 'l', 1);
+new DEbugMsg("Enemies", () => JSON.stringify(G.objects.enemies, (key, value) => {
     if (typeof value == 'number') if (value.toString().length > 4) return value.toFixed(2);
     return value;
 }), '#7f7', 'l', 0, true);
-new DEbugMsg("Length", () => G.T.E.length, '#afa', 'l', 1);
-new DEbugMsg("Buildings", () => JSON.stringify(G.T.B, (key, value) => {
+new DEbugMsg("Length", () => G.objects.enemies.length, '#afa', 'l', 1);
+new DEbugMsg("Buildings", () => JSON.stringify(G.objects.buildings, (key, value) => {
     if (typeof value == 'number') if (value.toString().length > 4) return value.toFixed(2);
     return value;
 }), '#7f7', 'l', 0, true);
-new DEbugMsg("Length", () => G.T.B.length, '#afa', 'l', 1);
+new DEbugMsg("Length", () => G.objects.buildings.length, '#afa', 'l', 1);
 new DEbugMsg("Path", () => JSON.stringify(G.path), '#7f7', 'l', 0, true);
 new DEbugMsg("Length", () => G.path.length, '#afa', 'l', 1);
 new DEbugMsg("[SELECTED TILE]", null, 'yellow');
-new DEbugMsg("Tile", () => JSON.stringify(getTile(G.A.C.X, G.A.C.Y), (key, value) => {
+new DEbugMsg("Tile", () => JSON.stringify(getTile(G.data.cursor.X, G.data.cursor.Y), (key, value) => {
     if (key == 'tower') return undefined;
     return value;
 }), '#ff7', 'l', 0, true);
-new DEbugMsg("Tower", () => JSON.stringify(getTile(G.A.C.X, G.A.C.Y).tower, (key, value) => {
+new DEbugMsg("Tower", () => JSON.stringify(getTile(G.data.cursor.X, G.data.cursor.Y).tower, (key, value) => {
     if (typeof value == 'number') if (value.toString().length > 4) return value.toFixed(2);
     return value;
 }), '#ff7', 'l', 0, true);
@@ -1207,11 +1231,11 @@ new DEbugMsg("Tower", () => JSON.stringify(getTile(G.A.C.X, G.A.C.Y).tower, (key
 function DrawConsole() {
     G.C.textAlign = 'left';
     if (!G.DEEEEEEEEBUG) return;
-    //G.D = G.A.B;
+    //G.D = G.data.buildings;
     G.C.font = "8px 'Press Start 2P', sans-serif";
-    var ly = 64 - 12;
-    var ry = 96 - 12;
-    var inc = 12;
+    let ly = 64 - 12;
+    let ry = 96 - 12;
+    let inc = 12;
     try {
         for (const c of G.DC) {
             try {
@@ -1219,8 +1243,8 @@ function DrawConsole() {
                 x = 6;
                 if (c.side == 'r') x = G.width - 6;
                 hidden = false;
-                if (G.O.X > G.width / 2 - 16 && c.hscroll && c.side != 'r') hidden = true;
-                if (c.hscroll && c.side != 'r') x += G.O.X;
+                if (G.offset.X > G.width / 2 - 16 && c.hscroll && c.side != 'r') hidden = true;
+                if (c.hscroll && c.side != 'r') x += G.offset.X;
                 if (c.side == 'r') {
                     G.C.textAlign = 'right';
                     ry += inc;
@@ -1233,8 +1257,8 @@ function DrawConsole() {
                     G.C.textAlign = 'left';
                     ly += inc;
                     out = c.out();
-                    if (out.length > (G.width / 2 + 60 - G.O.X) / 8 && c.hscroll) {
-                        out = out.slice(0, (G.width / 2 + 60 - G.O.X) / 8);
+                    if (out.length > (G.width / 2 + 60 - G.offset.X) / 8 && c.hscroll) {
+                        out = out.slice(0, (G.width / 2 + 60 - G.offset.X) / 8);
                     } else if (out.length > (G.width / 2 + 60) / 8) {
                         out = out.slice(0, (G.width / 2 + 60) / 8);
                     }
@@ -1254,7 +1278,7 @@ function DrawConsole() {
         debug(err.stack);
     }
     G.C.textAlign = 'left';
-    //G.D = G.A.T;
+    //G.D = G.data.textures;
     //G.D = "";
 }
 
@@ -1264,8 +1288,8 @@ G.canvas.addEventListener('mousedown', e => {
     if (G.scene != 'g') return;
     if (e.button == '1') {
         G.pan.down = true;
-        G.pan.x = G.M.X;
-        G.pan.y = G.M.Y;
+        G.pan.x = G.mouse.X;
+        G.pan.y = G.mouse.Y;
     }
 });
 
@@ -1279,10 +1303,10 @@ G.canvas.addEventListener('mouseup', e => {
 
 //W-CLICK
 G.canvas.addEventListener('click', e => {
-    for (const button in G.N.B) {
-        if (G.N.B[button].collide(e.offsetX, e.offsetY)) {
+    for (const button in G.nav.buttons) {
+        if (G.nav.buttons[button].collide(e.offsetX, e.offsetY)) {
             try {
-                G.N.B[button].action(e);
+                G.nav.buttons[button].action(e);
             } catch (err) {
                 debug(err.stack);
             }
@@ -1291,8 +1315,8 @@ G.canvas.addEventListener('click', e => {
     }
     if (G.scene == 'g') {
         if (e.offsetY < 48) return;
-        if (e.offsetY > G.height - 192 && G.U.on) {
-            tile = getTile(G.A.C.X, G.A.C.Y, true);
+        if (e.offsetY > G.height - 192 && G.toolBar.on) {
+            tile = getTile(G.data.cursor.X, G.data.cursor.Y, true);
             if (tile.type != 'platform') return
             if (tile.tower == null) {
                 //basic
@@ -1302,9 +1326,9 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset + 68 < e.offsetY &&
                     G.height - offset + 108 > e.offsetY
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.basic.cost) {
-                        G.A.B.basic.generate(G.A.C.X, G.A.C.Y);
-                        G.points -= G.A.B.basic.cost;
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.basic.cost) {
+                        G.data.buildings.basic.generate(G.data.cursor.X, G.data.cursor.Y);
+                        G.points -= G.data.buildings.basic.cost;
                     }
                 }
                 //sniper
@@ -1314,9 +1338,9 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset + 68 < e.offsetY &&
                     G.height - offset + 108 > e.offsetY
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.sniper.cost) {
-                        G.A.B.sniper.generate(G.A.C.X, G.A.C.Y);
-                        G.points -= G.A.B.sniper.cost;
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.sniper.cost) {
+                        G.data.buildings.sniper.generate(G.data.cursor.X, G.data.cursor.Y);
+                        G.points -= G.data.buildings.sniper.cost;
                     }
                 }
                 //beam
@@ -1326,9 +1350,9 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset + 68 < e.offsetY &&
                     G.height - offset + 108 > e.offsetY
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.beam.cost) {
-                        G.A.B.beam.generate(G.A.C.X, G.A.C.Y);
-                        G.points -= G.A.B.beam.cost;
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.beam.cost) {
+                        G.data.buildings.beam.generate(G.data.cursor.X, G.data.cursor.Y);
+                        G.points -= G.data.buildings.beam.cost;
                     }
                 }
                 //multi
@@ -1338,9 +1362,9 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset + 108 < e.offsetY &&
                     G.height - offset + 148 > e.offsetY
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.multi.cost) {
-                        G.A.B.multi.generate(G.A.C.X, G.A.C.Y);
-                        G.points -= G.A.B.multi.cost;
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.multi.cost) {
+                        G.data.buildings.multi.generate(G.data.cursor.X, G.data.cursor.Y);
+                        G.points -= G.data.buildings.multi.cost;
                     }
                 }
                 //aura
@@ -1350,9 +1374,9 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset + 108 < e.offsetY &&
                     G.height - offset + 148 > e.offsetY
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.aura.cost) {
-                        G.A.B.aura.generate(G.A.C.X, G.A.C.Y);
-                        G.points -= G.A.B.aura.cost;
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.aura.cost) {
+                        G.data.buildings.aura.generate(G.data.cursor.X, G.data.cursor.Y);
+                        G.points -= G.data.buildings.aura.cost;
                     }
                 }
                 //super
@@ -1362,9 +1386,9 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset + 108 < e.offsetY &&
                     G.height - offset + 148 > e.offsetY
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).type == 'platform' && getTile(G.A.C.X, G.A.C.Y).tower == null && G.points >= G.A.B.super.cost) {
-                        G.A.B.super.generate(G.A.C.X, G.A.C.Y);
-                        G.points -= G.A.B.super.cost;
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).type == 'platform' && getTile(G.data.cursor.X, G.data.cursor.Y).tower == null && G.points >= G.data.buildings.super.cost) {
+                        G.data.buildings.super.generate(G.data.cursor.X, G.data.cursor.Y);
+                        G.points -= G.data.buildings.super.cost;
                     }
                 }
                 return;
@@ -1381,7 +1405,7 @@ G.canvas.addEventListener('click', e => {
                     pos1 + Math.floor(upgradeWidth / 3) > e.offsetX &&
                     upgradeTop < e.offsetY
                 ) {
-                    BuyUpgrade(getTile(G.A.C.X, G.A.C.Y, true), 0);
+                    BuyUpgrade(getTile(G.data.cursor.X, G.data.cursor.Y, true), 0);
                     return;
                 }
                 if (
@@ -1389,7 +1413,7 @@ G.canvas.addEventListener('click', e => {
                     pos2 + Math.floor(upgradeWidth / 3) > e.offsetX &&
                     upgradeTop < e.offsetY
                 ) {
-                    BuyUpgrade(getTile(G.A.C.X, G.A.C.Y, true), 1);
+                    BuyUpgrade(getTile(G.data.cursor.X, G.data.cursor.Y, true), 1);
                     return;
                 }
                 if (
@@ -1397,7 +1421,7 @@ G.canvas.addEventListener('click', e => {
                     pos3 + Math.floor(upgradeWidth / 3) > e.offsetX &&
                     upgradeTop < e.offsetY
                 ) {
-                    BuyUpgrade(getTile(G.A.C.X, G.A.C.Y, true), 2);
+                    BuyUpgrade(getTile(G.data.cursor.X, G.data.cursor.Y, true), 2);
                     return;
                 }
                 leftarrow = G.width / 2;
@@ -1410,7 +1434,7 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset < e.offsetY &&
                     G.height - offset + 36
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).tower !== null) getTile(G.A.C.X, G.A.C.Y).tower.targetchange(-1);
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).tower !== null) getTile(G.data.cursor.X, G.data.cursor.Y).tower.targetchange(-1);
                 }
                 if (
                     rightarrow - hitwidth / 2 < e.offsetX &&
@@ -1418,11 +1442,11 @@ G.canvas.addEventListener('click', e => {
                     G.height - offset < e.offsetY &&
                     G.height - offset + 36
                 ) {
-                    if (getTile(G.A.C.X, G.A.C.Y, true).tower !== null) getTile(G.A.C.X, G.A.C.Y).tower.targetchange(1);
+                    if (getTile(G.data.cursor.X, G.data.cursor.Y, true).tower !== null) getTile(G.data.cursor.X, G.data.cursor.Y).tower.targetchange(1);
                 }
             };
             //Destroy tower
-            offset = (96 * Math.sin((Math.PI / F.time) * (G.U.anim - 25)) + 96);
+            offset = (96 * Math.sin((Math.PI / F.time) * (G.toolBar.anim - 25)) + 96);
             G.C.font = "16px 'Press Start 2P', sans-serif";
             destroy = {};
             destroy.x = G.width - G.C.textWidth("[X] Destroy: " + tile.tower.refund + "p").width - 20;
@@ -1435,11 +1459,11 @@ G.canvas.addEventListener('click', e => {
                 destroy.y < e.offsetY &&
                 destroy.y + destroy.h > e.offsetY
             ) {
-                for (var i = 0; i < G.T.B.length; i++) {
-                    if (G.T.B[i].x == G.A.C.X && G.T.B[i].y == G.A.C.Y && getTile(G.T.B[i].x, G.T.B[i].y, true).tower != null) {
-                        G.points += getTile(G.T.B[i].x, G.T.B[i].y).tower.refund;
-                        getTile(G.T.B[i].x, G.T.B[i].y).tower = null;
-                        G.T.B.splice(i, 1);
+                for (let i = 0; i < G.objects.buildings.length; i++) {
+                    if (G.objects.buildings[i].x == G.data.cursor.X && G.objects.buildings[i].y == G.data.cursor.Y && getTile(G.objects.buildings[i].x, G.objects.buildings[i].y, true).tower != null) {
+                        G.points += getTile(G.objects.buildings[i].x, G.objects.buildings[i].y).tower.refund;
+                        getTile(G.objects.buildings[i].x, G.objects.buildings[i].y).tower = null;
+                        G.objects.buildings.splice(i, 1);
                     }
                 }
             }
@@ -1462,15 +1486,15 @@ G.canvas.addEventListener('click', e => {
             if (G.wavespawn < 0) NextWave();
             return;
         }
-        //if (G.A.loaded) G.nodes.push([Math.round(e.offsetX/G.A.A.config.scale[0])*G.A.A.config.scale[0], Math.round(e.offsetY/G.A.A.config.scale[1])*G.A.A.config.scale[1]]);
-        G.A.C.X = Math.round((e.offsetX - G.O.X - G.A.TS[0] / 2) / G.A.TS[0]);
-        G.A.C.Y = Math.round((e.offsetY - G.O.Y - G.A.TS[1] / 2) / G.A.TS[1]);
-        G.A.C.on = true;
+        //if (G.data.loaded) G.nodes.push([Math.round(e.offsetX/G.data.atlas.config.scale[0])*G.data.atlas.config.scale[0], Math.round(e.offsetY/G.data.atlas.config.scale[1])*G.data.atlas.config.scale[1]]);
+        G.data.cursor.X = Math.round((e.offsetX - G.offset.X - G.data.tileSize[0] / 2) / G.data.tileSize[0]);
+        G.data.cursor.Y = Math.round((e.offsetY - G.offset.Y - G.data.tileSize[1] / 2) / G.data.tileSize[1]);
+        G.data.cursor.on = true;
     }
     else if (G.scene == 'ee') {
-        G.A.C.X = Math.round((e.offsetX - G.O.X - G.A.TS[0] / 2) / G.A.TS[0]);
-        G.A.C.Y = Math.round((e.offsetY - G.O.Y - G.A.TS[1] / 2) / G.A.TS[1]);
-        G.A.C.on = true;
+        G.data.cursor.X = Math.round((e.offsetX - G.offset.X - G.data.tileSize[0] / 2) / G.data.tileSize[0]);
+        G.data.cursor.Y = Math.round((e.offsetY - G.offset.Y - G.data.tileSize[1] / 2) / G.data.tileSize[1]);
+        G.data.cursor.on = true;
     }
 });
 
@@ -1481,7 +1505,7 @@ class KeyBinding {
         this.key = key;
         this.action = action;
         this.scene = scene;
-        K[this.id] = this;
+        G.bindings[this.id] = this;
     }
 }
 
@@ -1579,12 +1603,12 @@ class Scene {
     constructor(scene, draw) {
         this.scene = scene;
         this.draw = draw;
-        S[this.scene] = this;
+        G.scenes[this.scene] = this;
     }
 }
 
 function Draw() {
-    S[G.scene].draw();
+    G.scenes[G.scene].draw();
     G.C.font = "8px 'Press Start 2P'";
     G.C.fillStyle = 'white';
     G.C.textAlign = 'left';
@@ -1593,9 +1617,9 @@ function Draw() {
 
 function NewGame(map) {
     /** @type {Track} */
-    let mapdata = G.A.M[map];
-    G.O.X = Math.floor((G.width - mapdata.map.size[0] * G.A.TS[0]) / 2);
-    G.O.Y = 48 + Math.floor((G.height - 48 - mapdata.map.size[1] * G.A.TS[1]) / 2);
+    let mapdata = G.data.maps[map];
+    G.offset.X = Math.floor((G.width - mapdata.map.size[0] * G.data.tileSize[0]) / 2);
+    G.offset.Y = 48 + Math.floor((G.height - 48 - mapdata.map.size[1] * G.data.tileSize[1]) / 2);
     G.map = map;
     G.boss = null;
     G.wave = 0;
@@ -1609,11 +1633,11 @@ function NewGame(map) {
     G.alternate = false;
     G.pause = false;
     G.path = [];
-    G.A.C.on = false;
-    G.hp = Math.round(G.basehp * G.S.lives);
-    G.maxhp = Math.round(G.basehp * G.S.lives);
+    G.data.cursor.on = false;
+    G.hp = Math.round(G.basehp * G.settings.lives);
+    G.maxhp = Math.round(G.basehp * G.settings.lives);
     G.points = G.basepoints;
-    loadMap(G.A.M[map]);
+    loadMap(G.data.maps[map]);
 }
 
 function FrameLimit(change) {
@@ -1630,36 +1654,36 @@ function FrameLimit(change) {
 }
 
 B = JSON.parse(window.localStorage.getItem('keys'));
-if (B != null) for (const binding in B) if (K[binding]) K[binding].key = B[binding];
+if (B != null) for (const binding in B) if (G.bindings[binding]) G.bindings[binding].key = B[binding];
 
 loadsound = JSON.parse(window.localStorage.getItem('sound'));
 if (loadsound != null) {
-    A.V.M = loadsound[0];
-    A.V.S = loadsound[1];
+    G.audio.volume.music = loadsound[0];
+    G.audio.volume.sfx = loadsound[1];
 }
 
 
 //W-KEY
 document.addEventListener('keydown', e => {
     try {
-        if (G.R.R != undefined) {
-            if (e.code == K[G.R.R].key) {
-                G.R.R = undefined;
+        if (G.rebind.current != undefined) {
+            if (e.code == G.bindings[G.rebind.current].key) {
+                G.rebind.current = undefined;
                 return;
             }
-            K[G.R.R].key = e.code;
-            G.R.R = undefined;
+            G.bindings[G.rebind.current].key = e.code;
+            G.rebind.current = undefined;
             if (B == null) B = {};
-            for (const binding in K) {
-                B[binding] = K[binding.key];
+            for (const binding in G.bindings) {
+                B[binding] = G.bindings[binding.key];
             }
             window.localStorage.setItem('keys', JSON.stringify(B));
         }
-        else for (const binding in K) {
-            if (Array.isArray(K[binding].scene)) {
-                if (e.code == K[binding].key && K[binding].scene.includes(G.scene)) K[binding].action(e);
+        else for (const binding in G.bindings) {
+            if (Array.isArray(G.bindings[binding].scene)) {
+                if (e.code == G.bindings[binding].key && G.bindings[binding].scene.includes(G.scene)) G.bindings[binding].action(e);
             } else {
-                if (e.code == K[binding].key && K[binding].scene == G.scene) K[binding].action(e);
+                if (e.code == G.bindings[binding].key && G.bindings[binding].scene == G.scene) G.bindings[binding].action(e);
             }
         }
     } catch (err) {
@@ -1684,7 +1708,7 @@ function DrawMiniMap(data, posx, posy, width, height, enemies = [], towers = [])
         tileheight = height / data.map.size[1];
         G.C.fillStyle = '#4447';
         G.C.fillRect(posx, posy, width, height);
-        for (var x = 0; x < data.map.size[0]; x++) for (var y = 0; y < data.map.size[1]; y++) {
+        for (let x = 0; x < data.map.size[0]; x++) for (let y = 0; y < data.map.size[1]; y++) {
             if ((x + y) % 2 != 0) {
                 continue;
             }
@@ -1695,11 +1719,11 @@ function DrawMiniMap(data, posx, posy, width, height, enemies = [], towers = [])
         }
         G.C.lineWidth = Math.round(width / data.map.size[0] / 8) * 2;
         G.C.strokeStyle = '#777';
-        for (var p = 0; p < data.map.lines.length; p++) {
+        for (let p = 0; p < data.map.lines.length; p++) {
             G.C.beginPath();
             G.C.moveTo(Math.floor((data.map.lines[p][0][0] - data.map.start[0] + 0.5) * (width / data.map.size[0])) + posx,
                 Math.floor((data.map.lines[p][0][1] - data.map.start[1] + 0.5) * (height / data.map.size[1])) + posy);
-            for (var v = 1; v < data.map.lines[p].length; v++) {
+            for (let v = 1; v < data.map.lines[p].length; v++) {
                 G.C.lineTo(Math.floor((data.map.lines[p][v][0] - data.map.start[0] + 0.5) * (width / data.map.size[0])) + posx,
                     Math.floor((data.map.lines[p][v][1] - data.map.start[1] + 0.5) * (height / data.map.size[1])) + posy);
             }
@@ -1710,7 +1734,7 @@ function DrawMiniMap(data, posx, posy, width, height, enemies = [], towers = [])
                 G.C.fillStyle = '#d90000';
                 G.C.beginPath();
                 G.C.arc(Math.floor((l.pos[0] - data.map.start[0] + 0.5) * (width / data.map.size[0])) + posx,
-                    Math.floor((l.pos[1] - data.map.start[1] + 0.5) * (height / data.map.size[1])) + posy, Math.floor(G.S.mapx / data.map.size[0] / 3),
+                    Math.floor((l.pos[1] - data.map.start[1] + 0.5) * (height / data.map.size[1])) + posy, Math.floor(G.settings.mapx / data.map.size[0] / 3),
                     0, 2 * Math.PI);
                 G.C.fill();
             }
@@ -1718,7 +1742,7 @@ function DrawMiniMap(data, posx, posy, width, height, enemies = [], towers = [])
                 G.C.fillStyle = '#0073d7';
                 G.C.beginPath();
                 G.C.arc(Math.floor((l.pos[0] - data.map.start[0] + 0.5) * (width / data.map.size[0])) + posx,
-                    Math.floor((l.pos[1] - data.map.start[1] + 0.5) * (height / data.map.size[1])) + posy, Math.floor(G.S.mapx / data.map.size[0] / 3),
+                    Math.floor((l.pos[1] - data.map.start[1] + 0.5) * (height / data.map.size[1])) + posy, Math.floor(G.settings.mapx / data.map.size[0] / 3),
                     0, 2 * Math.PI);
                 G.C.fill();
             }
@@ -1729,12 +1753,12 @@ function DrawMiniMap(data, posx, posy, width, height, enemies = [], towers = [])
             G.C.lineWidth = 1;
             G.C.beginPath();
             G.C.arc(Math.floor((Math.round((e.x + 0.5) * 4) / 4 - 0.5 - data.map.start[0]) * (width / data.map.size[0])) + posx,
-                Math.floor((Math.round((e.y + 0.5) * 4) / 4 - 0.5 - data.map.start[1]) * (height / data.map.size[1])) + posy, G.S.mapx / data.map.size[0] / 6,
+                Math.floor((Math.round((e.y + 0.5) * 4) / 4 - 0.5 - data.map.start[1]) * (height / data.map.size[1])) + posy, G.settings.mapx / data.map.size[0] / 6,
                 0, 2 * Math.PI);
             G.C.stroke();
             G.C.beginPath();
             G.C.arc(Math.floor((Math.round((e.x + 0.5) * 4) / 4 - 0.5 - data.map.start[0]) * (width / data.map.size[0])) + posx,
-                Math.floor((Math.round((e.y + 0.5) * 4) / 4 - 0.5 - data.map.start[1]) * (height / data.map.size[1])) + posy, G.S.mapx / data.map.size[0] / 6,
+                Math.floor((Math.round((e.y + 0.5) * 4) / 4 - 0.5 - data.map.start[1]) * (height / data.map.size[1])) + posy, G.settings.mapx / data.map.size[0] / 6,
                 0, 2 * Math.PI * (e.hp / e.maxhp));
             G.C.lineTo(Math.floor((Math.round((e.x + 0.5) * 4) / 4 - 0.5 - data.map.start[0]) * (width / data.map.size[0])) + posx,
                 Math.floor((Math.round((e.y + 0.5) * 4) / 4 - 0.5 - data.map.start[1]) * (height / data.map.size[1])) + posy);
@@ -1753,13 +1777,13 @@ function DrawMiniMap(data, posx, posy, width, height, enemies = [], towers = [])
 /*
 function StartLoad() {
     try {
-    G.A.T = new Image();
-    G.A.T.src = "tiles.png";
-    G.A.T.style.display = 'none';
-    G.A.T.onload = () => {
+    G.data.textures = new Image();
+    G.data.textures.src = "tiles.png";
+    G.data.textures.style.display = 'none';
+    G.data.textures.onload = () => {
         EndLoad();
     }
-    document.body.appendChild(G.A.T);
+    document.body.appendChild(G.data.textures);
     } catch (e) {
         G.D = e.stack;
     }
@@ -1767,12 +1791,12 @@ function StartLoad() {
 
 function EndLoad() {
     G.scene = 'm';
-    G.A.loaded = true;
+    G.data.loaded = true;
 }
 */
 
 function NextWave() {
-    wave = G.A.D.W[G.waveset].W[G.wave]
+    wave = G.data.difficulties.W[G.waveset].W[G.wave]
     G.wave++;
     if (G.wavetimer > 0) {
         G.points += Math.floor(G.wavetimer * Math.sqrt(G.wave));
@@ -1792,12 +1816,12 @@ function NextWave() {
 //StartLoad();
 
 /*G.canvas.addEventListener('wheel', (e) => {
-    G.O.X -= G.M.X * (Math.max(0.5, Math.min(2, G.A.S - e.deltaY * 0.0005)) - G.A.S);
-    G.O.Y -= G.M.Y * (Math.max(0.5, Math.min(2, G.A.S - e.deltaY * 0.0005)) - G.A.S);
-    G.A.S = Math.max(0.5, Math.min(2, G.A.S - e.deltaY * 0.0005));
-    G.A.A.config.scale[0] = G.A.S * G.A.A.config.defaultscale[0];
-    G.A.A.config.scale[1] = G.A.S * G.A.A.config.defaultscale[1];
-    G.P = new OffscreenCanvas(G.A.A.config.scale[0], G.A.A.config.scale[1]); //PRELOAD
+    G.offset.X -= G.mouse.X * (Math.max(0.5, Math.min(2, G.data.scale - e.deltaY * 0.0005)) - G.data.scale);
+    G.offset.Y -= G.mouse.Y * (Math.max(0.5, Math.min(2, G.data.scale - e.deltaY * 0.0005)) - G.data.scale);
+    G.data.scale = Math.max(0.5, Math.min(2, G.data.scale - e.deltaY * 0.0005));
+    G.data.atlas.config.scale[0] = G.data.scale * G.data.atlas.config.defaultscale[0];
+    G.data.atlas.config.scale[1] = G.data.scale * G.data.atlas.config.defaultscale[1];
+    G.P = new OffscreenCanvas(G.data.atlas.config.scale[0], G.data.atlas.config.scale[1]); //PRELOAD
     G.PC = G.P.getContext('2d');
 });*/
 

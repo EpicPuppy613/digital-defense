@@ -1,0 +1,19 @@
+{
+    "name": "MK 1",
+    "id": "basic-mk1",
+    "desc": [
+        "the first major tower upgrade",
+        "",
+        "+ 2 damage",
+        "+ 0.2 fire rate",
+        "+ 0.2 range"
+    ],
+    "tower": "basic",
+    "cost": 65,
+    "req": [],
+    "add": {
+        "dg": 2,
+        "fr": 0.2,
+        "rg": 0.2
+    }
+}

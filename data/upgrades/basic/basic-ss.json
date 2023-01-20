@@ -1,0 +1,20 @@
+{
+    "name": "Super Scope",
+    "id": "basic-ss",
+    "desc": [
+        "massively increases the",
+        "range of the tower",
+        "",
+        "+ 0.4 range"
+    ],
+    "tower": "basic",
+    "cost": 1320,
+    "req": [
+        "basic-mk5",
+        "basic-sc",
+        "basic-PB"
+    ],
+    "add": {
+        "rg": 0.4
+    }
+}

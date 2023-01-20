@@ -1,0 +1,21 @@
+{
+    "name": "Double turret",
+    "id": "basic-dt",
+    "desc": [
+        "increases the amount of multishots",
+        "",
+        "+ 1 multishot"
+    ],
+    "tower": "basic",
+    "cost": 1500,
+    "req": [
+        "basic-mk5",
+        "basic-fr4",
+        "basic-dg4",
+        "basic-PB",
+        "basic-PA"
+    ],
+    "add": {
+        "sh": 1
+    }
+}

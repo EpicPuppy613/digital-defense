@@ -1,0 +1,21 @@
+{
+    "name": "MK 4",
+    "id": "basic-mk4",
+    "desc": [
+        "the fourth major tower upgrade",
+        "",
+        "+ 10 damage",
+        "+ 0.2 fire rate",
+        "+0.35 range"
+    ],
+    "tower": "basic",
+    "cost": 520,
+    "req": [
+        "basic-mk3"
+    ],
+    "add": {
+        "dg": 10,
+        "fr": 0.2,
+        "rg": 0.35
+    }
+}

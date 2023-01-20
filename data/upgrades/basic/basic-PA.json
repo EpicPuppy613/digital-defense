@@ -1,0 +1,23 @@
+{
+    "name": "BASIC AMP",
+    "id": "basic-PA",
+    "desc": [
+        "massively increases the",
+        "fire rate and damage of the tower",
+        "",
+        "+ 10 damage",
+        "+ 0.3 fire rate"
+    ],
+    "tower": "basic",
+    "cost": 1280,
+    "req": [
+        "basic-mk5",
+        "basic-fr4",
+        "basic-dg4",
+        "basic-PB"
+    ],
+    "add": {
+        "dg": 10,
+        "fr": 0.3
+    }
+}

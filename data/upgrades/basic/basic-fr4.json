@@ -1,0 +1,20 @@
+{
+    "name": "Fire Rate IV",
+    "id": "basic-fr4",
+    "desc": [
+        "massively increases the",
+        "fire rate of the tower",
+        "",
+        "+ 0.2 fire rate"
+    ],
+    "tower": "basic",
+    "cost": 620,
+    "req": [
+        "basic-mk4",
+        "basic-fr3",
+        "basic-PB"
+    ],
+    "add": {
+        "fr": 0.2
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "name": "Precision I",
+    "id": "sniper-dg1",
+    "desc": [
+        "increases the damage of the tower",
+        "",
+        "+ 2 damage"
+    ],
+    "tower": "sniper",
+    "cost": 125,
+    "req": [
+        "sniper-mk1"
+    ],
+    "add": {
+        "dg": 2
+    }
+}

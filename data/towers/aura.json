@@ -1,0 +1,15 @@
+{
+    "name": "Aura",
+    "type": "aura",
+    "texture": "tower-aura",
+    "turret": "turret-aura",
+    "firerate": 50,
+    "damage": 0.01,
+    "range": 1.5,
+    "color": "#f17a00",
+    "offset": 0,
+    "firewidth": 0.2,
+    "fireduration": 0.04,
+    "shots": 100,
+    "cost": 185
+}

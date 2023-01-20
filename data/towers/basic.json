@@ -1,0 +1,15 @@
+{
+    "name": "Basic",
+    "type": "basic",
+    "texture": "tower-basic",
+    "turret": "turret-basic",
+    "firerate": 2,
+    "damage": 4,
+    "range": 2.5,
+    "color": "#007eeb",
+    "offset": 20,
+    "firewidth": 2,
+    "fireduration": 0.2,
+    "shots": 1,
+    "cost": 60
+}

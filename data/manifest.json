@@ -1,0 +1,63 @@
+{
+    "maps": [
+        "data/maps/track1a.json",
+        "data/maps/track2a.json"
+    ],
+    "enemies": [
+        "data/enemies/basic.json",
+        "data/enemies/fast.json",
+        "data/enemies/heavy.json",
+        "data/enemies/speeder.json",
+        "data/enemies/tank.json",
+        "data/enemies/thiccboi.json"
+    ],
+    "waves": [
+        "data/waves/test.json"
+    ],
+    "towers": [
+        "data/towers/aura.json",
+        "data/towers/basic.json",
+        "data/towers/beam.json",
+        "data/towers/multi.json",
+        "data/towers/sniper.json",
+        "data/towers/super.json"
+    ],
+    "upgrades": [
+        "data/upgrades/basic/basic-dg1.json",
+        "data/upgrades/basic/basic-dg2.json",
+        "data/upgrades/basic/basic-dg3.json",
+        "data/upgrades/basic/basic-dg4.json",
+        "data/upgrades/basic/basic-dt.json",
+        "data/upgrades/basic/basic-fr1.json",
+        "data/upgrades/basic/basic-fr2.json",
+        "data/upgrades/basic/basic-fr3.json",
+        "data/upgrades/basic/basic-fr4.json",
+        "data/upgrades/basic/basic-lt.json",
+        "data/upgrades/basic/basic-mk1.json",
+        "data/upgrades/basic/basic-mk2.json",
+        "data/upgrades/basic/basic-mk3.json",
+        "data/upgrades/basic/basic-mk4.json",
+        "data/upgrades/basic/basic-mk5.json",
+        "data/upgrades/basic/basic-PA.json",
+        "data/upgrades/basic/basic-PB.json",
+        "data/upgrades/basic/basic-sc.json",
+        "data/upgrades/basic/basic-ss.json",
+        "data/upgrades/sniper/sniper-dg1.json",
+        "data/upgrades/sniper/sniper-dg2.json",
+        "data/upgrades/sniper/sniper-dg3.json",
+        "data/upgrades/sniper/sniper-fr1.json",
+        "data/upgrades/sniper/sniper-fr2.json",
+        "data/upgrades/sniper/sniper-fr3.json",
+        "data/upgrades/sniper/sniper-mk1.json",
+        "data/upgrades/sniper/sniper-mk2.json",
+        "data/upgrades/sniper/sniper-mk3.json",
+        "data/upgrades/sniper/sniper-mk4.json",
+        "data/upgrades/sniper/sniper-mk5.json",
+        "data/upgrades/sniper/sniper-PA.json",
+        "data/upgrades/sniper/sniper-PB.json",
+        "data/upgrades/sniper/sniper-rep.json",
+        "data/upgrades/sniper/sniper-rg1.json",
+        "data/upgrades/sniper/sniper-rg2.json",
+        "data/upgrades/sniper/sniper-rg3.json"
+    ]
+}

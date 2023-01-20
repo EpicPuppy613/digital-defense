@@ -1,0 +1,18 @@
+{
+    "name": "Range II",
+    "id": "sniper-rg2",
+    "desc": [
+        "increases the range of the tower",
+        "",
+        "+ 0.4 range"
+    ],
+    "tower": "sniper",
+    "cost": 400,
+    "req": [
+        "sniper-mk3",
+        "sniper-rg1"
+    ],
+    "add": {
+        "rg": 0.4
+    }
+}

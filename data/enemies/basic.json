@@ -1,0 +1,14 @@
+{
+    "type": "basic", 
+    "id": "basic", 
+    "size": [30, 30], 
+    "texture": "enemy-basic", 
+    "hp": 10, 
+    "damage": 1, 
+    "speed": 1, 
+    "hitbox": [14, 14], 
+    "reward": 1, 
+    "color1": "#ff0000", 
+    "color2": "#e00000",
+    "boss": false
+}

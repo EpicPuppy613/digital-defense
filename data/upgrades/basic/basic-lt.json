@@ -1,0 +1,17 @@
+{
+    "name": "Longer Turret",
+    "id": "basic-lt",
+    "desc": [
+        "increases the range of the tower",
+        "",
+        "+ 0.15 range"
+    ],
+    "tower": "basic",
+    "cost": 95,
+    "req": [
+        "basic-mk1"
+    ],
+    "add": {
+        "rg": 0.15
+    }
+}

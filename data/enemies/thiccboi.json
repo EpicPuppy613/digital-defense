@@ -1,0 +1,14 @@
+{
+    "type": "boss", 
+    "id": "thiccboi", 
+    "size": [60, 60], 
+    "texture": "enemy-boss", 
+    "hp": 250, 
+    "damage": 20, 
+    "speed": 0.3, 
+    "hitbox": [28, 28], 
+    "reward": 25, 
+    "color1": "#982c00", 
+    "color2": "#742100",
+    "boss": true
+}

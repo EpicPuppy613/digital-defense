@@ -1,0 +1,17 @@
+{
+    "name": "Repeater Module",
+    "id": "sniper-rep",
+    "desc": [
+        "increases the fire rate of the tower",
+        "",
+        "+ 0.2 fire rate"
+    ],
+    "tower": "sniper",
+    "cost": 300,
+    "req": [
+        "sniper-mk2"
+    ],
+    "add": {
+        "fr": 0.2
+    }
+}

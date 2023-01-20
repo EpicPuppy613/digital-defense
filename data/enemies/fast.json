@@ -1,0 +1,14 @@
+{
+    "type": "fast", 
+    "id": "fast", 
+    "size": [26, 26], 
+    "texture": "enemy-fast", 
+    "hp": 5, 
+    "damage": 1, 
+    "speed": 1.5, 
+    "hitbox": [12, 12], 
+    "reward": 2, 
+    "color1": "#ff6b00", 
+    "color2": "#e05e00",
+    "boss": false
+}

@@ -1,0 +1,19 @@
+{
+    "name": "MK 1",
+    "id": "sniper-mk1",
+    "desc": [
+        "the first major tower upgrade",
+        "",
+        "+ 2 damage",
+        "+ 0.1 fire rate",
+        "+ 0.15 range"
+    ],
+    "tower": "sniper",
+    "cost": 90,
+    "req": [],
+    "add": {
+        "dg": 2,
+        "fr": 0.1,
+        "rg": 0.15
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "name": "Sniper",
+    "type": "sniper",
+    "texture": "tower-sniper",
+    "turret": "turret-sniper",
+    "firerate": 0.5,
+    "damage": 15,
+    "range": 4.5,
+    "color": "#00cb3e",
+    "offset": 26,
+    "firewidth": 1,
+    "fireduration": 0.5,
+    "shots": 1,
+    "cost": 85
+}

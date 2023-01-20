@@ -1,0 +1,21 @@
+{
+    "name": "BASIC BOOST",
+    "id": "basic-PB",
+    "desc": [
+        "tower damage and fire rate booster",
+        "",
+        "+ 7 damage",
+        "+ 0.2 fire rate"
+    ],
+    "tower": "basic",
+    "cost": 360,
+    "req": [
+        "basic-mk3",
+        "basic-dg2",
+        "basic-fr2"
+    ],
+    "add": {
+        "dg": 7,
+        "fr": 0.2
+    }
+}

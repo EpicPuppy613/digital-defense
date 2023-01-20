@@ -1,0 +1,15 @@
+{
+    "name": "Ultimate",
+    "type": "super",
+    "texture": "tower-super",
+    "turret": "turret-super",
+    "firerate": 4,
+    "damage": 15,
+    "range": 3.5,
+    "color": "#f30000",
+    "offset": 20,
+    "firewidth": 2,
+    "fireduration": 0.2,
+    "shots": 1,
+    "cost": 500
+}
