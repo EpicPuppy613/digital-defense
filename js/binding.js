@@ -1,6 +1,6 @@
 //W-BINDINGS
 new KeyBinding('Deselect', 'deselect', 'Escape', () => { G.A.C.on = false; }, 'g');
-new KeyBinding('Recenter', 'recenter', 'KeyR', () => { G.O.X = 0; G.O.Y = 0; }, ['g', 'ee']);
+new KeyBinding('Recenter', 'recenter', 'KeyR', () => { G.O.X = Math.floor((G.width - G.A.M[G.map].map.size[0] * G.A.TS[0]) / 2); G.O.Y = 48 + Math.floor((G.height - 48 - G.A.M[G.map].map.size[1] * G.A.TS[1]) / 2); }, ['g', 'ee']);
 new KeyBinding('Move Right', 'right', 'ArrowRight', e => {
     if (e.ctrlKey && e.shiftKey) G.O.X -= G.A.TS[0] * 16;
     else if (e.ctrlKey) G.O.X -= G.A.TS[0] / 4;
@@ -132,3 +132,6 @@ new KeyBinding('Toggle Up', 'eup', 'KeyW', e => { if (E.D.U) E.D.U = false; else
 new KeyBinding('Toggle Down', 'edown', 'KeyS', e => { if (E.D.D) E.D.D = false; else if (!E.D.B && !E.D.P) E.D.D = true; }, 'ee');
 new KeyBinding('Toggle Base', 'ebase', 'KeyB', e => { if (E.D.B) E.D.B = false; else if (!E.D.P) {E.D.B = true; E.D.L = false; E.D.R = false; E.D.U = false; E.D.D = false;} }, 'ee');
 new KeyBinding('Toggle Platform', 'eplat', 'KeyC', e => {  if (E.D.P) E.D.P = false; else {E.D.P = true; E.D.B = false; E.D.L = false; E.D.R = false; E.D.U = false; E.D.D = false;} }, 'ee');
+new KeyBinding('Increase Percent Total', 'lt', 'KeyT', e => { L.percent = Math.min(L.percent + 0.025, 0.999) }, 'l');
+new KeyBinding('Increase Sub Total', 'ls', 'KeyF', e => { L.stages[L.stage].percent = Math.min(L.stages[L.stage].percent + 0.025, 1) }, 'l');
+new KeyBinding('Next Stage', 'ln', 'KeyG', e => { L.stage = Math.min(L.stage + 1, 3); L.stages[L.stage].percent = 0 }, 'l');

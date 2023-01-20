@@ -9,9 +9,6 @@ Array.prototype.includes = function (obj) {
     return false;
 }
 
-const TC = new OffscreenCanvas(8, 8); //TEXT CANVAS
-const TCX = TC.getContext('2d');
-
 const G = {}; //GAME
 /** @type {HTMLCanvasElement} */
 G.canvas = document.getElementById('main');
@@ -42,13 +39,14 @@ G.time = 0;
 G.path = [];
 G.S = {}; //SETTINGS
 G.S.mapy = 0;
+
 //W-SETTINGS
 // -----[SETTINGS]-----
-G.S.extendedtargeting = false; //Extended targetting options
-G.S.MORESPEED = true; //MORE speed options
+G.S.extendedtargeting = true; //Extended targetting options
+G.S.MORESPEED = false; //MORE speed options
 G.S.lives = 1.0; //Lives multiplier
 G.S.mapx = Math.floor(G.width / 5); //Minimap X max width
-G.S.cheatmode = true; //Enable increased starting money & lives
+G.S.cheatmode = false; //Enable increased starting money & lives
 // --------------------
 if (G.S.MORESPEED) {
     G.speeds = [0, 0.5, 1, 2, 3, 4, 6, 8, 12, 16];
@@ -60,7 +58,7 @@ G.M.Y = 0; //MOUSE Y
 G.N = {}; //NAVIGATION
 G.N.B = {}; //BUTTONS
 G.N.pos = 0; //MENU POSITION
-G.scene = 'm'; //SCENE
+G.scene = 'l'; //SCENE
 G.boss = null;
 G.A = {}; //ASSETS
 /** @type {Track{}} */
@@ -89,7 +87,7 @@ G.TS = {};
 G.TS.page = 0;
 /** options */
 G.TS.O = [];
-/** available */
+/** available @type {Track[]} */
 G.TS.A = [];
 G.T = {};
 /** projectiles */
@@ -111,6 +109,10 @@ G.basepoints = 150;
 G.basehp = 25;
 G.hp = Math.round(G.basehp * G.S.lives);
 G.maxhp = Math.round(G.basehp * G.S.lives);
+G.pan = {};
+G.pan.down = false;
+G.pan.x = 0;
+G.pan.y = 0;
 
 if (G.S.cheatmode) {
     G.basepoints *= 1000;
@@ -122,6 +124,33 @@ S = {}; //SCENES
 T = {}; //TARGETING
 T.T = {};
 T.L = [];
+
+/** Loading */
+const L = {};
+L.percent = 0;
+L.stage = 0;
+L.stages = [
+    {
+        stage: 'maps',
+        display: 'loading maps...',
+        percent: 0
+    },
+    {
+        stage: 'enemies',
+        display: 'loading enemies...',
+        percent: 0
+    },
+    {
+        stage: 'waves',
+        display: 'loading waves...',
+        percent: 0
+    },
+    {
+        stage: 'towers',
+        display: 'loading towers...',
+        percent: 0
+    }
+];
 
 const E = {}; //EDITOR
 E.C = {}; //MAP BOUNDS
@@ -610,44 +639,59 @@ class Enemy {
         this.color1 = color1;
         this.color2 = color2;
     }
+    newTile() {
+        var direction;
+        if (getTile(this.tile[0], this.tile[1], true).direction.length > 1) {
+            direction = getTile(this.tile[0], this.tile[1], true).direction[Math.floor(Math.random() * getTile(this.tile[0], this.tile[1], true).direction.length)];
+        } else {
+            direction = getTile(this.tile[0], this.tile[1], true).direction
+        }
+        switch (direction) {
+            case 'l':
+                this.direction = [-1, 0];
+                this.movement += 1;
+                this.tile[0] -= 1;
+                break;
+            case 'r':
+                this.direction = [1, 0];
+                this.movement += 1;
+                this.tile[0] += 1;
+                break;
+            case 'u':
+                this.direction = [0, -1];
+                this.movement += 1;
+                this.tile[1] -= 1;
+                break;
+            case 'd':
+                this.direction = [0, 1];
+                this.movement += 1;
+                this.tile[1] += 1;
+                break;
+            case 'b':
+                G.hp -= this.damage;
+                return true;
+                break;
+        }
+    }
     tick() {
         if (this.movement <= 0) {
-            var direction;
-            if (getTile(this.tile[0], this.tile[1], true).direction.length > 1) {
-                direction = getTile(this.tile[0], this.tile[1], true).direction[Math.floor(Math.random() * getTile(this.tile[0], this.tile[1], true).direction.length)];
-            } else {
-                direction = getTile(this.tile[0], this.tile[1], true).direction
-            }
-            switch (direction) {
-                case 'l':
-                    this.direction = [-1, 0];
-                    this.movement += 1;
-                    this.tile[0] -= 1;
-                    break;
-                case 'r':
-                    this.direction = [1, 0];
-                    this.movement += 1;
-                    this.tile[0] += 1;
-                    break;
-                case 'u':
-                    this.direction = [0, -1];
-                    this.movement += 1;
-                    this.tile[1] -= 1;
-                    break;
-                case 'd':
-                    this.direction = [0, 1];
-                    this.movement += 1;
-                    this.tile[1] += 1;
-                    break;
-                case 'b':
-                    G.hp -= this.damage;
-                    return true;
-                    break;
-            }
+            this.newTile();
         } else {
-            this.x += this.direction[0] * this.speed / F.time;
-            this.y += this.direction[1] * this.speed / F.time;
-            this.movement -= Math.abs(((this.direction[0] * this.speed) + (this.direction[1] * this.speed)) / F.time);
+            let movedistance = this.speed / F.time;
+            while (movedistance > 0) {
+                if (movedistance > this.movement) {
+                    this.x += this.direction[0] * this.movement;
+                    this.y += this.direction[1] * this.movement;
+                    movedistance -= this.movement;
+                    this.movement = 0;
+                } else {
+                    this.x += this.direction[0] * this.speed / F.time;
+                    this.y += this.direction[1] * this.speed / F.time;
+                    movedistance = 0;
+                    this.movement -= Math.abs(((this.direction[0] * this.speed) + (this.direction[1] * this.speed)) / F.time);
+                }
+                if (this.movement <= 0) this.newTile();
+            }
         }
         this.distance = G.path.indexOf(Math.floor(this.x) + ',' + Math.floor(this.y));
         if (this.direction[0] > 0) {
@@ -988,12 +1032,21 @@ G.canvas.addEventListener('mousemove', e => {
     for (const button in G.N.B) {
         G.N.B[button].hover = G.N.B[button].collide(e.offsetX, e.offsetY);
     }
+    if (G.pan.down) {
+        G.O.X -= G.pan.x - G.M.X;
+        G.O.Y -= G.pan.y - G.M.Y;
+        G.pan.x = G.M.X;
+        G.pan.y = G.M.Y;
+    }
 });
 
 //FRAME STUFF
 F = {};
 F.last = performance.now();
-F.fps = Array(48).fill(0);
+F.fps = Array(10).fill(0);
+F.getFPS = function () {
+    return this.fps.reduce((a, b) => (a + b) / 2);
+}
 F.time = 1;
 F.limit = 60;
 F.limiti = 3;
@@ -1204,6 +1257,25 @@ function DrawConsole() {
     //G.D = G.A.T;
     //G.D = "";
 }
+
+//W-PAN
+G.canvas.addEventListener('mousedown', e => {
+    e.preventDefault();
+    if (G.scene != 'g') return;
+    if (e.button == '1') {
+        G.pan.down = true;
+        G.pan.x = G.M.X;
+        G.pan.y = G.M.Y;
+    }
+});
+
+G.canvas.addEventListener('mouseup', e => {
+    e.preventDefault();
+    if (G.scene != 'g') return;
+    if (e.button == '1') {
+        G.pan.down = false;
+    }
+});
 
 //W-CLICK
 G.canvas.addEventListener('click', e => {
@@ -1513,11 +1585,17 @@ class Scene {
 
 function Draw() {
     S[G.scene].draw();
+    G.C.font = "8px 'Press Start 2P'";
+    G.C.fillStyle = 'white';
+    G.C.textAlign = 'left';
+    G.C.text("FPS: " + Math.round(F.getFPS()), 4, G.height - 4);
 }
 
 function NewGame(map) {
-    G.O.X = 0;
-    G.O.Y = 0;
+    /** @type {Track} */
+    let mapdata = G.A.M[map];
+    G.O.X = Math.floor((G.width - mapdata.map.size[0] * G.A.TS[0]) / 2);
+    G.O.Y = 48 + Math.floor((G.height - 48 - mapdata.map.size[1] * G.A.TS[1]) / 2);
     G.map = map;
     G.boss = null;
     G.wave = 0;
@@ -1604,14 +1682,14 @@ function DrawMiniMap(data, posx, posy, width, height, enemies = [], towers = [])
     if (data.map !== undefined) {
         tilewidth = width / data.map.size[0];
         tileheight = height / data.map.size[1];
-        G.C.fillStyle = '#4448';
+        G.C.fillStyle = '#4447';
         G.C.fillRect(posx, posy, width, height);
         for (var x = 0; x < data.map.size[0]; x++) for (var y = 0; y < data.map.size[1]; y++) {
             if ((x + y) % 2 != 0) {
                 continue;
             }
             else {
-                G.C.fillStyle = '#4442';
+                G.C.fillStyle = '#4444';
             }
             G.C.fillRect(Math.round(posx + x * tilewidth), Math.round(posy + y * tileheight), Math.round(tilewidth), Math.round(tileheight));
         }
@@ -1696,6 +1774,9 @@ function EndLoad() {
 function NextWave() {
     wave = G.A.D.W[G.waveset].W[G.wave]
     G.wave++;
+    if (G.wavetimer > 0) {
+        G.points += Math.floor(G.wavetimer * Math.sqrt(G.wave));
+    }
     try {
         G.wavespawn = wave[3] * wave[5].length;
         G.wavetotal = G.wavespawn;

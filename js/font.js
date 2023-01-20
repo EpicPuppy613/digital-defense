@@ -2,23 +2,28 @@ var fonts = [];
 for (var f = 8; f <= 64; f += 8) {
     var font = new Image();
     font.src = 'font/' + f + 'px.png';
-    font.C = new OffscreenCanvas(f, f);
+    font.C = new OffscreenCanvas(G.width, G.height);
     font.CX = font.C.getContext('2d');
     fonts.push(font);
 }
 
 CanvasRenderingContext2D.prototype.text = function(text, x, y) {
     var size = this.font.split(' ')[0].split('px')[0];
+    var xpos = 0;
     //STARTING X POS
     if (this.textAlign == 'left') {
-        var xpos = x;
+        xpos = x;
     }
     else if (this.textAlign == 'center') {
-        var xpos = x - (text.length * size / 2);
+        xpos = x - (text.length * size / 2);
     }
     else if (this.textAlign == 'right') {
-        var xpos = x - (text.length * size);
+        xpos = x - (text.length * size);
     }
+    //GET IMAGE
+    var texturesize = Math.round(size / 8) * 8;
+    var texture = fonts[Math.round(size / 8) - 1];
+    texture.CX.clearRect(0, 0, G.width, G.height);
     //ITERATE THROUGH TEXT
     for (var i = 0; i < text.length; i++) {
         //GET CHARACTER LOCATION ON SPRITESHEET
@@ -28,22 +33,31 @@ CanvasRenderingContext2D.prototype.text = function(text, x, y) {
         //GET SPRITE LOCATION
         var xloc = Math.floor(loc % 12);
         var yloc = Math.floor(loc / 12);
-        //GET IMAGE
-        var texturesize = Math.round(size / 8) * 8;
-        var texture = fonts[Math.round(size / 8) - 1];
         //DRAW SPRITE
-        texture.CX.clearRect(0, 0, texture.C.width, texture.C.height);
-        texture.CX.drawImage(texture, xloc * texturesize, yloc * texturesize, texturesize, texturesize, 0, 0, texturesize, texturesize);
-        //DRAW COLOR
-        texture.CX.globalCompositeOperation = 'source-atop';
-        texture.CX.fillStyle = this.fillStyle;
-        texture.CX.fillRect(0, 0, texturesize, texturesize);
-        texture.CX.globalCompositeOperation = 'source-over';
-        if (this.textBaseline == 'top') this.drawImage(texture.C, 0, 0, texturesize, texturesize, xpos + i * size, y, size, size);
-        else if (this.textBaseline == 'middle') this.drawImage(texture.C, 0, 0, texturesize, texturesize, xpos + i * size, y - size / 2, size, size);
-        else if (this.textBaseline == 'alphabetic') this.drawImage(texture.C, 0, 0, texturesize, texturesize, xpos + i * size, y - size, size, size);
-        else if (this.textBaseline == 'bottom') this.drawImage(texture.C, 0, 0, texturesize, texturesize, xpos + i * size, y - size, size, size);
+        var ypos = 0;
+        switch (this.textBaseline) {
+            case 'top':
+                ypos = y;
+                break;
+            case 'middle':
+                ypos = y - size / 2;
+                break;
+            case 'alphabetic':
+                ypos = y - size;
+                break;
+            case 'bottom':
+                ypos = y - size;
+                break;
+        }
+        texture.CX.drawImage(texture, xloc * texturesize, yloc * texturesize, texturesize, texturesize, xpos + i * size, ypos, texturesize, texturesize);
     }
+    //DRAW COLOR
+    texture.CX.globalCompositeOperation = 'source-atop';
+    texture.CX.fillStyle = this.fillStyle;
+    texture.CX.fillRect(0, 0, G.width, G.height);
+    texture.CX.globalCompositeOperation = 'source-over';
+    //RENDER TEXT
+    this.drawImage(texture.C, 0, 0);
 }
 CanvasRenderingContext2D.prototype.textWidth = function(text) {
     var size = this.font.split(' ')[0].split('px')[0];

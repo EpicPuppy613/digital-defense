@@ -1,13 +1,41 @@
+//W-SCENE:L // LOADING
+new Scene('l', () => {
+    G.C.fillStyle = 'white';
+    G.C.font = "32px 'Press Start 2P', monospace";
+    G.C.textAlign = 'center';
+    G.C.text('initializing...', Math.round(G.width / 2), 250);
+    //MAIN PROGRESS BAR
+    G.C.font = "24px 'Press Start 2P', monospace";
+    G.C.text(`${(L.percent * 100).toFixed(1)}%`, Math.round(G.width / 2), 340);
+    G.C.strokeStyle = 'white';
+    G.C.lineWidth = 2;
+    G.C.strokeRect(Math.round(G.width / 6), 350, Math.round(G.width / 1.5), 25);
+    G.C.fillStyle = '#3df';
+    G.C.fillRect(Math.round(G.width / 6) + 1, 351, (Math.round(G.width / 1.5) - 2) * L.percent, 23);
+    //SECONDARY PROGRESS BAR
+    G.C.fillStyle = 'white';
+    G.C.font = "16px 'Press Start 2P', monospace";
+    G.C.strokeStyle = 'gray';
+    G.C.text(`${L.stages[L.stage].display}`, Math.round(G.width / 2), 400);
+    G.C.strokeRect(Math.round(G.width / 3), 410, Math.round(G.width / 3), 10);
+    G.C.fillStyle = '#08c'
+    G.C.fillRect(Math.round(G.width / 3) + 1, 411, (Math.round(G.width / 3) - 2) * L.stages[L.stage].percent, 8);
+    //CHANGE TO MENU SCREEN WHEN FINISHED
+    if (L.percent >= 1) {
+        G.scene = 'm';
+    }
+})
+
 //W-SCENE:M // MENU
 new Scene('m', () => {
     G.C.fillStyle = 'white';
-    G.C.font = "40px 'Press Start 2P', sans-serif";
+    G.C.font = "40px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
     G.C.text('Just Another Tower Defense', Math.round(G.width / 2), 150);
-    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.font = "32px 'Press Start 2P', monospace";
     if (G.N.B.start.hover) G.C.text('> NEW GAME <', Math.round(G.width / 2), 350);
     else G.C.text('NEW GAME', Math.round(G.width / 2), 350);
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     if (G.wave != 0) {
         if (G.N.B.resume.hover) G.C.text('> RESUME <', Math.round(G.width / 2), 450);
         else G.C.text('RESUME', Math.round(G.width / 2), 450);
@@ -23,10 +51,10 @@ new Scene('m', () => {
 //W-SCENE:E // EDITOR
 new Scene('e', () => {
     G.C.fillStyle = 'white';
-    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.font = "32px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
     G.C.text('EDITOR', Math.round(G.width / 2), 200);
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     if (G.N.B.new.hover) G.C.text('> CREATE NEW <', Math.round(G.width / 2), 350);
     else G.C.text('CREATE NEW', Math.round(G.width / 2), 350);
     if (G.N.B.load.hover) G.C.text('> LOAD MAP <', Math.round(G.width / 2), 430);
@@ -112,7 +140,7 @@ new Scene('ee', () => {
     //UI
     //TOPBAR
     G.C.fillStyle = '#393939';
-    G.C.font = "16px 'Press Start 2P', sans-serif";
+    G.C.font = "16px 'Press Start 2P', monospace";
     G.C.fillRect(0, 0, G.width, 32);
     G.C.fillStyle = '#444';
     G.C.fillRect(0, G.height - 32, G.width, 32);
@@ -156,10 +184,10 @@ new Scene('ee', () => {
 //W-SCENE:S // SETTINGS
 new Scene('s', () => {
     G.C.fillStyle = 'white';
-    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.font = "32px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
     G.C.text('SETTINGS', Math.round(G.width / 2), 200);
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     if (G.N.B.bindings.hover) G.C.text('> CONTROLS <', Math.round(G.width / 2), 350);
     else G.C.text('CONTROLS', Math.round(G.width / 2), 350);
     if (G.N.B.default.hover) G.C.text('> RESET BINDINGS <', Math.round(G.width / 2), 430);
@@ -175,10 +203,10 @@ new Scene('s', () => {
 //W-SCENE:SG // SETTINGS:GRAPHICS
 new Scene('sg', () => {
     G.C.fillStyle = 'white';
-    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.font = "32px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
     G.C.text('GRAPHICS', Math.round(G.width / 2), 200);
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     if (G.N.B.rescale.hover) G.C.text('> RESCALE <', Math.round(G.width / 2), 350);
     else G.C.text('RESCALE', Math.round(G.width / 2), 350);
     G.C.text('FPS LIMIT:', Math.round(G.width / 2), 430);
@@ -198,10 +226,10 @@ new Scene('sg', () => {
 //W-SCENE:SS // SETTINGS:SOUND
 new Scene('ss', () => {
     G.C.fillStyle = 'white';
-    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.font = "32px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
     G.C.text('SOUND', Math.round(G.width / 2), 200);
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     G.C.text('MUSIC VOLUME:', Math.round(G.width / 2), 350);
     if (G.N.B.musicup.hover) G.C.text('> ' + Math.round(A.V.M * 100) + '% >', Math.round(G.width / 2), 390);
     else if (G.N.B.musicdown.hover) G.C.text('< ' + Math.round(A.V.M * 100) + '% <', Math.round(G.width / 2), 390);
@@ -217,11 +245,11 @@ new Scene('ss', () => {
 //W-SCENE:SB // SETTINGS:BINDINGS
 new Scene('sb', () => {
     G.C.fillStyle = 'white';
-    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.font = "32px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
     G.C.text("CONTROLS", Math.round(G.width / 2), 200);
     G.C.text(S[G.R.P].category, Math.round(G.width / 2), 260);
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     y = 320;
     x = 0;
     for (const binding of S[G.R.P].bindings) {
@@ -253,11 +281,11 @@ new Scene('sb', () => {
 //W-SCENE:T // TRACK SELECT
 new Scene('t', () => {
     G.C.fillStyle = 'white';
-    G.C.font = "32px 'Press Start 2P', sans-serif";
+    G.C.font = "32px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
     G.C.text("TRACK SELECT", Math.round(G.width / 2), 200);
     G.C.textAlign = 'center';
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     if (G.N.B.tback.hover) G.C.text('> BACK <', 100, 50);
     else G.C.text('BACK', 100, 50);
     G.C.fillStyle = 'white';
@@ -281,10 +309,10 @@ new Scene('t', () => {
     }
     tracks.sort((a, b) => a.difficulty - b.difficulty);
     if (G.TS.page * 2 < G.TS.A.length) {
-        G.C.font = "24px 'Press Start 2P', sans-serif";
+        G.C.font = "24px 'Press Start 2P', monospace";
         if (G.N.B.tleft.hover) G.C.text("> " + tracks[G.TS.page * 2].name + " <", Math.round(G.width / 2 - G.width / 4), 260)
         else G.C.text(tracks[G.TS.page * 2].name, Math.round(G.width / 2 - G.width / 4), 260);
-        G.C.font = "16px 'Press Start 2P', sans-serif";
+        G.C.font = "16px 'Press Start 2P', monospace";
         G.C.text(tracks[G.TS.page * 2].desc, Math.round(G.width / 2 - G.width / 4), 286);
         switch (tracks[G.TS.page * 2].difficulty) {
             case 1: G.C.fillStyle = '#1e90ff'; break;
@@ -300,13 +328,13 @@ new Scene('t', () => {
             default: G.C.fillStyle = 'white';
         }
         G.C.text(`Difficulty: [${"X".repeat(tracks[G.TS.page * 2].difficulty)}${" ".repeat(10 - tracks[G.TS.page * 2].difficulty)}]`, Math.round(G.width / 2 - G.width / 4), 310);
-        DrawMiniMap(tracks[G.TS.page * 2], Math.round(G.width / 2 - G.width / 4 - G.width / 6), 320, Math.round(G.width / 3), Math.floor(G.height / 5 * 2));
+        DrawMiniMap(tracks[G.TS.page * 2], Math.round(G.width / 2 - G.width / 4 - G.width / 6), 320, Math.round(G.width / 3), Math.round(((G.width / 3) / tracks[G.TS.page * 2].map.size[0]) * tracks[G.TS.page * 2].map.size[1]));
     }
     if (G.TS.page * 2 + 1 < G.TS.A.length) {
-        G.C.font = "24px 'Press Start 2P', sans-serif";
+        G.C.font = "24px 'Press Start 2P', monospace";
         if (G.N.B.tright.hover) G.C.text("> " + tracks[G.TS.page * 2 + 1].name + " <", Math.round(G.width / 2 + G.width / 4), 260);
         else G.C.text(tracks[G.TS.page * 2 + 1].name, Math.round(G.width / 2 + G.width / 4), 260);
-        G.C.font = "16px 'Press Start 2P', sans-serif";
+        G.C.font = "16px 'Press Start 2P', monospace";
         G.C.text(tracks[G.TS.page * 2 + 1].desc, Math.round(G.width / 2 + G.width / 4), 286);
         switch (tracks[G.TS.page * 2 + 1].difficulty) {
             case 1: G.C.fillStyle = '#1e90ff'; break;
@@ -482,14 +510,14 @@ new Scene('g', () => {
     //W-UI
     //TOPBAR
     G.C.fillStyle = '#393939';
-    G.C.font = "16px 'Press Start 2P', sans-serif";
+    G.C.font = "16px 'Press Start 2P', monospace";
     G.C.fillRect(0, 0, G.width, 48);
     G.C.fillRect(0, G.height - offset, G.width, 192);
     //BOSSBAR
     //G.D = G.boss;
     if (G.boss != null) {
         G.C.fillStyle = '#555';
-        G.C.font = "16px 'Press Start 2P', sans-serif";
+        G.C.font = "16px 'Press Start 2P', monospace";
         G.C.fillRect(12, 48, G.C.textWidth('BOSS').width + 8, 24);
         G.C.fillStyle = 'crimson';
         G.C.text("BOSS", 16, 68);
@@ -514,11 +542,11 @@ new Scene('g', () => {
     if (getTile(G.A.C.X, G.A.C.Y, true).tower == null) G.C.fillStyle = 'white';
     else G.C.fillStyle = getTile(G.A.C.X, G.A.C.Y, true).tower.color;
     G.C.textBaseline = 'top';
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     //W-UI:INFOBOX
     if (getTile(G.A.C.X, G.A.C.Y, true).tower == null && G.U.on) {
         G.C.text("Platform [Lv. -]", 10, G.height - offset + 10,);
-        G.C.font = "16px 'Press Start 2P', sans-serif";
+        G.C.font = "16px 'Press Start 2P', monospace";
         G.C.strokeStyle = 'gray';
         G.C.lineWidth = 2;
         G.C.textAlign = 'center';
@@ -557,7 +585,7 @@ new Scene('g', () => {
     } else if (G.U.on) {
         tower = getTile(G.A.C.X, G.A.C.Y, true).tower;
         G.C.text(tower.name + ` [Lv. ${tower.level}]`, 10, G.height - offset + 10);
-        G.C.font = "16px 'Press Start 2P', sans-serif";
+        G.C.font = "16px 'Press Start 2P', monospace";
         G.C.text("Kills: " + tower.kills.toLocaleString(), 10, G.height - offset + 44);
         G.C.text("Earned: " + tower.earned.toLocaleString() + "p", 10, G.height - offset + 64);
         G.C.text("Fire Rate: " + tower.firerate.toFixed(1) + "/s", 10, G.height - offset + 84);
@@ -580,13 +608,13 @@ new Scene('g', () => {
             else G.C.fillStyle = tower.color;
             G.C.text(tower.available[0].name, pos1, upgradeTop);
             vpos = upgradeTop + 26;
-            G.C.font = "8px 'Press Start 2P', sans-serif";
+            G.C.font = "8px 'Press Start 2P', monospace";
             for (const desc of tower.available[0].desc) {
                 G.C.text(desc, pos1, vpos);
                 vpos += 12;
             }
             vpos += 8;
-            G.C.font = "16px 'Press Start 2P', sans-serif";
+            G.C.font = "16px 'Press Start 2P', monospace";
             G.C.text("[" + tower.available[0].cost + "p]", pos1, vpos);
         }
         if (tower.available[1]) {
@@ -594,13 +622,13 @@ new Scene('g', () => {
             else G.C.fillStyle = tower.color;
             G.C.text(tower.available[1].name, pos2, upgradeTop);
             vpos = upgradeTop + 26;
-            G.C.font = "8px 'Press Start 2P', sans-serif";
+            G.C.font = "8px 'Press Start 2P', monospace";
             for (const desc of tower.available[1].desc) {
                 G.C.text(desc, pos2, vpos);
                 vpos += 12;
             }
             vpos += 8;
-            G.C.font = "16px 'Press Start 2P', sans-serif";
+            G.C.font = "16px 'Press Start 2P', monospace";
             G.C.text("[" + tower.available[1].cost + "p]", pos2, vpos);
         }
         if (tower.available[2]) {
@@ -608,16 +636,16 @@ new Scene('g', () => {
             else G.C.fillStyle = tower.color;
             G.C.text(tower.available[2].name, pos3, upgradeTop);
             vpos = upgradeTop + 26;
-            G.C.font = "8px 'Press Start 2P', sans-serif";
+            G.C.font = "8px 'Press Start 2P', monospace";
             for (const desc of tower.available[2].desc) {
                 G.C.text(desc, pos3, vpos);
                 vpos += 12;
             }
             vpos += 8;
-            G.C.font = "16px 'Press Start 2P', sans-serif";
+            G.C.font = "16px 'Press Start 2P', monospace";
             G.C.text("[" + tower.available[2].cost + "p]", pos3, vpos);
         }
-        G.C.font = "16px 'Press Start 2P', sans-serif";
+        G.C.font = "16px 'Press Start 2P', monospace";
         G.C.fillStyle = tower.color;
         G.C.text('<', Math.round(G.width / 2), G.height - offset + 10);
         G.C.text('>', Math.round(G.width / 2) + 200, G.height - offset + 10);
@@ -632,7 +660,7 @@ new Scene('g', () => {
     }
     G.C.textBaseline = 'alphabetic';
     G.C.fillStyle = 'gold';
-    G.C.font = "24px 'Press Start 2P', sans-serif";
+    G.C.font = "24px 'Press Start 2P', monospace";
     G.C.text(G.points.toLocaleString() + 'p', 12, 36);
     G.C.textAlign = 'right';
     if (G.hp / G.maxhp > 1) G.C.fillStyle = 'rgb(0, 255, ' + Math.round((G.hp / G.maxhp - 1) * 255) + ')';
@@ -695,7 +723,7 @@ new Scene('g', () => {
     DrawMiniMap(G.A.M[G.map], G.width - G.S.mapx, G.height - offset - G.S.mapy, G.S.mapx, G.S.mapy, G.T.E, G.T.B);
     G.C.textAlign = 'left';
     //W-UI:FPS
-    G.C.font = "16px 'Press Start 2P', sans-serif";
+    G.C.font = "16px 'Press Start 2P', monospace";
     G.C.fillStyle = 'white';
     G.C.text(Math.round(F.fps.reduce((a, b) => a + b) / F.fps.length), 6, G.height - offset - 6);
 });
