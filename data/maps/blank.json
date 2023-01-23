@@ -1,0 +1,20 @@
+{
+    "name": "Blank",
+    "id": "blank",
+    "desc": "blank map, for template and editor use",
+    "tiles": [
+
+    ],
+    "locations": [
+
+    ],
+    "map": {
+        "start": [0, 0],
+        "size": [1, 1],
+        "lines": [
+            []
+        ]
+    },
+    "difficulty": 1,
+    "show": false
+}

@@ -1,0 +1,23 @@
+{
+    "name": "MK 5",
+    "id": "multi-mk5",
+    "desc": [
+        "the final major tower upgrade",
+        "",
+        "+ 12 damage",
+        "+ 0.1 fire rate",
+        "+ 0.35 range",
+        "+ 1 multishot"
+    ],
+    "tower": "multi",
+    "cost": 2480,
+    "req": [
+        "multi-mk4"
+    ],
+    "add": {
+        "dg": 12,
+        "fr": 0.1,
+        "rg": 0.35,
+        "sh": 1
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "MK 2",
+    "id": "multi-mk2",
+    "desc": [
+        "the second major tower upgrade",
+        "",
+        "+ 1.5 damage",
+        "+ 0.1 fire rate",
+        "+ 0.2 range"
+    ],
+    "tower": "multi",
+    "cost": 310,
+    "req": [
+        "multi-mk1"
+    ],
+    "add": {
+        "dg": 1.5,
+        "fr": 0.1,
+        "rg": 0.2
+    }
+}

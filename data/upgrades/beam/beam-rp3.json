@@ -1,0 +1,20 @@
+{
+    "name": "Large Repeater",
+    "id": "beam-rp3",
+    "desc": [
+        "massively increases the",
+        "fire rate of the tower",
+        "",
+        "+ 10 fire rate"
+    ],
+    "tower": "beam",
+    "cost": 2200,
+    "req": [
+        "beam-mk5",
+        "beam-PA",
+        "beam-rp2"
+    ],
+    "add": {
+        "fr": 10
+    }
+}

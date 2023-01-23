@@ -1,0 +1,17 @@
+{
+    "name": "Power I",
+    "id": "beam-dg1",
+    "desc": [
+        "increases the damage of the tower",
+        "",
+        "+ 0.1 damage"
+    ],
+    "tower": "beam",
+    "cost": 180,
+    "req": [
+        "beam-mk1"
+    ],
+    "add": {
+        "dg": 0.1
+    }
+}

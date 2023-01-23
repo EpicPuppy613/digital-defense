@@ -1,0 +1,19 @@
+{
+    "name": "MK 1",
+    "id": "super-mk1",
+    "desc": [
+        "the first major tower upgrade",
+        "",
+        "+ 4 damage",
+        "+ 0.4 fire rate",
+        "+ 0.4 range"
+    ],
+    "tower": "super",
+    "cost": 510,
+    "req": [],
+    "add": {
+        "dg": 4,
+        "fr": 0.4,
+        "rg": 0.4
+    }
+}

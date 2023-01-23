@@ -1,0 +1,21 @@
+{
+    "name": "MK 2",
+    "id": "beam-mk2",
+    "desc": [
+        "the second major tower upgrade",
+        "",
+        "+ 0.15 damage",
+        "+ 0.04 range",
+        "+ 1 multishot"
+    ],
+    "tower": "beam",
+    "cost": 230,
+    "req": [
+        "beam-mk1"
+    ],
+    "add": {
+        "dg": 0.15,
+        "rg": 0.04,
+        "sh": 1
+    }
+}

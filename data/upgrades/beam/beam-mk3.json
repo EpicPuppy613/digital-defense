@@ -1,0 +1,21 @@
+{
+    "name": "MK 3",
+    "id": "beam-mk3",
+    "desc": [
+        "the third major tower upgrade",
+        "",
+        "+ 0.2 damage",
+        "+ 0.06 range",
+        "+ 1 multishot"
+    ],
+    "tower": "beam",
+    "cost": 460,
+    "req": [
+        "beam-mk2"
+    ],
+    "add": {
+        "dg": 0.2,
+        "rg": 0.06,
+        "sh": 1
+    }
+}

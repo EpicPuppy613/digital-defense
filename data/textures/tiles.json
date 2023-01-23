@@ -1,0 +1,35 @@
+{
+    "id": "tiles",
+    "src": "img/tiles.png",
+    "config": {
+        "sizex": 128,
+        "sizey": 128,
+        "tilex": 5,
+        "tiley": 5,
+        "scalex": 64,
+        "scaley": 64
+    },
+    "textures": [
+        {"id": "track-", "x": 0, "y": 0},
+        {"id": "track-r", "x": 1, "y": 0},
+        {"id": "track-rl", "x": 2, "y": 0},
+        {"id": "track-l", "x": 3, "y": 0},
+        {"id": "track-d", "x": 4, "y": 0},
+        {"id": "track-rd", "x": 0, "y": 1},
+        {"id": "track-rld", "x": 1, "y": 1},
+        {"id": "track-ld", "x": 2, "y": 1},
+        {"id": "track-ud", "x": 3, "y": 1},
+        {"id": "track-rud", "x": 4, "y": 1},
+        {"id": "track-rlud", "x": 0, "y": 2},
+        {"id": "track-lud", "x": 1, "y": 2},
+        {"id": "track-u", "x": 2, "y": 2},
+        {"id": "track-ru", "x": 3, "y": 2},
+        {"id": "track-rlu", "x": 4, "y": 2},
+        {"id": "track-lu", "x": 0, "y": 3},
+        {"id": "tower", "x": 1, "y": 3},
+        {"id": "selected", "x": 2, "y": 3},
+        {"id": "selected-invalid", "x": 3, "y": 3},
+        {"id": "spawn", "x": 4, "y": 3},
+        {"id": "base", "x": 0, "y": 4}
+    ]
+}

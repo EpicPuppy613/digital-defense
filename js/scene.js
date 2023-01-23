@@ -27,7 +27,7 @@ new Scene('m', () => {
     G.C.fillStyle = 'white';
     G.C.font = "40px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
-    G.C.text('Just Another Tower Defense', Math.round(G.width / 2), 150);
+    G.C.text('Just Another TD', Math.round(G.width / 2), 150);
     G.C.font = "32px 'Press Start 2P', monospace";
     if (G.nav.buttons.start.hover) G.C.text('> NEW GAME <', Math.round(G.width / 2), 350);
     else G.C.text('NEW GAME', Math.round(G.width / 2), 350);
@@ -346,7 +346,7 @@ new Scene('t', () => {
             default: G.C.fillStyle = 'white';
         }
         G.C.text(`Difficulty: [${"X".repeat(tracks[G.trackSelect.page * 2 + 1].difficulty)}${" ".repeat(10 - tracks[G.trackSelect.page * 2 + 1].difficulty)}]`, Math.round(G.width / 2 + G.width / 4), 310);
-        DrawMiniMap(tracks[G.trackSelect.page * 2 + 1], Math.round(G.width / 2 + G.width / 4 - G.width / 6), 320, Math.round(G.width / 3), Math.floor(G.height / 5 * 2));
+        DrawMiniMap(tracks[G.trackSelect.page * 2 + 1], Math.round(G.width / 2 + G.width / 4 - G.width / 6), 320, Math.round(G.width / 3), Math.round(((G.width / 3) / tracks[G.trackSelect.page * 2 + 1].map.size[0]) * tracks[G.trackSelect.page * 2 + 1].map.size[1]));
     }
     G.C.textAlign = 'left';
 });

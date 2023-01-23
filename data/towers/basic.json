@@ -1,5 +1,6 @@
 {
     "name": "Basic",
+    "id": "basic",
     "type": "basic",
     "texture": "tower-basic",
     "turret": "turret-basic",

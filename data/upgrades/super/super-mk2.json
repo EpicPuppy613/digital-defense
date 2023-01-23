@@ -1,0 +1,21 @@
+{
+    "name": "MK 2",
+    "id": "super-mk2",
+    "desc": [
+        "the second major tower upgrade",
+        "",
+        "+ 8 damage",
+        "+ 0.4 fire rate",
+        "+ 0.45 range"
+    ],
+    "tower": "super",
+    "cost": 1020,
+    "req": [
+        "super-mk1"
+    ],
+    "add": {
+        "dg": 8,
+        "fr": 0.4,
+        "rg": 0.45
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "Distance III",
+    "id": "beam-rg3",
+    "desc": [
+        "massively increases the",
+        "range of the tower",
+        "",
+        "+ 0.07 range"
+    ],
+    "tower": "beam",
+    "cost": 550,
+    "req": [
+        "beam-mk3",
+        "beam-PB",
+        "beam-rg2"
+    ],
+    "add": {
+        "rg": 0.07
+    }
+}

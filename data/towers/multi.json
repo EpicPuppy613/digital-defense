@@ -1,5 +1,6 @@
 {
     "name": "Multishot",
+    "id": "multi",
     "type": "multi",
     "texture": "tower-multi",
     "turret": "turret-multi",

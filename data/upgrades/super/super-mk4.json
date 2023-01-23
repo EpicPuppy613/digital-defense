@@ -1,0 +1,23 @@
+{
+    "name": "MK 4",
+    "id": "super-mk4",
+    "desc": [
+        "the fourth major tower upgrade",
+        "",
+        "+ 32 damage",
+        "+ 0.4 fire rate",
+        "+ 0.55 range",
+        "+ 1 multishot"
+    ],
+    "tower": "super",
+    "cost": 4080,
+    "req": [
+        "super-mk3"
+    ],
+    "add": {
+        "dg": 32,
+        "fr": 0.4,
+        "rg": 0.55,
+        "sh": 1
+    }
+}

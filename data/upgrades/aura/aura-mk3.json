@@ -1,0 +1,21 @@
+{
+    "name": "MK 3",
+    "id": "aura-mk3",
+    "desc": [
+        "the third major tower upgrade",
+        "",
+        "+ 0.02 damage",
+        "+ 0.12 range",
+        "+ 25 multishot"
+    ],
+    "tower": "aura",
+    "cost": 760,
+    "req": [
+        "aura-mk2"
+    ],
+    "add": {
+        "dg": 0.02,
+        "rg": 0.12,
+        "sh": 25
+    }
+}

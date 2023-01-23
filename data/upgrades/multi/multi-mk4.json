@@ -1,0 +1,21 @@
+{
+    "name": "MK 4",
+    "id": "multi-mk4",
+    "desc": [
+        "the fourth major tower upgrade",
+        "",
+        "+ 6 damage",
+        "+ 0.1 fire rate",
+        "+ 0.3 range"
+    ],
+    "tower": "multi",
+    "cost": 1240,
+    "req": [
+        "multi-mk3"
+    ],
+    "add": {
+        "dg": 6,
+        "fr": 0.1,
+        "rg": 0.3
+    }
+}

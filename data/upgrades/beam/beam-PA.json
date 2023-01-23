@@ -1,0 +1,27 @@
+{
+    "name": "BEAM AMP",
+    "id": "beam-PA",
+    "desc": [
+        "massively increases the",
+        "stats of the tower",
+        "",
+        "+ 0.35 damage",
+        "+ 0.12 range",
+        "+ 10 fire rate",
+        "+ 1 multishot"
+    ],
+    "tower": "beam",
+    "cost": 2000,
+    "req": [
+        "beam-mk5",
+        "beam-dg4",
+        "beam-rg4",
+        "beam-rp2"
+    ],
+    "add": {
+        "dg": 0.35,
+        "rg": 0.12,
+        "fr": 10,
+        "sh": 1
+    }
+}

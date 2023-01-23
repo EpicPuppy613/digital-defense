@@ -1,0 +1,17 @@
+{
+    "name": "Distance I",
+    "id": "beam-rg1",
+    "desc": [
+        "increases the range of the tower",
+        "",
+        "+ 0.03 range"
+    ],
+    "tower": "beam",
+    "cost": 140,
+    "req": [
+        "beam-mk1"
+    ],
+    "add": {
+        "rg": 0.03
+    }
+}

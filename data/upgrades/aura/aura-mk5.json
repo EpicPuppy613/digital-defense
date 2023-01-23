@@ -1,0 +1,21 @@
+{
+    "name": "MK 5",
+    "id": "aura-mk5",
+    "desc": [
+        "the final major tower upgrade",
+        "",
+        "+ 0.08 damage",
+        "+ 0.2 range",
+        "+ 50 multishot"
+    ],
+    "tower": "aura",
+    "cost": 3040,
+    "req": [
+        "aura-mk4"
+    ],
+    "add": {
+        "dg": 0.08,
+        "rg": 0.2,
+        "sh": 50
+    }
+}

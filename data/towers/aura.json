@@ -1,5 +1,6 @@
 {
     "name": "Aura",
+    "id": "aura",
     "type": "aura",
     "texture": "tower-aura",
     "turret": "turret-aura",

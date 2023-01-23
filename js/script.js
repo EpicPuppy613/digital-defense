@@ -46,7 +46,7 @@ G.settings.extendedtargeting = true; //Extended targetting options
 G.settings.MORESPEED = false; //MORE speed options
 G.settings.lives = 1.0; //Lives multiplier
 G.settings.mapx = Math.floor(G.width / 5); //Minimap X max width
-G.settings.cheatmode = false; //Enable increased starting money & lives
+G.settings.cheatmode = true; //Enable increased starting money & lives
 // --------------------
 if (G.settings.MORESPEED) {
     G.speeds = [0, 0.5, 1, 2, 3, 4, 6, 8, 12, 16];
@@ -75,6 +75,7 @@ G.DC = []; //Debug Componenets
 G.data.enemies = {};
 G.data.buildings = {};
 G.data.difficulties = {};
+G.data.upgrades = {};
 G.data.difficulties.W = {};
 G.data.locations = {}; //LOCATIONS
 G.data.locations.spawn = []; //SPAWNS

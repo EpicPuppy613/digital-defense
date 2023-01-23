@@ -1,0 +1,17 @@
+{
+    "name": "MK 1",
+    "id": "beam-mk1",
+    "desc": [
+        "the first major tower upgrade",
+        "",
+        "+ 0.1 damage",
+        "+ 0.02 range"
+    ],
+    "tower": "beam",
+    "cost": 115,
+    "req": [],
+    "add": {
+        "dg": 0.1,
+        "rg": 0.02
+    }
+}

@@ -1,5 +1,6 @@
 {
     "name": "Beam",
+    "id": "beam",
     "type": "beam",
     "texture": "tower-beam",
     "turret": "turret-beam",

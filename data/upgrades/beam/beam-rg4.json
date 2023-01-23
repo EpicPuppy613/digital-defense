@@ -1,0 +1,20 @@
+{
+    "name": "Distance IV",
+    "id": "beam-rg4",
+    "desc": [
+        "massively increases the",
+        "range of the tower",
+        "",
+        "+ 0.09 range"
+    ],
+    "tower": "beam",
+    "cost": 960,
+    "req": [
+        "beam-mk4",
+        "beam-PB",
+        "beam-rg3"
+    ],
+    "add": {
+        "rg": 0.07
+    }
+}

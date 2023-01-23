@@ -1,0 +1,19 @@
+{
+    "name": "Medium Repeater",
+    "id": "beam-rp2",
+    "desc": [
+        "increases the fire rate of the tower",
+        "",
+        "+ 5 fire rate"
+    ],
+    "tower": "beam",
+    "cost": 1200,
+    "req": [
+        "beam-mk4",
+        "beam-PB",
+        "beam-rp1"
+    ],
+    "add": {
+        "fr": 5
+    }
+}

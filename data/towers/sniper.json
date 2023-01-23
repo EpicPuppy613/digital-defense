@@ -1,5 +1,6 @@
 {
     "name": "Sniper",
+    "id": "sniper",
     "type": "sniper",
     "texture": "tower-sniper",
     "turret": "turret-sniper",

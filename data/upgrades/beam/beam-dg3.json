@@ -1,0 +1,20 @@
+{
+    "name": "Power III",
+    "id": "beam-dg3",
+    "desc": [
+        "massively increases the",
+        "damage of the tower",
+        "",
+        "+ 0.25 damage"
+    ],
+    "tower": "beam",
+    "cost": 580,
+    "req": [
+        "beam-mk3",
+        "beam-PB",
+        "beam-dg2"
+    ],
+    "add": {
+        "dg": 0.25
+    }
+}

@@ -1,5 +1,5 @@
 async function LoadAsset(file, callback) {
-    const data = await fetch(file);
+    const data = await fetch(file + "?v=" + G.load.manifest.version);
     const json = await data.json();
     setTimeout(() => {callback(json)}, 0);
 }
@@ -11,11 +11,11 @@ function LoadMaps() {
             new Track(data.name, data.id, data.desc, data.tiles, data.locations, data.map, data.difficulty, data.available);
             G.load.stages[0].progress++;
             G.load.stages[0].percent = G.load.stages[0].progress / G.load.stages[0].total;
-            G.load.percent = G.load.stages[0].percent / 5;
+            G.load.percent = G.load.stages[0].percent / 6;
             if (G.load.stages[0].progress >= G.load.stages[0].total) {
                 G.load.stage++;
             }
-        }), 0);
+        }), 100 * i);
         i++
     }
 }
@@ -29,11 +29,11 @@ function LoadEnemies() {
                 );
             G.load.stages[1].progress++;
             G.load.stages[1].percent = G.load.stages[1].progress / G.load.stages[1].total;
-            G.load.percent = 0.2 + G.load.stages[1].percent / 5;
+            G.load.percent = (1/6) + G.load.stages[1].percent / 6;
             if (G.load.stages[1].progress >= G.load.stages[1].total) {
                 G.load.stage++;
             }
-        }), 0);
+        }), 80 * i);
         i++;
     }
 }
@@ -45,11 +45,11 @@ function LoadWaves() {
             G.data.difficulties.W[data.id] = data;
             G.load.stages[2].progress++;
             G.load.stages[2].percent = G.load.stages[2].progress / G.load.stages[2].total;
-            G.load.percent = 0.4 + G.load.stages[2].percent / 5;
+            G.load.percent = (2/6) + G.load.stages[2].percent / 6;
             if (G.load.stages[2].progress >= G.load.stages[2].total) {
                 G.load.stage++;
             }
-        }), 0);
+        }), 200 * i);
         i++;
     }
 }
@@ -64,11 +64,11 @@ function LoadTowers() {
             );
             G.load.stages[3].progress++;
             G.load.stages[3].percent = G.load.stages[3].progress / G.load.stages[3].total;
-            G.load.percent = 0.6 + G.load.stages[3].percent / 5;
+            G.load.percent = (3/6) + G.load.stages[3].percent / 6;
             if (G.load.stages[3].progress >= G.load.stages[3].total) {
                 G.load.stage++;
             }
-        }), 0);
+        }), 80 * i);
         i++;
     }
 }
@@ -83,13 +83,33 @@ function LoadUpgrades() {
             G.data.upgrades[data.tower].push(new Upgrade(data.name, data.id, data.desc, data.tower, data.cost, data.req, data.add));
             G.load.stages[4].progress++;
             G.load.stages[4].percent = G.load.stages[4].progress / G.load.stages[4].total;
-            G.load.percent = 0.8 + G.load.stages[4].percent / 5;
+            G.load.percent = (4/6) + G.load.stages[4].percent / 6;
             if (G.load.stages[4].progress >= G.load.stages[4].total) {
+                G.load.stage++;
+            }
+        }), 10 * i);
+        i++;
+    }
+}
+
+function LoadTextures() {
+    let i = 0;
+    for (const texture of G.load.manifest.textures) {
+        setTimeout(() => LoadAsset(upgrade, (data) => {
+            const config = new TextureConfig(data.config.sizex, data.config.sizey, data.config.tilex, data.config.tiley, data.config.scalex, data.config.scaley);
+            const textures = [];
+            for (const texture of data.textures) {
+                textures.push(new TextureEntry(texture.id, texture.x, texture.y));
+            }
+            new TextureAtlas(data.id, data.src, config, textures);
+            G.load.stages[5].progress++;
+            G.load.stages[5].percent = G.load.stages[5].progress / G.load.stages[5].total;
+            G.load.percent = (5/6) + G.load.stages[5].percent / 6;
+            if (G.load.stages[5].progress >= G.load.stages[5].total) {
                 G.load.stage++;
                 G.scene = 'm';
             }
-        }), 50 * i);
-        i++;
+        }), 100 * i);
     }
 }
 
@@ -97,11 +117,19 @@ async function LoadGame() {
     if (G.load.manifest === null) {
         const manifestRaw = await fetch("data/manifest.json");
         G.load.manifest = await manifestRaw.json();
+        for (const manifest of G.load.manifest.manifests) {
+            const newManifest = await fetch(manifest);
+            G.load.manifest = {
+                ...G.load.manifest,
+                ...await newManifest.json()
+            };
+        }
         G.load.stages[0].total = G.load.manifest.maps.length;
         G.load.stages[1].total = G.load.manifest.enemies.length;
         G.load.stages[2].total = G.load.manifest.waves.length;
         G.load.stages[3].total = G.load.manifest.towers.length;
         G.load.stages[4].total = G.load.manifest.upgrades.length;
+        G.load.stages[5].total = G.load.manifest.textures.length;
     }
     switch (G.load.stage) {
         case 0:
@@ -128,6 +156,12 @@ async function LoadGame() {
             if (G.load.loaded.includes("upgrades")) return;
             LoadUpgrades();
             G.load.loaded.push("upgrades");
+            break;
+        case 5:
+            if (G.load.loaded.includes("textures")) return;
+            LoadTextures();
+            LoadTextures();
+            G.load.loaded.push("textures");
             break;
     }
 }

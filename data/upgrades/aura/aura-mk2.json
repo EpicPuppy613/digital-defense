@@ -1,0 +1,21 @@
+{
+    "name": "MK 2",
+    "id": "aura-mk2",
+    "desc": [
+        "the second major tower upgrade",
+        "",
+        "+ 0.01 damage",
+        "+ 0.08 range",
+        "+ 25 multishot"
+    ],
+    "tower": "aura",
+    "cost": 380,
+    "req": [
+        "aura-mk1"
+    ],
+    "add": {
+        "dg": 0.01,
+        "rg": 0.08,
+        "sh": 25
+    }
+}

@@ -1,5 +1,6 @@
 {
     "name": "Ultimate",
+    "id": "super",
     "type": "super",
     "texture": "tower-super",
     "turret": "turret-super",

@@ -1,0 +1,23 @@
+{
+    "name": "MK 5",
+    "id": "super-mk5",
+    "desc": [
+        "the final major tower upgrade",
+        "",
+        "+ 64 damage",
+        "+ 0.2 fire rate",
+        "+ 0.6 range",
+        "+ 1 multishot"
+    ],
+    "tower": "super",
+    "cost": 8160,
+    "req": [
+        "super-mk4"
+    ],
+    "add": {
+        "dg": 64,
+        "fr": 0.4,
+        "rg": 0.6,
+        "sh": 1
+    }
+}

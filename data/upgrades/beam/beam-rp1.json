@@ -1,0 +1,17 @@
+{
+    "name": "Small Repeater",
+    "id": "beam-rp1",
+    "desc": [
+        "increases the damage rate of the tower",
+        "",
+        "+ 5 fire rate"
+    ],
+    "tower": "beam",
+    "cost": 210,
+    "req": [
+        "beam-mk1"
+    ],
+    "add": {
+        "fr": 5
+    }
+}
