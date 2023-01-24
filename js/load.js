@@ -95,7 +95,7 @@ function LoadUpgrades() {
 function LoadTextures() {
     let i = 0;
     for (const texture of G.load.manifest.textures) {
-        setTimeout(() => LoadAsset(upgrade, (data) => {
+        setTimeout(() => LoadAsset(texture, (data) => {
             const config = new TextureConfig(data.config.sizex, data.config.sizey, data.config.tilex, data.config.tiley, data.config.scalex, data.config.scaley);
             const textures = [];
             for (const texture of data.textures) {

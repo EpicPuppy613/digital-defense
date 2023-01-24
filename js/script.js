@@ -170,6 +170,13 @@ G.load.stages = [
         percent: 0,
         progress: 0,
         total: 0
+    },
+    {
+        stage: 'textures',
+        display: 'loading textures...',
+        percent: 0,
+        progress: 0,
+        total: 0
     }
 ];
 
