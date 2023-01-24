@@ -6,18 +6,20 @@ new MenuButton("editor", () => G.width / 2 - 200, 580, 400, 36, () => { G.scene 
 new MenuButton("quit", () => G.width / 2 - 200, 660, 400, 36, () => { window.close() }, 'm');
 //W-BUTTON:E // EDITOR BUTTONS
 new MenuButton("eback", 0, 20, 200, 36, () => { G.scene = 'm' }, 'e');
-new MenuButton("new", () => G.width / 2 - 200, 320, 400, 36, () => { NewGame("blank"); G.scene = 'ee' }, 'e');
+new MenuButton("new", () => G.width / 2 - 200, 320, 400, 36, () => { NewGame("blank", true); G.scene = 'ee' }, 'e');
 new MenuButton("load", () => G.width / 2 - 200, 400, 400, 36, () => { }, 'e');
 new MenuButton("continue", () => G.width / 2 - 200, 480, 480, 36, () => { if (G.map == 'blank') G.scene = 'ee' }, 'e');
 //W-BUTTON:EE // EDITOR BUTTONS
 new MenuButton('eeback', 0, 0, () => G.width / 10, 32, () => { G.scene = 'e' }, 'ee');
 new MenuButton('eesave', () => G.width / 10, 0, () => G.width / 10, 32, () => { G.scene = 'e' }, 'ee');
-new MenuButton('eeleft', 0, () => G.height - 32, () => G.width / 6, 32, () => { if (G.editor.direction.left) G.editor.direction.left = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.left = true; }, 'ee');
-new MenuButton('eeright', () => G.width / 6, () => G.height - 32, () => G.width / 6, 32, () => { if (G.editor.direction.right) G.editor.direction.right = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.right = true; }, 'ee');
-new MenuButton('eeup', () => G.width / 6 * 2, () => G.height - 32, () => G.width / 6, 32, () => { if (G.editor.direction.up) G.editor.direction.up = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.up = true; }, 'ee');
-new MenuButton('eedown', () => G.width / 6 * 3, () => G.height - 32, () => G.width / 6, 32, () => { if (G.editor.direction.down) G.editor.direction.down = false; else if (!G.editor.direction.base && !G.editor.direction.platform) G.editor.direction.down = true; }, 'ee');
-new MenuButton('eebase', () => G.width / 6 * 4, () => G.height - 32, () => G.width / 6, 32, () => { if (G.editor.direction.base) G.editor.direction.base = false; else if (!G.editor.direction.platform) {G.editor.direction.base = true; G.editor.direction.left = false; G.editor.direction.right = false; G.editor.direction.up = false; G.editor.direction.down = false;} }, 'ee');
-new MenuButton('eeplatform', () => G.width / 6 * 5, () => G.height - 32, () => G.width / 6, 32, () => { if (G.editor.direction.platform) G.editor.direction.platform = false; else {G.editor.direction.platform = true; G.editor.direction.base = false; G.editor.direction.left = false; G.editor.direction.right = false; G.editor.direction.up = false; G.editor.direction.down = false;} }, 'ee');
+new MenuButton('eeexport', () => G.width / 10 * 2, 0, () => G.width / 10, 32, () => { ExportMap(); }, 'ee');
+new MenuButton('eespawn', 0, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('s'); }, 'ee');
+new MenuButton('eeleft', () => G.width / 7, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('l'); }, 'ee');
+new MenuButton('eeright', () => G.width / 7 * 2, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('r'); }, 'ee');
+new MenuButton('eeup', () => G.width / 7 * 3, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('u'); }, 'ee');
+new MenuButton('eedown', () => G.width / 7 * 4, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('d'); }, 'ee');
+new MenuButton('eebase', () => G.width / 7 * 5, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('b'); }, 'ee');
+new MenuButton('eeplatform', () => G.width / 7 * 6, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('p'); }, 'ee');
 //W-BUTTON:S // SETTINGS BUTTONS
 new MenuButton("sback", 0, 20, 200, 36, () => { G.scene = 'm'; G.audio.music.switch = true; }, 's');
 new MenuButton("bindings", () => G.width / 2 - 200, 320, 400, 36, () => { G.scene = 'sb' }, 's');

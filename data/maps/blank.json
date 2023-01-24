@@ -2,6 +2,7 @@
     "name": "Blank",
     "id": "blank",
     "desc": "blank map, for template and editor use",
+    "version": "manual",
     "tiles": [
 
     ],
@@ -10,7 +11,7 @@
     ],
     "map": {
         "start": [0, 0],
-        "size": [1, 1],
+        "size": [2, 1],
         "lines": [
             []
         ]

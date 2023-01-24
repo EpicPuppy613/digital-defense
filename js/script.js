@@ -187,6 +187,7 @@ G.editor.bounds.top = 0; //TOP
 G.editor.bounds.right = 0; //RIGHT
 G.editor.bounds.bottom = 0; //BOTTOM
 G.editor.direction = {}; //DIRECTIONS
+G.editor.direction.spawn = false; //SPAWN
 G.editor.direction.left = false; //LEFT
 G.editor.direction.right = false; //RIGHT
 G.editor.direction.up = false; //UP
@@ -243,8 +244,12 @@ G.rebind.bindings = [
         bindings: ["destroy", "upgrade1", "upgrade2", "upgrade3", "nexttargeting", "prevtargeting"]
     },
     {
-        category: "Editor",
-        bindings: ["eright", "eleft", "eup", "edown", "ebase"]
+        category: "Editor [1/2]",
+        bindings: ["eright", "eleft", "eup", "edown"]
+    },
+    {
+        category: "Editor [2/2]",
+        bindings: ["espawn", "ebase", "eexit", "erecenter"]
     }
 ];
 
@@ -875,10 +880,10 @@ new Targeting('Max HP', 'm', 'maxhp', false, '#f30000', false);
  * @returns {Tile}
  */
 function getTile(x, y, object = false) {
-    for (const tile of G.objects.tiles) {
+    for (let i = 0; i < G.objects.tiles.length; i++) {
         //Check if matching tile
-        if (tile.x == x && tile.y == y) {
-            return tile; //Return tile
+        if (G.objects.tiles[i].x == x && G.objects.tiles[i].y == y) {
+            return G.objects.tiles[i]; //Return tile
         }
     }
     //Return null if no tile
@@ -1293,7 +1298,7 @@ function DrawConsole() {
 //W-PAN
 G.canvas.addEventListener('mousedown', e => {
     e.preventDefault();
-    if (G.scene != 'g') return;
+    if (G.scene != 'g' && G.scene != 'ee') return;
     if (e.button == '1') {
         G.pan.down = true;
         G.pan.x = G.mouse.X;
@@ -1303,7 +1308,7 @@ G.canvas.addEventListener('mousedown', e => {
 
 G.canvas.addEventListener('mouseup', e => {
     e.preventDefault();
-    if (G.scene != 'g') return;
+    if (G.scene != 'g' && G.scene != 'ee') return;
     if (e.button == '1') {
         G.pan.down = false;
     }
@@ -1503,6 +1508,38 @@ G.canvas.addEventListener('click', e => {
         G.data.cursor.X = Math.round((e.offsetX - G.offset.X - G.data.tileSize[0] / 2) / G.data.tileSize[0]);
         G.data.cursor.Y = Math.round((e.offsetY - G.offset.Y - G.data.tileSize[1] / 2) / G.data.tileSize[1]);
         G.data.cursor.on = true;
+        const tile = getTile(G.data.cursor.X, G.data.cursor.Y);
+        if (tile === null) {
+            G.editor.direction.left = false;
+            G.editor.direction.right = false;
+            G.editor.direction.up = false;
+            G.editor.direction.down = false;
+            G.editor.direction.base = false;
+            G.editor.direction.spawn = false;
+            G.editor.direction.platform = false;
+            return;
+        };
+        if (tile.type == "track") {
+            G.editor.direction.left = tile.direction.includes("l");
+            G.editor.direction.right = tile.direction.includes("r");
+            G.editor.direction.up = tile.direction.includes("u");
+            G.editor.direction.down = tile.direction.includes("d");
+            G.editor.direction.base = tile.direction.includes("b");
+            G.editor.direction.spawn = false;
+            for (let l = 0; l < G.objects.locations.length; l++) {
+                if (G.objects.locations[l].x == G.data.cursor.X && G.objects.locations[l].y == G.data.cursor.Y) {
+                    G.editor.direction.spawn = true;
+                }
+            }
+        } else {
+            G.editor.direction.spawn = false;
+            G.editor.direction.left = false;
+            G.editor.direction.right = false;
+            G.editor.direction.up = false;
+            G.editor.direction.down = false;
+            G.editor.direction.base = false;
+        }
+        G.editor.direction.platform = tile.type == "platform";
     }
 });
 
@@ -1623,11 +1660,14 @@ function Draw() {
     G.C.text("FPS: " + Math.round(F.getFPS()), 4, G.height - 4);
 }
 
-function NewGame(map) {
+function NewGame(map, editor=false) {
     /** @type {Track} */
     let mapdata = G.data.maps[map];
     G.offset.X = Math.floor((G.width - mapdata.map.size[0] * G.data.tileSize[0]) / 2);
     G.offset.Y = 48 + Math.floor((G.height - 48 - mapdata.map.size[1] * G.data.tileSize[1]) / 2);
+    if (editor) {
+        G.offset.Y = 12 + Math.floor((G.height - 12 - mapdata.map.size[1] * G.data.tileSize[1]) / 2);
+    }
     G.map = map;
     G.boss = null;
     G.wave = 0;
@@ -1821,18 +1861,139 @@ function NextWave() {
     }
 }
 
-//StartLoad();
+function ChangeTile(change) {
+    let tile = getTile(G.data.cursor.X, G.data.cursor.Y);
+    if (!G.data.cursor.on) return 1;
+    if ("lrud".includes(change)) {
+        if (tile == null) tile = new Tile("track", G.data.cursor.X, G.data.cursor.Y, "track-", "");
+        if (tile.direction == "b") return;
+        if (G.editor.direction.base || G.editor.direction.platform) return 2;
+        let l = tile.direction.includes("l");
+        let r = tile.direction.includes("r");
+        let u = tile.direction.includes("u");
+        let d = tile.direction.includes("d");
+        if (change == "l") l = !l;
+        if (change == "r") r = !r;
+        if (change == "u") u = !u;
+        if (change == "d") d = !d;
+        tile.direction = (l ? 'l' : '') + (r ? 'r' : '') + (u ? 'u' : '') + (d ? 'd' : '');
+        G.editor.direction.right = r;
+        G.editor.direction.left = l;
+        G.editor.direction.up = u;
+        G.editor.direction.down = d;
+        if (tile.direction == '') {
+            delTile(G.data.cursor.X, G.data.cursor.Y);
+            TileRemap();
+            return;
+        }
+        TileRemap();
+    }
+    if (change == "b") {
+        if (tile == null) {
+            tile = new Tile("track", G.data.cursor.X, G.data.cursor.Y, "track-", "b");
+            G.editor.direction.base = true;
+            new Location("base", G.data.cursor.X, G.data.cursor.Y, "base");
+            TileRemap();
+        }
+        else if (tile.direction == "b") {
+            delTile(G.data.cursor.X, G.data.cursor.Y);
+            G.editor.direction.spawn = false;
+            G.editor.direction.base = false;
+            G.editor.direction.right = false;
+            G.editor.direction.left = false;
+            G.editor.direction.up = false;
+            G.editor.direction.down = false;
+            for (let l = 0; l < G.objects.locations.length; l++) {
+                if (G.objects.locations[l].x == G.data.cursor.X && G.objects.locations[l].y == G.data.cursor.Y) {
+                    G.objects.locations.splice(l, 1);
+                    l--;
+                }
+            }
+            for (let s = 0; s < G.data.locations.spawn.length; s++) {
+                if (G.data.locations.spawn[s][0] == G.data.cursor.X && G.data.locations.spawn[s][1] == G.data.cursor.Y) {
+                    G.data.locations.spawn.splice(s, 1);
+                    s--;
+                }
+            }
+            return;
+        }
+        else if (tile.type == "track") {
+            tile.direction = 'b';
+            for (let l = 0; l < G.objects.locations.length; l++) {
+                if (G.objects.locations[l].x == G.data.cursor.X && G.objects.locations[l].y == G.data.cursor.Y) {
+                    G.objects.locations.splice(l, 1);
+                    l--;
+                }
+            }
+            for (let s = 0; s < G.data.locations.spawn.length; s++) {
+                if (G.data.locations.spawn[s][0] == G.data.cursor.X && G.data.locations.spawn[s][1] == G.data.cursor.Y) {
+                    G.data.locations.spawn.splice(s, 1);
+                    s--;
+                }
+            }
+            G.editor.direction.base = true;
+            new Location("base", G.data.cursor.X, G.data.cursor.Y, "base");
+            TileRemap();
+        }
+    }
+    if (change == "p") {
+        if (tile == null) {
+            G.editor.direction.platform = true;
+            tile = new Tile("platform", G.data.cursor.X, G.data.cursor.Y, "tower");
+        }
+        else if (tile.type == "platform") {
+            G.editor.direction.platform = false;
+            delTile(G.data.cursor.X, G.data.cursor.Y);
+        }
+    }
+    if (change == "s") {
+        if (tile == null) return;
+        if (tile.type != "track" || tile.direction == '') return;
+        for (let l = 0; l < G.objects.locations.length; l++) {
+            if (G.objects.locations[l].type == "spawn" && G.objects.locations[l].x == G.data.cursor.X && G.objects.locations[l].y == G.data.cursor.Y) {
+                G.editor.direction.spawn = false;
+                G.objects.locations.splice(l, 1);
+                for (let s = 0; s < G.data.locations.spawn.length; s++) {
+                    if (G.data.locations.spawn[s][0] == G.data.cursor.X && G.data.locations.spawn[s][1] == G.data.cursor.Y) {
+                        G.data.locations.spawn.splice(s, 1);
+                        s--;
+                    }
+                }
+                return;
+            }
+        }
+        let spawn = new Location("spawn", G.data.cursor.X, G.data.cursor.Y, "spawn");
+        G.data.locations.spawn.push([spawn.x, spawn.y]);
+        G.editor.direction.spawn = true;
+    }
+}
 
-/*G.canvas.addEventListener('wheel', (e) => {
-    G.offset.X -= G.mouse.X * (Math.max(0.5, Math.min(2, G.data.scale - e.deltaY * 0.0005)) - G.data.scale);
-    G.offset.Y -= G.mouse.Y * (Math.max(0.5, Math.min(2, G.data.scale - e.deltaY * 0.0005)) - G.data.scale);
-    G.data.scale = Math.max(0.5, Math.min(2, G.data.scale - e.deltaY * 0.0005));
-    G.data.atlas.config.scale[0] = G.data.scale * G.data.atlas.config.defaultscale[0];
-    G.data.atlas.config.scale[1] = G.data.scale * G.data.atlas.config.defaultscale[1];
-    G.P = new OffscreenCanvas(G.data.atlas.config.scale[0], G.data.atlas.config.scale[1]); //PRELOAD
-    G.PC = G.P.getContext('2d');
-});*/
+function TileRemap() {
+    for (let t = 0; t < G.objects.tiles.length; t++) {
+        if (G.objects.tiles[t].type != 'track') continue;
+        let r = false;
+        let l = false;
+        let u = false;
+        let d = false;
+        let tile = G.objects.tiles[t];
+        if (tile.direction.includes('r')) r = true;
+        if (tile.direction.includes('l')) l = true;
+        if (tile.direction.includes('u')) u = true;
+        if (tile.direction.includes('d')) d = true;
+        if (getTile(G.objects.tiles[t].x + 1, G.objects.tiles[t].y, true).type == 'track') if (getTile(G.objects.tiles[t].x + 1, G.objects.tiles[t].y, true).direction.includes('l')) r = true;
+        if (getTile(G.objects.tiles[t].x - 1, G.objects.tiles[t].y, true).type == 'track') if (getTile(G.objects.tiles[t].x - 1, G.objects.tiles[t].y, true).direction.includes('r')) l = true;
+        if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y - 1, true).type == 'track') if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y - 1, true).direction.includes('d')) u = true;
+        if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y + 1, true).type == 'track') if (getTile(G.objects.tiles[t].x, G.objects.tiles[t].y + 1, true).direction.includes('u')) d = true;
+        tile.paths = '';
+        if (r) tile.paths += 'r';
+        if (l) tile.paths += 'l';
+        if (u) tile.paths += 'u';
+        if (d) tile.paths += 'd';
+        G.objects.tiles[t].texture = 'track-' + G.objects.tiles[t].paths;
+    }
+}
 
-//} catch (err) {
-//    alert(err.stack);
-//}
+function ExportMap() {
+    const data = {};
+    window.open("data:text/json;utf8," + encodeURI(JSON.stringify(data)), "_empty");
+}

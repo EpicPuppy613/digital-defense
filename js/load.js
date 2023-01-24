@@ -8,14 +8,14 @@ function LoadMaps() {
     let i = 0;
     for (const map of G.load.manifest.maps) {
         setTimeout(() => LoadAsset(map, (data) => {
-            new Track(data.name, data.id, data.desc, data.tiles, data.locations, data.map, data.difficulty, data.available);
+            new Track(data.name, data.id, data.desc, data.tiles, data.locations, data.map, data.difficulty, data.show);
             G.load.stages[0].progress++;
             G.load.stages[0].percent = G.load.stages[0].progress / G.load.stages[0].total;
             G.load.percent = G.load.stages[0].percent / 6;
             if (G.load.stages[0].progress >= G.load.stages[0].total) {
                 G.load.stage++;
             }
-        }), 100 * i);
+        }), 10 * i);
         i++
     }
 }
@@ -33,7 +33,7 @@ function LoadEnemies() {
             if (G.load.stages[1].progress >= G.load.stages[1].total) {
                 G.load.stage++;
             }
-        }), 80 * i);
+        }), 8 * i);
         i++;
     }
 }
@@ -49,7 +49,7 @@ function LoadWaves() {
             if (G.load.stages[2].progress >= G.load.stages[2].total) {
                 G.load.stage++;
             }
-        }), 200 * i);
+        }), 20 * i);
         i++;
     }
 }
@@ -68,7 +68,7 @@ function LoadTowers() {
             if (G.load.stages[3].progress >= G.load.stages[3].total) {
                 G.load.stage++;
             }
-        }), 80 * i);
+        }), 8 * i);
         i++;
     }
 }
@@ -87,7 +87,7 @@ function LoadUpgrades() {
             if (G.load.stages[4].progress >= G.load.stages[4].total) {
                 G.load.stage++;
             }
-        }), 10 * i);
+        }), 2 * i);
         i++;
     }
 }
@@ -109,7 +109,7 @@ function LoadTextures() {
                 G.load.stage++;
                 G.scene = 'm';
             }
-        }), 100 * i);
+        }), 10 * i);
     }
 }
 

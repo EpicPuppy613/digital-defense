@@ -5,7 +5,8 @@
     ],
     "maps": [
         "data/maps/track1a.json",
-        "data/maps/track2a.json",
+        "data/maps/track1b.json",
+        "data/maps/track2b.json",
         "data/maps/blank.json"
     ],
     "enemies": [

@@ -92,7 +92,7 @@ new Scene('ee', () => {
     }
     //GRID
     G.C.strokeStyle = '#333';
-    G.C.lineWidth = 2;
+    G.C.lineWidth = 1;
     for (let x = Math.floor(-G.offset.X / G.data.tileSize[0]) * G.data.tileSize[0]; x < -G.offset.X + G.width; x += G.data.tileSize[0]) {
         G.C.beginPath();
         G.C.moveTo(x + G.offset.X, -10);
@@ -146,35 +146,61 @@ new Scene('ee', () => {
     else G.C.text("Exit", Math.round(G.width / 20), 26);
     if (G.nav.buttons.eesave.hover) G.C.text("> Save <", Math.round(G.width / 20 * 3), 26);
     else G.C.text("Save", Math.round(G.width / 20 * 3), 26);
-    if (G.editor.direction.left) G.C.fillStyle = '#3ff';
-    else if (!G.editor.direction.base && !G.editor.direction.platform) G.C.fillStyle = '#888';
-    else G.C.fillStyle = '#866';
-    if (G.nav.buttons.eeleft.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> LEFT <", Math.round(G.width / 12), G.height - 6);
-    else G.C.text("LEFT", Math.round(G.width / 12), G.height - 6);
-    if (G.editor.direction.right) G.C.fillStyle = '#3ff';
-    else if (!G.editor.direction.base && !G.editor.direction.platform) G.C.fillStyle = '#888';
-    else G.C.fillStyle = '#866';
-    if (G.nav.buttons.eeright.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> RIGHT <", Math.round(G.width / 12 * 3), G.height - 6);
-    else G.C.text("RIGHT", Math.round(G.width / 12 * 3), G.height - 6);
-    if (G.editor.direction.up) G.C.fillStyle = '#3ff';
-    else if (!G.editor.direction.base && !G.editor.direction.platform) G.C.fillStyle = '#888';
-    else G.C.fillStyle = '#866';
-    if (G.nav.buttons.eeup.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> UP <", Math.round(G.width / 12 * 5), G.height - 6);
-    else G.C.text("UP", Math.round(G.width / 12 * 5), G.height - 6);
-    if (G.editor.direction.down) G.C.fillStyle = '#3ff';
-    else if (!G.editor.direction.base && !G.editor.direction.platform) G.C.fillStyle = '#888';
-    else G.C.fillStyle = '#866';
-    if (G.nav.buttons.eedown.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> DOWN <", Math.round(G.width / 12 * 7), G.height - 6);
-    else G.C.text("DOWN", Math.round(G.width / 12 * 7), G.height - 6);
-    if (G.editor.direction.base) G.C.fillStyle = '#3ff';
-    else if (!G.editor.direction.platform) G.C.fillStyle = '#888';
-    else G.C.fillStyle = '#866';
-    if (G.nav.buttons.eebase.hover && !G.editor.direction.platform) G.C.text("> BASE <", Math.round(G.width / 12 * 9), G.height - 6);
-    else G.C.text("BASE", Math.round(G.width / 12 * 9), G.height - 6);
-    if (G.editor.direction.platform) G.C.fillStyle = '#3ff';
-    else G.C.fillStyle = '#888';
-    if (G.nav.buttons.eeplatform.hover) G.C.text("> PLATFORM <", Math.round(G.width / 12 * 11), G.height - 6);
-    else G.C.text("PLATFORM", Math.round(G.width / 12 * 11), G.height - 6);
+    if (G.nav.buttons.eeexport.hover) G.C.text("> Export <", Math.round(G.width / 20 * 5), 26);
+    else G.C.text("Export", Math.round(G.width / 20 * 5), 26);
+
+    //TOOLBAR
+    let tile = getTile(G.data.cursor.X, G.data.cursor.Y);
+
+    if (G.editor.direction.base || G.editor.direction.platform || !G.data.cursor.on || (!G.editor.direction.left && !G.editor.direction.right && !G.editor.direction.up && !G.editor.direction.down)) G.C.fillStyle = '#866';
+    else if (G.editor.direction.spawn) G.C.fillStyle = "#3ff";
+    else G.C.fillStyle = "#888";
+
+    if (G.nav.buttons.eespawn.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> SPAWN <", Math.round(G.width / 14), G.height - 6);
+    else G.C.text("SPAWN", Math.round(G.width / 14), G.height - 6);
+    
+    if (G.editor.direction.base || G.editor.direction.platform || !G.data.cursor.on) G.C.fillStyle = '#866';
+    else if (G.editor.direction.left) G.C.fillStyle = "#3ff";
+    else G.C.fillStyle = "#888";
+
+    if (G.nav.buttons.eeleft.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> LEFT <", Math.round(G.width / 14 * 3), G.height - 6);
+    else G.C.text("LEFT", Math.round(G.width / 14 * 3), G.height - 6);
+
+    if (G.editor.direction.base || G.editor.direction.platform || !G.data.cursor.on) G.C.fillStyle = '#866';
+    else if (G.editor.direction.right) G.C.fillStyle = "#3ff";
+    else G.C.fillStyle = "#888";
+
+    if (G.nav.buttons.eeright.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> RIGHT <", Math.round(G.width / 14 * 5), G.height - 6);
+    else G.C.text("RIGHT", Math.round(G.width / 14 * 5), G.height - 6);
+
+    if (G.editor.direction.base || G.editor.direction.platform || !G.data.cursor.on) G.C.fillStyle = '#866';
+    else if (G.editor.direction.up) G.C.fillStyle = "#3ff";
+    else G.C.fillStyle = "#888";
+
+    if (G.nav.buttons.eeup.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> UP <", Math.round(G.width / 14 * 7), G.height - 6);
+    else G.C.text("UP", Math.round(G.width / 14 * 7), G.height - 6);
+
+    if (G.editor.direction.base || G.editor.direction.platform || !G.data.cursor.on) G.C.fillStyle = '#866';
+    else if (G.editor.direction.down) G.C.fillStyle = "#3ff";
+    else G.C.fillStyle = "#888";
+
+    if (G.nav.buttons.eedown.hover && !G.editor.direction.base && !G.editor.direction.platform) G.C.text("> DOWN <", Math.round(G.width / 14 * 9), G.height - 6);
+    else G.C.text("DOWN", Math.round(G.width / 14 * 9), G.height - 6);
+
+    if (G.editor.direction.platform || !G.data.cursor.on) G.C.fillStyle = '#866';
+    else if (G.editor.direction.base) G.C.fillStyle = "#3ff";
+    else G.C.fillStyle = "#888";
+
+    if (G.nav.buttons.eebase.hover && !G.editor.direction.platform) G.C.text("> BASE <", Math.round(G.width / 14 * 11), G.height - 6);
+    else G.C.text("BASE", Math.round(G.width / 14 * 11), G.height - 6);
+
+    if (G.editor.direction.base || !G.data.cursor.on) G.C.fillStyle = '#866';
+    else if (G.editor.direction.platform) G.C.fillStyle = "#3ff";
+    else G.C.fillStyle = "#888";
+
+    if (G.nav.buttons.eeplatform.hover) G.C.text("> PLATFORM <", Math.round(G.width / 14 * 13), G.height - 6);
+    else G.C.text("PLATFORM", Math.round(G.width / 14 * 13), G.height - 6);
+
 });
 
 //W-SCENE:S // SETTINGS

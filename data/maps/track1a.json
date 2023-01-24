@@ -2,6 +2,7 @@
     "name": "The First Defense",
     "id": "track1a",
     "desc": "the first one, nice and easy",
+    "version": "manual",
     "tiles": [
         [ 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ],
         [ 1 ,"d","d","d","d","x", 1 , 1 ,"d","d","d","d","d","d","d","d","x", 1 ],
