@@ -12,7 +12,7 @@ new MenuButton("continue", () => G.width / 2 - 200, 480, 480, 36, () => { if (G.
 //W-BUTTON:EE // EDITOR BUTTONS
 new MenuButton('eeback', 0, 0, () => G.width / 10, 32, () => { G.scene = 'e' }, 'ee');
 new MenuButton('eesave', () => G.width / 10, 0, () => G.width / 10, 32, () => { G.scene = 'e' }, 'ee');
-new MenuButton('eeexport', () => G.width / 10 * 2, 0, () => G.width / 10, 32, () => { ExportMap(); }, 'ee');
+new MenuButton('eeexport', () => G.width / 10 * 2, 0, () => G.width / 10, 32, () => { G.scene = 'eee' }, 'ee');
 new MenuButton('eespawn', 0, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('s'); }, 'ee');
 new MenuButton('eeleft', () => G.width / 7, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('l'); }, 'ee');
 new MenuButton('eeright', () => G.width / 7 * 2, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('r'); }, 'ee');
@@ -20,6 +20,15 @@ new MenuButton('eeup', () => G.width / 7 * 3, () => G.height - 32, () => G.width
 new MenuButton('eedown', () => G.width / 7 * 4, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('d'); }, 'ee');
 new MenuButton('eebase', () => G.width / 7 * 5, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('b'); }, 'ee');
 new MenuButton('eeplatform', () => G.width / 7 * 6, () => G.height - 32, () => G.width / 7, 32, () => { ChangeTile('p'); }, 'ee');
+//W-BUTTON:EEE // EDITOR EXPORT
+new MenuButton('eeeback', 0, 20, 200, 36, () => { G.scene = 'ee' }, 'eee');
+new MenuButton("eeename", () => G.width / 2 - 400, 270, 800, 36, () => { G.export.selected.name = true; G.export.selected.id = false; G.export.selected.desc = false; G.export.selected.author = false; }, 'eee');
+new MenuButton("eeeid", () => G.width / 2 - 400, 320, 800, 36, () => { G.export.selected.id = true; G.export.selected.name = false; G.export.selected.desc = false; G.export.selected.author = false; }, 'eee');
+new MenuButton("eeeauthor", () => G.width / 2 - 400, 370, 800, 36, () => { G.export.selected.author = true; G.export.selected.id = false; G.export.selected.name = false; G.export.selected.desc = false; }, 'eee');
+new MenuButton("eeedesc", () => G.width / 2 - 400, 470, 800, 36, () => { G.export.selected.desc = true; G.export.selected.name = false; G.export.selected.id = false; G.export.selected.author = false; }, 'eee');
+new MenuButton("eeediffup", () => G.width / 2, 420, 500, 36, () => { G.export.difficulty = Math.min(++G.export.difficulty, 10); }, 'eee');
+new MenuButton("eeediffdown", () => G.width / 2 - 500, 420, 500, 36, () => { G.export.difficulty = Math.max(--G.export.difficulty, 1); }, 'eee');
+new MenuButton("eeedownload", () => G.width / 2 - 300, 570, 600, 36, () => { ExportMap(); }, 'eee');
 //W-BUTTON:S // SETTINGS BUTTONS
 new MenuButton("sback", 0, 20, 200, 36, () => { G.scene = 'm'; G.audio.music.switch = true; }, 's');
 new MenuButton("bindings", () => G.width / 2 - 200, 320, 400, 36, () => { G.scene = 'sb' }, 's');

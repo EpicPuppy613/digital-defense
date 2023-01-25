@@ -135,3 +135,4 @@ new KeyBinding('Toggle Down', 'edown', 'KeyS', e => { ChangeTile('d'); }, 'ee');
 new KeyBinding('Toggle Base', 'ebase', 'KeyB', e => { ChangeTile('b'); }, 'ee');
 new KeyBinding('Toggle Platform', 'eplat', 'KeyC', e => { ChangeTile('p'); }, 'ee');
 new KeyBinding('Exit', 'eexit', 'KeyQ', e => { G.scene = 'e'; }, 'ee');
+new KeyBinding('Confirm Entry', 'eeeconfirm', 'Enter', e => { G.export.selected.desc = false; G.export.selected.name = false; G.export.selected.id = false; G.export.selected.author = false; }, 'eee');

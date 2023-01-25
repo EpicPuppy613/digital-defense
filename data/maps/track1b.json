@@ -1,6 +1,7 @@
 {
     "name": "The Loop Defense",
     "id": "track1b",
+    "author": "EpicPuppy613",
     "desc": "a big loop",
     "version": "manual",
     "tiles": [
@@ -38,6 +39,6 @@
             [[2, 5], [16, 5]]
         ]
     },
-    "difficulty": 2,
+    "difficulty": 1,
     "show": true
 }

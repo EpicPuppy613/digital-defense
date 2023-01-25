@@ -8,7 +8,7 @@ function LoadMaps() {
     let i = 0;
     for (const map of G.load.manifest.maps) {
         setTimeout(() => LoadAsset(map, (data) => {
-            new Track(data.name, data.id, data.desc, data.tiles, data.locations, data.map, data.difficulty, data.show);
+            new Track(data.name, data.id, data.author, data.version, data.desc, data.tiles, data.locations, data.map, data.difficulty, data.show);
             G.load.stages[0].progress++;
             G.load.stages[0].percent = G.load.stages[0].progress / G.load.stages[0].total;
             G.load.percent = G.load.stages[0].percent / 6;

@@ -1,6 +1,7 @@
 {
     "name": "Blank",
     "id": "blank",
+    "author": "",
     "desc": "blank map, for template and editor use",
     "version": "manual",
     "tiles": [

@@ -39,6 +39,19 @@ G.time = 0;
 G.path = [];
 G.settings = {}; //SETTINGS
 G.settings.mapy = 0;
+G.export = {};
+G.export.name = "";
+G.export.difficulty = 1;
+G.export.id = "";
+G.export.desc = "";
+G.export.author = "";
+G.export.selected = {};
+G.export.selected.name = false;
+G.export.selected.id = false;
+G.export.selected.author = "";
+G.export.selected.desc = false;
+G.export.error = "";
+G.export.errorfade = 0;
 
 //W-SETTINGS
 // -----[SETTINGS]-----
@@ -366,7 +379,9 @@ class Track {
      * 
      * @param {String} name 
      * @param {String} desc 
-     * @param {any[][]} track 
+     * @param {String} author
+     * @param {String} version
+     * @param {any[][] || string[]} track 
      * @param {Object[]} locations
      * @param {String} locations[].type - type of location (spawn / base)
      * @param {Number[]} locations[].pos - position of location (tile grid x,y)
@@ -377,9 +392,11 @@ class Track {
      * @param {Number} difficulty - ranked on a scale from 1-10
      * @param {Boolean} available
      */
-    constructor(name, id, desc, track, locations, map, difficulty, available=true) {
+    constructor(name, id, author, version, desc, track, locations, map, difficulty, available=true) {
         this.name = name;
         this.id = id;
+        this.author = author;
+        this.version = version;
         this.desc = desc;
         this.track = track;
         this.locations = locations;
@@ -913,7 +930,7 @@ function loadMap(mapdata) {
     G.objects.locations = [];
     G.objects.buildings = [];
     G.objects.enemies = [];
-    for (let y = 0; y < mapdata.track.length; y++) {
+    if (mapdata.version == "manual") for (let y = 0; y < mapdata.track.length; y++) {
         for (let x = 0; x < mapdata.track[y].length; x++) {
             switch (mapdata.track[y][x]) {
                 case 0:
@@ -971,6 +988,11 @@ function loadMap(mapdata) {
                     break;
             }
         }
+    }
+    if (mapdata.version == "editor") for (let y = 0; y < mapdata.track.length; y++) {
+        let track = mapdata.track[y].split(';');
+        if (track[2] == 'platform') new Tile('platform', track[0], track[1], "tower");
+        else new Tile('track', track[0], track[1], 'track-', track[3]);
     }
     for (let i = 0; i < mapdata.locations.length; i++) {
         new Location(mapdata.locations[i].type, mapdata.locations[i].pos[0], mapdata.locations[i].pos[1], mapdata.locations[i].type);
@@ -1734,6 +1756,25 @@ document.addEventListener('keydown', e => {
                 if (e.code == G.bindings[binding].key && G.bindings[binding].scene == G.scene) G.bindings[binding].action(e);
             }
         }
+        if (G.scene == 'eee') {
+            if (G.export.selected.name) {
+                if (e.key == 'Backspace') G.export.name = G.export.name.substring(0, G.export.name.length - 1);
+                if (!/^([A-Za-z0-9 ])$/.test(e.key) || G.export.name.length >= 20) return;
+                G.export.name += e.key;
+            } else if (G.export.selected.id) {
+                if (e.key == 'Backspace') G.export.id = G.export.id.substring(0, G.export.id.length - 1);
+                if (!/^([a-z0-9-])$/.test(e.key) || G.export.id.length >= 20) return;
+                G.export.id += e.key;
+            } else if (G.export.selected.author) {
+                if (e.key == 'Backspace') G.export.author = G.export.author.substring(0, G.export.author.length - 1);
+                if (!/^([A-Za-z0-9- ])$/.test(e.key) || G.export.author.length >= 24) return;
+                G.export.author += e.key;
+            } else if (G.export.selected.desc) {
+                if (e.key == 'Backspace') G.export.desc = G.export.desc.substring(0, G.export.desc.length - 1);
+                if (!/^([a-zA-Z0-9-!@#$%^&*()_+=,.?/:;'" ])$/.test(e.key) || G.export.desc.length >= 35) return;
+                G.export.desc += e.key;
+            }
+        }
     } catch (err) {
         debug(err.stack);
     }
@@ -1994,6 +2035,64 @@ function TileRemap() {
 }
 
 function ExportMap() {
-    const data = {};
-    window.open("data:text/json;utf8," + encodeURI(JSON.stringify(data)), "_empty");
+    const data = {
+        name: G.export.name,
+        id: G.export.id,
+        author: G.export.author,
+        desc: G.export.desc,
+        version: "editor",
+        difficulty: G.export.difficulty,
+        tiles: [],
+        locations: [],
+        map: {
+            lines: []
+        },
+        show: true
+    };
+    if (G.objects.tiles.length == 0) {
+        G.export.error = 'Map cannot be empty';
+        G.export.errorfade = 5;
+        return;
+    }
+    if (data.name == '') {
+        G.export.error = 'Map name cannot be blank';
+        G.export.errorfade = 5;
+        return;
+    }
+    if (data.id == '') {
+        G.export.error = 'Map ID cannot be blank';
+        G.export.errorfade = 5;
+        return;
+    }
+    for (const location of G.objects.locations) {
+        data.locations.push({type: location.type, pos: [location.x, location.y]});
+    }
+    //CREATE MINIMAP
+    let r = G.objects.tiles[0].x;
+    let l = G.objects.tiles[0].x;
+    let u = G.objects.tiles[0].y;
+    let d = G.objects.tiles[0].y;
+    for (const tile of G.objects.tiles) {
+        if (tile.type == 'track') {
+            data.tiles.push(`${tile.x};${tile.y};${tile.type};${tile.direction}`);
+        } else {
+            data.tiles.push(`${tile.x};${tile.y};${tile.type};`);
+        }
+        if (tile.x > r) r = tile.x;
+        if (tile.x < l) l = tile.x;
+        if (tile.y > d) d = tile.y;
+        if (tile.y < u) u = tile.y;
+        if (tile.type != 'track') continue;
+        if (tile.direction.includes('r')) data.map.lines.push([[tile.x, tile.y], [tile.x + 1, tile.y]]);
+        if (tile.direction.includes('l')) data.map.lines.push([[tile.x, tile.y], [tile.x - 1, tile.y]]);
+        if (tile.direction.includes('u')) data.map.lines.push([[tile.x, tile.y], [tile.x, tile.y - 1]]);
+        if (tile.direction.includes('d')) data.map.lines.push([[tile.x, tile.y], [tile.x, tile.y + 1]]);
+    }
+    data.map.start = [l, u];
+    data.map.size = [r - l + 1, d - u + 1];
+    const dataURI = "data:text/json;utf8," + encodeURI(JSON.stringify(data, null, 4));
+    const downloadElement = document.getElementById("downloadLink");
+    downloadElement.setAttribute("href", dataURI);
+    downloadElement.setAttribute("download", G.export.id + ".json");
+    downloadElement.click();
 }

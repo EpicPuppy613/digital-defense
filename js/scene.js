@@ -194,13 +194,69 @@ new Scene('ee', () => {
     if (G.nav.buttons.eebase.hover && !G.editor.direction.platform) G.C.text("> BASE <", Math.round(G.width / 14 * 11), G.height - 6);
     else G.C.text("BASE", Math.round(G.width / 14 * 11), G.height - 6);
 
-    if (G.editor.direction.base || !G.data.cursor.on) G.C.fillStyle = '#866';
+    if (G.editor.direction.base || !G.data.cursor.on || G.editor.direction.left || G.editor.direction.right || G.editor.direction.down || G.editor.direction.up) G.C.fillStyle = '#866';
     else if (G.editor.direction.platform) G.C.fillStyle = "#3ff";
     else G.C.fillStyle = "#888";
 
     if (G.nav.buttons.eeplatform.hover) G.C.text("> PLATFORM <", Math.round(G.width / 14 * 13), G.height - 6);
     else G.C.text("PLATFORM", Math.round(G.width / 14 * 13), G.height - 6);
 
+});
+
+//W-SCENE:EEE // EXPORT
+new Scene('eee', () => {
+    G.C.fillStyle = 'white';
+    G.C.font = "32px 'Press Start 2P', monospace";
+    G.C.textAlign = 'center';
+    G.C.text('EXPORT MAP', Math.round(G.width / 2), 200);
+    G.C.font = "24px 'Press Start 2P', monospace";
+    G.C.fillStyle = 'white';
+    G.C.textAlign = 'center';
+    if (G.export.selected.name) G.C.fillStyle = '#1e90ff';
+    else G.C.fillStyle = 'white';
+    if (G.nav.buttons.eeename.hover) G.C.text(`> Map Name: ${G.export.name} <`, Math.round(G.width / 2), 300);
+    else G.C.text(`Map Name: ${G.export.name}`, Math.round(G.width / 2), 300);
+    if (G.export.selected.id) G.C.fillStyle = '#1e90ff';
+    else G.C.fillStyle = 'white';
+    if (G.nav.buttons.eeeid.hover) G.C.text(`> Map ID: ${G.export.id} <`, Math.round(G.width / 2), 350);
+    else G.C.text(`Map ID: ${G.export.id}`, Math.round(G.width / 2), 350);
+    if (G.export.selected.author) G.C.fillStyle = '#1e90ff';
+    else G.C.fillStyle = 'white';
+    if (G.nav.buttons.eeeauthor.hover) G.C.text(`> Map Author: ${G.export.author} <`, Math.round(G.width / 2), 400);
+    else G.C.text(`Map Author: ${G.export.author}`, Math.round(G.width / 2), 400);
+    G.C.font = "16px 'Press Start 2P', monospace";
+    if (G.export.selected.desc) G.C.fillStyle = '#1e90ff';
+    else G.C.fillStyle = 'white';
+    if (G.nav.buttons.eeedesc.hover) G.C.text(`> Map Description: ${G.export.desc} <`, Math.round(G.width / 2), 500);
+    else G.C.text(`Map Description: ${G.export.desc}`, Math.round(G.width / 2), 500);
+    G.C.font = "24px 'Press Start 2P', monospace";
+    switch (G.export.difficulty) {
+        case 1: G.C.fillStyle = '#1e90ff'; break;
+        case 2: G.C.fillStyle = '#00ff7f'; break;
+        case 3: G.C.fillStyle = '#7cfc00'; break;
+        case 4: G.C.fillStyle = '#befe00'; break;
+        case 5: G.C.fillStyle = '#ffff00'; break;
+        case 6: G.C.fillStyle = '#ffdb00'; break;
+        case 7: G.C.fillStyle = '#ffb700'; break;
+        case 8: G.C.fillStyle = '#f8880c'; break;
+        case 9: G.C.fillStyle = '#ea4e24'; break;
+        case 10: G.C.fillStyle = '#dc143c'; break;
+        default: G.C.fillStyle = 'white';
+    }
+    if (G.nav.buttons.eeediffup.hover) G.C.text(`> Map Difficulty: [${"X".repeat(G.export.difficulty)}${" ".repeat(10 - G.export.difficulty)}] >`, Math.round(G.width / 2), 450);
+    else if (G.nav.buttons.eeediffdown.hover) G.C.text(`< Map Difficulty: [${"X".repeat(G.export.difficulty)}${" ".repeat(10 - G.export.difficulty)}] <`, Math.round(G.width / 2), 450);
+    else G.C.text(`Map Difficulty: [${"X".repeat(G.export.difficulty)}${" ".repeat(10 - G.export.difficulty)}]`, Math.round(G.width / 2), 450);
+    G.C.fillStyle = 'white';
+    if (G.nav.buttons.eeedownload.hover) G.C.text(`> DOWNLOAD MAP <`, Math.round(G.width / 2), 600);
+    else G.C.text(`DOWNLOAD MAP`, Math.round(G.width / 2), 600);
+    if (G.nav.buttons.eeeback.hover) G.C.text('> BACK <', 100, 50);
+    else G.C.text('BACK', 100, 50);
+    G.C.font = "16px 'Press Start 2P', monospace";
+    G.export.errorfade -= 1 / F.time;
+    G.C.fillStyle = '#ff3333';
+    G.C.globalAlpha = Math.max(Math.min(G.export.errorfade, 3), 0) / 3;
+    G.C.text(G.export.error, Math.round(G.width / 2), 550);
+    G.C.globalAlpha = 1;
 });
 
 //W-SCENE:S // SETTINGS
@@ -305,7 +361,7 @@ new Scene('t', () => {
     G.C.fillStyle = 'white';
     G.C.font = "32px 'Press Start 2P', monospace";
     G.C.textAlign = 'center';
-    G.C.text("TRACK SELECT", Math.round(G.width / 2), 200);
+    G.C.text("TRACK SELECT", Math.round(G.width / 2), 150);
     G.C.textAlign = 'center';
     G.C.font = "24px 'Press Start 2P', monospace";
     if (G.nav.buttons.tback.hover) G.C.text('> BACK <', 100, 50);
@@ -332,10 +388,11 @@ new Scene('t', () => {
     tracks.sort((a, b) => a.difficulty - b.difficulty);
     if (G.trackSelect.page * 2 < G.trackSelect.available.length) {
         G.C.font = "24px 'Press Start 2P', monospace";
-        if (G.nav.buttons.tleft.hover) G.C.text("> " + tracks[G.trackSelect.page * 2].name + " <", Math.round(G.width / 2 - G.width / 4), 260)
-        else G.C.text(tracks[G.trackSelect.page * 2].name, Math.round(G.width / 2 - G.width / 4), 260);
+        if (G.nav.buttons.tleft.hover) G.C.text("> " + tracks[G.trackSelect.page * 2].name + " <", Math.round(G.width / 2 - G.width / 4), 210)
+        else G.C.text(tracks[G.trackSelect.page * 2].name, Math.round(G.width / 2 - G.width / 4), 210);
         G.C.font = "16px 'Press Start 2P', monospace";
-        G.C.text(tracks[G.trackSelect.page * 2].desc, Math.round(G.width / 2 - G.width / 4), 286);
+        G.C.text("By: " + tracks[G.trackSelect.page * 2].author, Math.round(G.width / 2 - G.width / 4), 240);
+        G.C.text(tracks[G.trackSelect.page * 2].desc, Math.round(G.width / 2 - G.width / 4), 266);
         switch (tracks[G.trackSelect.page * 2].difficulty) {
             case 1: G.C.fillStyle = '#1e90ff'; break;
             case 2: G.C.fillStyle = '#00ff7f'; break;
@@ -349,15 +406,16 @@ new Scene('t', () => {
             case 10: G.C.fillStyle = '#dc143c'; break;
             default: G.C.fillStyle = 'white';
         }
-        G.C.text(`Difficulty: [${"X".repeat(tracks[G.trackSelect.page * 2].difficulty)}${" ".repeat(10 - tracks[G.trackSelect.page * 2].difficulty)}]`, Math.round(G.width / 2 - G.width / 4), 310);
-        DrawMiniMap(tracks[G.trackSelect.page * 2], Math.round(G.width / 2 - G.width / 4 - G.width / 6), 320, Math.round(G.width / 3), Math.round(((G.width / 3) / tracks[G.trackSelect.page * 2].map.size[0]) * tracks[G.trackSelect.page * 2].map.size[1]));
+        G.C.text(`Difficulty: [${"X".repeat(tracks[G.trackSelect.page * 2].difficulty)}${" ".repeat(10 - tracks[G.trackSelect.page * 2].difficulty)}]`, Math.round(G.width / 2 - G.width / 4), 290);
+        DrawMiniMap(tracks[G.trackSelect.page * 2], Math.round(G.width / 2 - G.width / 4 - G.width / 6), 300, Math.round(G.width / 3), Math.round(((G.width / 3) / tracks[G.trackSelect.page * 2].map.size[0]) * tracks[G.trackSelect.page * 2].map.size[1]));
     }
     if (G.trackSelect.page * 2 + 1 < G.trackSelect.available.length) {
         G.C.font = "24px 'Press Start 2P', monospace";
-        if (G.nav.buttons.tright.hover) G.C.text("> " + tracks[G.trackSelect.page * 2 + 1].name + " <", Math.round(G.width / 2 + G.width / 4), 260);
-        else G.C.text(tracks[G.trackSelect.page * 2 + 1].name, Math.round(G.width / 2 + G.width / 4), 260);
+        if (G.nav.buttons.tright.hover) G.C.text("> " + tracks[G.trackSelect.page * 2 + 1].name + " <", Math.round(G.width / 2 + G.width / 4), 210);
+        else G.C.text(tracks[G.trackSelect.page * 2 + 1].name, Math.round(G.width / 2 + G.width / 4), 210);
         G.C.font = "16px 'Press Start 2P', monospace";
-        G.C.text(tracks[G.trackSelect.page * 2 + 1].desc, Math.round(G.width / 2 + G.width / 4), 286);
+        G.C.text("By: " + tracks[G.trackSelect.page * 2 + 1].author, Math.round(G.width / 2 + G.width / 4), 240);
+        G.C.text(tracks[G.trackSelect.page * 2 + 1].desc, Math.round(G.width / 2 + G.width / 4), 266);
         switch (tracks[G.trackSelect.page * 2 + 1].difficulty) {
             case 1: G.C.fillStyle = '#1e90ff'; break;
             case 2: G.C.fillStyle = '#00ff7f'; break;
@@ -371,8 +429,8 @@ new Scene('t', () => {
             case 10: G.C.fillStyle = '#dc143c'; break;
             default: G.C.fillStyle = 'white';
         }
-        G.C.text(`Difficulty: [${"X".repeat(tracks[G.trackSelect.page * 2 + 1].difficulty)}${" ".repeat(10 - tracks[G.trackSelect.page * 2 + 1].difficulty)}]`, Math.round(G.width / 2 + G.width / 4), 310);
-        DrawMiniMap(tracks[G.trackSelect.page * 2 + 1], Math.round(G.width / 2 + G.width / 4 - G.width / 6), 320, Math.round(G.width / 3), Math.round(((G.width / 3) / tracks[G.trackSelect.page * 2 + 1].map.size[0]) * tracks[G.trackSelect.page * 2 + 1].map.size[1]));
+        G.C.text(`Difficulty: [${"X".repeat(tracks[G.trackSelect.page * 2 + 1].difficulty)}${" ".repeat(10 - tracks[G.trackSelect.page * 2 + 1].difficulty)}]`, Math.round(G.width / 2 + G.width / 4), 290);
+        DrawMiniMap(tracks[G.trackSelect.page * 2 + 1], Math.round(G.width / 2 + G.width / 4 - G.width / 6), 300, Math.round(G.width / 3), Math.round(((G.width / 3) / tracks[G.trackSelect.page * 2 + 1].map.size[0]) * tracks[G.trackSelect.page * 2 + 1].map.size[1]));
     }
     G.C.textAlign = 'left';
 });

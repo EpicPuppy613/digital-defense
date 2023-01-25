@@ -7,7 +7,8 @@
         "data/maps/track1a.json",
         "data/maps/track1b.json",
         "data/maps/track2b.json",
-        "data/maps/blank.json"
+        "data/maps/blank.json",
+        "data/maps/test.json"
     ],
     "enemies": [
         "data/enemies/basic.json",
