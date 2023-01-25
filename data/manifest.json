@@ -9,7 +9,8 @@
         "data/maps/track2b.json",
         "data/maps/blank.json",
         "data/maps/test.json",
-        "data/maps/some-map.json"
+        "data/maps/some-map.json",
+        "data/maps/shuriken.json"
     ],
     "enemies": [
         "data/enemies/basic.json",
